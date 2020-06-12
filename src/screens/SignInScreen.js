@@ -93,13 +93,25 @@ class SignInScreen extends Component {
             />
           </View>
           {
-            // <View style={CommonStyles.buttonBox}>
-            //   <GradientButton
-            //     onPressButton={this._goToSignUpScreen.bind(this)}
-            //     setting={shadowOpt}
-            //     btnText="Sign In with Facebook"
-            //   />
-            // </View>
+            <View style={CommonStyles.buttonBox}>
+              <Image
+                source={require('../../img/healer/log.png')}
+                style={{
+                  position:'absolute',
+                  // bottom: 1,
+                  // left: 20,
+                  width: 220,
+                  height: 110
+                }}
+              />
+              {
+                // <GradientButton
+                //   onPressButton={this._goToSignUpScreen.bind(this)}
+                //   setting={shadowOpt}
+                //   btnText="Sign In with Facebook"
+                // />
+                }
+            </View>
           }
           <View style={styles.noteBox}>
             <Text normal lightGrey regular>

@@ -35,27 +35,41 @@ export default class CallDoctorScreen extends Component {
         />
         <View style={styles.textCont}>
           <Text grey regular style={{marginBottom: 8, fontSize: 24}}>
-            Calling...
+            Appel en cours...
           </Text>
-          <Text header black semiBold>Alexander Wolfe</Text>
+          <Text header black semiBold>Dr. Nguefack Maurice</Text>
         </View>
         <View style={styles.parentCir}>
           <View style={styles.childCir}>
             <Image
-              source={require('../../img/person/doctor.png')}
+              source={require('../../img/person/doc_portrait.png')}
               style={{width: 160, height: 184}}
             />
           </View>
         </View>
-        <TouchableHighlight
-          style={styles.buttonBox}
-          underlayColor={'transparent'}
-          onPress={this._handleClickEndCallButton.bind(this)}>
           <View>
             <Image
-              source={require('../../img/healer/esclip.png')}
-              style={{alignItems: 'center', width: 85, height: 90}}
+              source={require('../../img/healer/log.png')}
+              style={{width: 160, height: 84}}
             />
+          </View>
+        <TouchableHighlight
+          style={styles.buttonBox}
+          underlayColor={'transparent'} 
+          onPress={this._handleClickEndCallButton.bind(this)}>
+          <View style={styles.panelBody}>
+            <View style={[styles.leftItem]}>
+              <Image
+                source={require('../../img/healer/icCall.png')}
+                style={{alignItems: 'center', width: 85, height: 90}}
+              />
+            </View>
+            <View style={styles.rightItem}>
+              <Image
+                source={require('../../img/healer/esclip.png')}
+                style={{alignItems: 'center', width: 85, height: 90}}
+              />
+            </View>
           </View>
         </TouchableHighlight>
       </View>
@@ -85,6 +99,16 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(229,229,229)',
     borderRadius: 200
   },
+  panelBody: {
+    width: deviceWidth - 30, 
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingVertical: 17,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    marginLeft: 85
+  },
   childCir: {
     height: 200,
     width: 200,
@@ -94,6 +118,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgb(229,229,229)',
     borderRadius: 200
+  },
+  leftItem: {
+    width: (deviceWidth -130) /2,
+    marginBottom: 10,
+  },
+  rightItem: {
+    width: (deviceWidth - 100) /2,
+    marginBottom: 10,
   },
   buttonBox: {
     flex: 1,

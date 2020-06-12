@@ -6,25 +6,72 @@ import ScrollPicker from '../elements/ScrollPicker';
 import Text from '../elements/Text';
 import GradientButton from '../elements/GradientButton';
 import CheckBox from '../elements/CheckBox';
-import PrimeNavigationBar from '../elements/PrimeNavigationBar';
-
+import PrimeNavigationBar from '../elements/PrimeNavigationBar'; 
+import { connect } from 'react-redux';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceWidth, deviceHeight, shadowOpt, blueGradient } from '../styles/variables';
 import StartWeightScreen from './StartWeightScreen';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { onRegister } from "./statefull/appStatefull";
 
-export default class StartGenderScreen extends Component {
+class StartGenderScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      genderIndex: 'MALE',
+      genderIndex: 'MASCULIN',
+      gender: "",
+      location: null,
+      errorMessage: "",
+
     };
+  } 
+  async componentDidMount() {
+    this._getLocationAsync();
+  }
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+
+      console.log('permission denied');
+      this.messageWithPosition()
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    console.log('location location', location)
+    this.setState({location: location});
+  };
+ 
+  messageWithPosition (position = "bottom",  extra = {}) {
+    let message = {
+      message: "Mamed a besoin du service de oclisation pour fontionner.",
+      type: "default",
+      position,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message);
+  }
+  showMessage2 (position = "bottom",  extra = {}) {
+    let message = {
+      message: "Enregistrement Encours...",
+      type: "default",
+      position,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message);
   }
 
   onGenderSelected(index) {
   }
 
   render() {
-    const genders = ['FEMALE', 'MALE', 'OTHER', 'SECRET'];
+    const genders = ['FEMININ', 'MASCULIN', 'AUTRE', 'CONFIDENTIEL'];
     const PickerItemIOS = PickerIOS.Item;
     const scrollHeight = 330;
 
@@ -38,7 +85,7 @@ export default class StartGenderScreen extends Component {
               activeOpacity={0.6}
               onPress={this._handleClickNext.bind(this)}
             >
-              <Text header softBlue regular>Skip</Text>
+              <Text header softBlue regular>Saut</Text>
             </TouchableOpacity>
           }
         />
@@ -65,7 +112,8 @@ export default class StartGenderScreen extends Component {
               )
             }}
             onValueChange={(data, selectedIndex) => {
-                //
+               console.log('datat', data)
+                this.setState({gender: data})
             }}
           />
         </View>
@@ -73,7 +121,7 @@ export default class StartGenderScreen extends Component {
           <GradientButton
             onPressButton={this._handleClickNext.bind(this)}
             setting={shadowOpt}
-            btnText="NEXT"
+            btnText="Finaliser"
           />
         </View>
       </View>
@@ -81,15 +129,32 @@ export default class StartGenderScreen extends Component {
   }
 
   _handleClickNext() {
+    this.onRegister();
+    return;
     const screen = StartWeightScreen;
     const params = null;
     const path = null; 
     const { router } = screen;
     const action = path && router.getActionForPathAndParams(path, params);
 
-    this.props.navigation.navigate('StartWeightScreen', {}, action);
+    // this.props.navigation.navigate('StartWeightScreen', {}, action);
+  }
+  onRegister = async() =>{
+    console.log('this.props', this.props)
+    let globalObj = {
+      latitude: this.state.location.coords.latitude,
+      longitude: this.state.location.coords.longitude,
+      sexe: this.state.gender,
+      ...this.props.infos, 
+      ...this.props.nameOb,
+      date: this.props.date,
+    }
+    this.showMessage2();
+    await onRegister(globalObj);
+    console.log('globalObj', globalObj)
   }
 }
+
 
 const styles = StyleSheet.create({
   buttonBox: {
@@ -99,3 +164,16 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 });
+
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    setDateToState: async (infos) => {
+      dispatch({type: "SET_DATE", date: infos});
+    },
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(StartGenderScreen);

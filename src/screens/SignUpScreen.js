@@ -3,17 +3,35 @@ import { TextInput, View, StyleSheet, Image, ScrollView, Platform, StatusBar } f
 
 import Text from '../elements/Text';
 import GradientButton from '../elements/GradientButton';
-import CheckBox from '../elements/CheckBox';
+import CheckBox from '../elements/CheckBox'; 
 
 import { deviceHeight, shadowOpt, colors } from '../styles/variables';
-
+import { connect } from 'react-redux';
 import CommonStyles from '../styles/CommonStyles';
 import StartNameScreen from './StartNameScreen';
+import FlashMessage, { showMessage, hideMessage } from "react-native-flash-message";
 // import SignInScreen from './SignInScreen';
 
-export default class SignUpScreen extends Component {
+class SignUpScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {   
+      username: "",
+      tel: "",
+      password: "",
+      repass: ""
+    }
+  }
+
+   messageWithPosition (position = "bottom",  extra = {}) {
+    let message = {
+       message: "Le mot de passe ne correspond pas.",
+      type: "default",
+      position,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message);
   }
 
   render() {
@@ -30,7 +48,22 @@ export default class SignUpScreen extends Component {
                 style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
               />
               <TextInput
-                placeholder='Username'
+                placeholder="Non d'utilsateur"
+                style={CommonStyles.textInput}
+                value={this.state.username}
+                onChangeText = {(ev)=>{this.setState({username: ev})}}
+                underlineColorAndroid='transparent'
+              />
+            </View>
+            <View style={CommonStyles.textInputField}>
+              <Image
+                source={require('../../img/healer/padlock.png')}
+                style={{position:'absolute',bottom: 12,left: 20,width: 17, height: 22}}
+              />
+              <TextInput
+                placeholder='Mot de passe'
+                value={this.state.password}
+                onChangeText = {(ev)=>{this.setState({password: ev})}}
                 style={CommonStyles.textInput}
                 underlineColorAndroid='transparent'
               />
@@ -41,18 +74,9 @@ export default class SignUpScreen extends Component {
                 style={{position:'absolute',bottom: 12,left: 20,width: 17, height: 22}}
               />
               <TextInput
-                placeholder='Password'
-                style={CommonStyles.textInput}
-                underlineColorAndroid='transparent'
-              />
-            </View>
-            <View style={CommonStyles.textInputField}>
-              <Image
-                source={require('../../img/healer/padlock.png')}
-                style={{position:'absolute',bottom: 12,left: 20,width: 17, height: 22}}
-              />
-              <TextInput
-                placeholder='Re Password'
+                placeholder='Confirmation'
+                value={this.state.repass}
+                onChangeText = {(ev)=>{this.setState({repass: ev})}}
                 style={CommonStyles.textInput}
                 underlineColorAndroid='transparent'
               />
@@ -63,7 +87,9 @@ export default class SignUpScreen extends Component {
                 style={{position:'absolute',bottom: 12,left: 20,width: 22, height: 17}}
               />
               <TextInput
-                placeholder='Email'
+                placeholder='Télephone'
+                value={this.state.tel}
+                onChangeText = {(ev)=>{this.setState({tel: ev})}}
                 style={CommonStyles.textInput}
                 underlineColorAndroid='transparent'
               />
@@ -78,12 +104,12 @@ export default class SignUpScreen extends Component {
           </View>
           <View style={styles.noteBox}>
             <Text normal lightGrey regular>
-              Have an account?
+              J'ai déja un compte?
               <Text> </Text>
               <Text
                 style={{color: colors.softBlue}}
                 onPress={() => this._handleClickSignIn()}>
-                SIGN IN
+                Se connecter
               </Text>
             </Text>
           </View>
@@ -92,8 +118,18 @@ export default class SignUpScreen extends Component {
     );
   }
 
-  _handleClickSignUpButton() {
+  async _handleClickSignUpButton() {
     //this.props.navigation.navigate('StartNameScreen');
+    if(this.state.password.toString() !== this.state.repass.toString()){
+      this.messageWithPosition();
+      return true; //show flashing message
+    } 
+    let infos = {
+      username: this.state.username,
+      password: this.state.password,
+      tel: this.state.tel
+    }
+    await this.props.dispatchBaseInfos(infos);
     this.props.navigation.navigate('VerifyPhoneScreen');
   }
 
@@ -140,3 +176,18 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   }
 });
+
+
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    dispatchBaseInfos: async (infos) => {
+      dispatch({type: "DISPACT_BASE_INFOS", infos: infos});
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);

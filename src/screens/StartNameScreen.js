@@ -7,13 +7,22 @@ import CheckBox from '../elements/CheckBox';
 import PrimeNavigationBar from '../elements/PrimeNavigationBar';
 
 import { deviceWidth, deviceHeight, shadowOpt } from '../styles/variables';
-
+import { connect } from 'react-redux';
 import CommonStyles from '../styles/CommonStyles';
 import StartBirthdayScreen from './StartBirthdayScreen';
-
-export default class StartNameScreen extends Component {
+ 
+class StartNameScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      nom: "",
+      prenom: "",
+      email: "",
+      tu: "",
+      pu: "",
+      arrondis: "",
+      adresse: "",
+    }
   }
 
   render() {
@@ -22,17 +31,18 @@ export default class StartNameScreen extends Component {
         <StatusBar backgroundColor={'transparent'} translucent />
         <PrimeNavigationBar
           navigation={this.props.navigation}
+          back
           rightChildren={
             <TouchableOpacity
               activeOpacity={0.6}
-              onPress={this.onStartYourBirthDayScreen.bind(this)}
+              onPress={this.onStartYourBirthDayScreenZ.bind(this)}
             >
-              <Text header softBlue regular>Skip</Text>
+              {/*<Text header softBlue regular>Saut</Text>*/}
             </TouchableOpacity>
           }
         />
         <View style={CommonStyles.labelField}>
-          <Text header grey mediumBold>YOUR NAME</Text>
+          <Text header grey mediumBold>Informations réquise</Text>
         </View>
         <View style={{alignSelf: 'center'}}>
           <View style={CommonStyles.textInput}>
@@ -41,7 +51,99 @@ export default class StartNameScreen extends Component {
               style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
             />
             <TextInput
-              placeholder='Full name'
+              value={this.state.nom}
+              onChangeText = {(ev)=>{this.setState({nom: ev})}}
+              placeholder='Nom'
+              style={CommonStyles.textInput}
+              underlineColorAndroid='transparent'
+            />
+          </View>
+        </View>
+        <View style={{alignSelf: 'center'}}>
+          <View style={CommonStyles.textInput}>
+            <Image
+              source={require('../../img/healer/avatar.png')}
+              style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
+            />
+            <TextInput
+              value={this.state.prenom}
+              onChangeText = {(ev)=>{this.setState({prenom: ev})}}
+              placeholder='Prenom'
+              style={CommonStyles.textInput}
+              underlineColorAndroid='transparent'
+            />
+          </View>
+        </View>
+        <View style={{alignSelf: 'center'}}>
+          <View style={CommonStyles.textInput}>
+            <Image
+              source={require('../../img/healer/avatar.png')}
+              style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
+            />
+            <TextInput
+              value={this.state.email}
+              onChangeText = {(ev)=>{this.setState({email: ev})}}
+              placeholder='Email'
+              style={CommonStyles.textInput}
+              underlineColorAndroid='transparent'
+            />
+          </View>
+        </View>
+        <View style={{alignSelf: 'center'}}>
+          <View style={CommonStyles.textInput}>
+            <Image
+              source={require('../../img/healer/avatar.png')}
+              style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
+            />
+            <TextInput
+              value={this.state.pu}
+              onChangeText = {(ev)=>{this.setState({pu: ev})}}
+              placeholder="Personne d'urgence"
+              style={CommonStyles.textInput}
+              underlineColorAndroid='transparent'
+            />
+          </View>
+        </View>
+        <View style={{alignSelf: 'center'}}>
+          <View style={CommonStyles.textInput}>
+            <Image
+              source={require('../../img/healer/avatar.png')}
+              style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
+            />
+            <TextInput
+              value={this.state.tu}
+              onChangeText = {(ev)=>{this.setState({tu: ev})}}
+              placeholder="Telephone d'urgence"
+              style={CommonStyles.textInput}
+              underlineColorAndroid='transparent'
+            />
+          </View>
+        </View>
+        <View style={{alignSelf: 'center'}}>
+          <View style={CommonStyles.textInput}>
+            <Image
+              source={require('../../img/healer/avatar.png')}
+              style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
+            />
+            <TextInput
+              value={this.state.arrondis}
+              onChangeText = {(ev)=>{this.setState({arrondis: ev})}}
+              placeholder="Votre arrondissement"
+              style={CommonStyles.textInput}
+              underlineColorAndroid='transparent'
+            />
+          </View>
+        </View>
+        <View style={{alignSelf: 'center'}}>
+          <View style={CommonStyles.textInput}>
+            <Image
+              source={require('../../img/healer/avatar.png')}
+              style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
+            />
+            <TextInput
+              value={this.state.adresse}
+              onChangeText = {(ev)=>{this.setState({adresse: ev})}}
+              placeholder="Votre adresse"
               style={CommonStyles.textInput}
               underlineColorAndroid='transparent'
             />
@@ -51,7 +153,7 @@ export default class StartNameScreen extends Component {
           <GradientButton
             onPressButton={this.onStartYourBirthDayScreen.bind(this)}
             setting={shadowOpt}
-            btnText="SUBMIT"
+            btnText="Continuer"
           />
         </View>
       </View>
@@ -61,8 +163,20 @@ export default class StartNameScreen extends Component {
   bannerError(error) {
     console.log("Banner error", error);
   }
+  onStartYourBirthDayScreenZ() {
+  }
 
   onStartYourBirthDayScreen() {
+    const nameOb = {
+      nom: this.state.nom,
+      prenom: this.state.prenom,
+      email: this.state.email,
+      pu: this.state.pu,
+      telu: this.state.tu,
+      arondis: this.state.arrondis,
+      adresse: this.state.adresse
+    }
+    this.props.dispatchBaseInfos(nameOb)
     const screen = StartBirthdayScreen;
     const params = null;
     const path = null; 
@@ -72,3 +186,15 @@ export default class StartNameScreen extends Component {
     this.props.navigation.navigate('StartBirthdayScreen', {}, action);
   }
 }
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    dispatchBaseInfos: async (infos) => {
+      dispatch({type: "DISPATCH_NAME", nameOb: infos});
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StartNameScreen);

@@ -10,6 +10,7 @@ import LeftMenu from './components/LeftMenu';
 import HealerRouter from './routes/IntroStack'; 
 import { Provider } from 'react-redux'
 import app from './reducer/appStore'
+import FlashMessage from "react-native-flash-message";
 
 const {width, height} = Dimensions.get('window');
 
@@ -98,6 +99,7 @@ export default () => {
   return (
     <Provider store={app}>
       <AppContainer />
+       <FlashMessage position="top" animated={true} />
     </Provider>
   )
 };

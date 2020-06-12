@@ -79,7 +79,7 @@ export default class DoctorReviewScreen extends Component {
                   avatar={uri+item.medecin.personne.image}
                   name={item.medecin.personne.prenom+' '+item.medecin.personne.nom}
                   birthDate={""}
-                  comment={'dernier message en chair et en oss'}
+                  comment={'ok demain je serai...'}
                 />
               ))
             }

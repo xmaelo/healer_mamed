@@ -23,11 +23,11 @@ export default class VerifyPhoneScreen extends Component {
           back
         />
         <View style={styles.titleBox}>
-          <Text header black semiBold >Verify Phone</Text>
+          <Text header black semiBold >Verifcation du numero de telephone</Text>
           <Text normal grey regular
             style={{ width: deviceWidth - 70, marginTop: 15, textAlign: 'center' }}
           >
-            We just need your resgistered Email to send you password reset intruction
+            Entrez le code que vous avez recu !
           </Text>
         </View>
         <CodeInput
@@ -64,14 +64,14 @@ export default class VerifyPhoneScreen extends Component {
           <GradientButton
             onPressButton={this._handleVerify.bind(this)}
             setting={shadowOpt}
-            btnText="Verify"
+            btnText="Verifier"
           />
         </View>
         <View style={{ alignItems: "center", marginVertical: 20 }}>
           <Text
             style={{ color: colors.softBlue, fontSize: fontSize.header }}
             onPress={() => this._handleResend()}>
-            Resend
+            Renvoyer le code
             </Text>
         </View>
       </View>

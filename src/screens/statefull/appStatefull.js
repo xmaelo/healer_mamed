@@ -1,6 +1,6 @@
 import * as axios from 'axios';
 
-export const baseUri = "https://covid19.mamed.care";
+export const baseUri = "https://covid.mamed.care";
 export const urlMedia = baseUri + "/bundles/mamedcovid/assets/images/pictures/";
 export const getPersonalData = async (uri) => {
 	return await axios.get(baseUri+uri) 
@@ -16,6 +16,16 @@ export const getPersonalData = async (uri) => {
 
 export const login = async (obj) => {
 	return await axios.post(baseUri+'/api_v1/connects.json', obj , { headers: { "Content-type": "application/json" } })
+    .then( (response) => {
+      console.log(" =================",response); 
+      return response
+    })
+    .catch( (error) => {
+      console.log(error);    
+    }); 
+}
+export const onRegister = async (obj) => {
+  return await axios.post(baseUri+'/api_v1/apis/registers.json', obj , { headers: { "Content-type": "application/json" } })
     .then( (response) => {
       console.log(" =================",response); 
       return response

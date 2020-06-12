@@ -7,12 +7,12 @@ import ScrollPicker from '../elements/ScrollPicker';
 import GradientButton from '../elements/GradientButton';
 import CheckBox from '../elements/CheckBox';
 import PrimeNavigationBar from '../elements/PrimeNavigationBar';
-
+import { connect } from 'react-redux';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceWidth, deviceHeight, shadowOpt, blueGradient } from '../styles/variables';
 import StartGenderScreen from './StartGenderScreen';
 
-export default class StartBirthdayScreen extends Component {
+class StartBirthdayScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -20,16 +20,22 @@ export default class StartBirthdayScreen extends Component {
       monthIndex: 'JANUARY',
       dayIndex: 1,
       yearIndex: 1970,
+      day: "",
+      year: "",
+      month: ""
     };
   }
 
   onMonthSelected(index) {
+    console.log('mount mount', index)
   }
 
   onDaySelected(index) {
+    console.log('day day', index)
   }
 
   onYearSelected(index) {
+    console.log('year year', index)
   }
 
   render() {
@@ -71,7 +77,7 @@ export default class StartBirthdayScreen extends Component {
               activeOpacity={0.6}
               onPress={this._handleClickNext.bind(this)}
             >
-              <Text header softBlue regular>Skip</Text>
+              <Text header softBlue regular>Saut</Text>
             </TouchableOpacity>
           }
         />
@@ -98,7 +104,8 @@ export default class StartBirthdayScreen extends Component {
               )
             }}
             onValueChange={(data, selectedIndex) => {
-                //
+              console.log('chang month',data, selectedIndex)
+              this.setState({month: data})
             }}
           />
           <ScrollPicker
@@ -120,7 +127,8 @@ export default class StartBirthdayScreen extends Component {
               )
             }}
             onValueChange={(data, selectedIndex) => {
-                //
+                console.log('chang day',data, selectedIndex)
+                this.setState({day: data})
             }}
           />
           <ScrollPicker
@@ -142,7 +150,8 @@ export default class StartBirthdayScreen extends Component {
               )
             }}
             onValueChange={(data, selectedIndex) => {
-                //
+                console.log('chang year',data, selectedIndex)
+                this.setState({year: data})
             }}
           />
         </View>
@@ -158,6 +167,11 @@ export default class StartBirthdayScreen extends Component {
   }
 
   _handleClickNext() {
+    let strToDate = this.state.month+' '+this.state.day+', '+this.state.year;
+    const toDate = new Date(strToDate);
+    console.log('date', toDate, strToDate)
+    // return;
+    this.props.setDateToState(toDate);
     const screen = StartGenderScreen;
     const params = null;
     const path = null; 
@@ -176,3 +190,15 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 });
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    setDateToState: async (infos) => {
+      dispatch({type: "SET_DATE", date: infos});
+    },
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(StartBirthdayScreen);
