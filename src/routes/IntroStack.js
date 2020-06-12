@@ -51,6 +51,8 @@ import NewsDetailsScreen from '../screens/NewsDetailsScreen';
 import NewsCommentScreen from '../screens/NewsCommentScreen';
 import BookmarkScreen from '../screens/BookmarkScreen';
 import IndicatorsDetailsScreen from '../screens/IndicatorsDetailsScreen';
+//Another routes
+import AddCasContactScreen from '../screens/AddCasContactScreen';
 
 import CartScreen from '../screens/CartScreen';
 import BillingScreen from '../screens/BillingScreen';
@@ -60,6 +62,9 @@ const AppRouter = StackRouter(
   {
     StartUpScreen: {
       screen: StartUpScreen,
+    },
+    AddCasContactScreen: {
+      screen: AddCasContactScreen,
     },
     IntroOneScreen: {
       screen: IntroOneScreen,

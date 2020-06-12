@@ -1,9 +1,22 @@
 import * as axios from 'axios';
 
-export const baseUri = "https://covid.mamed.care";
+export const baseUri = "https://covid19.mamed.care";
 export const urlMedia = baseUri + "/bundles/mamedcovid/assets/images/pictures/";
 export const getPersonalData = async (uri) => {
 	return await axios.get(baseUri+uri) 
+    .then( (response) => { 
+      console.log(" =================",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });  
+ 
+}
+
+export const updateCasContact = async (idUpdate, idPer, obj) => {
+  const _com = '/api_v1/updates/'+idUpdate+'/cas/'+idPer+'contacts.json';
+  return await axios.post(baseUri+_com, obj , { headers: { "Content-type": "application/json" } }) 
     .then( (response) => { 
       console.log(" =================",response.data);
       return response.data

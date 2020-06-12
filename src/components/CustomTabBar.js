@@ -69,6 +69,6 @@ export default class CustomTabBar extends Component {
   }
 
   _onProfileIconClick() {
-    this.props.navigation.navigate('UserProfileScreen');
+    this.props.navigation.navigate('ListDrugsScreen');//this.props.navigation.navigate('UserProfileScreen');
   }
 }

@@ -11,11 +11,13 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 
+import { updateCasContact } from "./statefull/appStatefull";
 import GradientNavigationBar from '../elements/GradientNavigationBar';
 import GradientButton from '../elements/GradientButton';
 import SelectBox from '../elements/SelectBox';
 
 import CommonStyles from '../styles/CommonStyles';
+import CheckBox from '../elements/CheckBox';
 import {
   deviceWidth,
   deviceHeight,
@@ -24,7 +26,7 @@ import {
   shadowOpt
 } from '../styles/variables';
 
-export default class AddDrugsScreen extends Component {
+export default class AddCasContactScreen extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -32,21 +34,30 @@ export default class AddDrugsScreen extends Component {
       prenom: "",
       email: "",
       telephone: "",
-      tel_urg: "",
-      con_urg: ""
+      date: null,
+      sexe: null,
+      lieu: null,
     }
   }
   async componentDidMount() {
-    const perons = this.props.navigation.state.params.personne;
-    const peron = perons.personne;
-    this.setState({
-      nom: peron.nom,
-      prenom: peron.prenom,
-      telephone: peron.prenom,
-      email: peron.email,
-      con_urg: perons.nom_contact_urgence,
-      tel_urg: perons.telephone_contact_urgence
-    })
+    const item = this.props.navigation.state.params.item;
+    if(item !== null){
+	    this.setState({
+	      nom: item.personne.nom, 
+	      prenom: item.personne.prenom,
+	      telephone: item.personne.telephone,
+	      email: item.personne.email,
+	      sexe: item.personne.sexe,
+	      lieu: item.lieurencontre,
+	      date: item.daterencontre
+	    })
+	    console.log('update state succes', item);
+	}
+  }
+  _onSave = async () => {
+  	let data = {
+
+  	}
   }
   render() {
     return (
@@ -54,13 +65,15 @@ export default class AddDrugsScreen extends Component {
         <GradientNavigationBar
           navigation={this.props.navigation}
           back
-          titleText='Modifier profil'
+          titleText='Ajouter un Cas contact'
         />
         <View style={styles.addDrugBtn}>
-          <Image
-            source={require('../../img/healer/addDrug.png')}
-            style={{width: 90, height: 90}}
-          />
+        {
+        //   <Image
+        //     source={require('../../img/healer/addDrug.png')}
+        //     style={{width: 90, height: 90}}
+        //   />
+        }
         </View>
         <ScrollView style={CommonStyles.scrollView}>
         <View style={styles.form}>
@@ -142,98 +155,70 @@ export default class AddDrugsScreen extends Component {
                 underlineColorAndroid='transparent'
               />
             </View>
-{
-            // <View>
-            //   <Text style={styles.text}>Informations d'urgence</Text>
-            // </View>
-            // <View style={CommonStyles.textInputField}>
-            //   <Image
-            //     source={require('../../img/healer/avatar.png')}
-            //     style={{
-            //       position:'absolute',
-            //       bottom: 12,
-            //       left: 20,
-            //       width: 19,
-            //       height: 22
-            //     }}
-            //   />
-            //   <TextInput
-            //     placeholder="Nom"
-            //     value={this.state.con_urg}
-            //     onChangeText={(val)=>this.setState({con_urg: val})}
-            //     style={CommonStyles.textInput}
-            //     underlineColorAndroid='transparent'
-            //   />
-            // </View>
-            // <View style={CommonStyles.textInputField}>
-            //   <Image
-            //     source={require('../../img/healer/avatar.png')}
-            //     style={{
-            //       position:'absolute',
-            //       bottom: 12,
-            //       left: 20,
-            //       width: 19,
-            //       height: 22
-            //     }}
-            //   />
-            //   <TextInput
-            //     placeholder="telephone"
-            //     value={this.state.tel_urg}
-            //     onChangeText={(val)=>this.setState({tel_urg: val})}
-            //     style={CommonStyles.textInput}
-            //     underlineColorAndroid='transparent'
-            //   />
-            // </View>
-}
-              {
-                // <SelectBox
-                //   label='Medication Name'
-                // />
-                // <View style={styles.selectboxField}>
-                //   <TouchableHighlight
-                //     underlayColor={'transparent'}
-                //   >
-                //     <View style={styles.selectboxRow}>
-                //       <Text style={CommonStyles.selectboxLabel}>Dosage</Text>
-                //       <Icon
-                //         style={{fontSize: 20, textAlign: 'center'}}
-                //         name="chevron-thin-down"
-                //         color="rgb(229,229,229)"
-                //       />
-                //     </View>
-                //   </TouchableHighlight>
-                //   <View style={{
-                //     width: deviceWidth - 95,
-                //     height: 0.7,
-                //     backgroundColor: 'rgb(229,229,229)'
-                //   }} />
-                //   <TouchableHighlight
-                //     underlayColor={'transparent'}
-                //   >
-                //     <View style={styles.selectboxRow}>
-                //       <Text style={CommonStyles.selectboxLabel}>Unit</Text>
-                //       <Icon
-                //         style={{fontSize: 20, textAlign: 'center'}}
-                //         name="chevron-thin-down"
-                //         color="rgb(229,229,229)"
-                //       />
-                //     </View>
-                //   </TouchableHighlight>
-                // </View>
-                // <SelectBox
-                //   label='Appearance'
-                // />
-                // <SelectBox
-                //   label='Infomation'
-                // />
-              }
+            <View style={CommonStyles.textInputField}>
+              <Image
+                source={require('../../img/healer/avatar.png')}
+                style={{
+                  position:'absolute',
+                  bottom: 12,
+                  left: 20,
+                  width: 19,
+                  height: 22
+                }}
+              />
+              <TextInput
+                placeholder="DD/MM/YYYY"
+                type="text"
+                value={this.state.date}
+                onChangeText={(val)=>this.setState({date: val})}
+                style={CommonStyles.textInput}
+                underlineColorAndroid='transparent'
+              />
+            </View>
+            <View style={CommonStyles.textInputField}>
+              <Image
+                source={require('../../img/healer/avatar.png')}
+                style={{
+                  position:'absolute',
+                  bottom: 12,
+                  left: 20,
+                  width: 19,
+                  height: 22
+                }}
+              />
+              <TextInput
+                placeholder="Lieu"
+                type="text"
+                value={this.state.lieu}
+                onChangeText={(val)=>this.setState({lieu: val})}
+                style={CommonStyles.textInput}
+                underlineColorAndroid='transparent'
+              />
+            </View>
+            <View style={styles.subFormBox}>
+              <CheckBox
+                label='Masculin'
+                checked={this.state.sexe === 'MASCULIN'}
+                onChange={(checked) => this.setState({sexe: 'MASCULIN'}) }
+                checkedImage={require('../../img/healer/check.png')}
+                uncheckedImage={require('../../img/healer/icUncheck.png')}
+              />
+              <CheckBox
+                label='Feminin'
+                checked={this.state.sexe === 'FEMININ'}
+                onChange={(checked) => this.setState({sexe: 'FEMININ'}) }
+                checkedImage={require('../../img/healer/check.png')}
+                uncheckedImage={require('../../img/healer/icUncheck.png')}
+              />
+            </View>
+
         </View>
 
         <View style={styles.btn}>
           <GradientButton
-            onPressButton={this._handleAddDrugs.bind(this)}
+            onPressButton={this._onSave}
             setting={shadowOpt}
-            btnText="Mise A jour"
+            btnText="Enregistrer"
           />
         </View>
         </ScrollView>
@@ -253,8 +238,15 @@ const spaceHeight = deviceHeight - (ELEMENT_HEIGHT + NAV_HEIGHT + STATUSBAR_HEIG
 const styles = StyleSheet.create({
   addDrugBtn: {
     alignItems: 'center',
-    marginTop: spaceHeight * 0.3,
+    marginTop: spaceHeight * 0.05,
     marginBottom: spaceHeight * 0.29,
+  },
+  subFormBox: {
+    width: deviceWidth - 85,
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: -10,
   },
   form: {
     // height: 305,

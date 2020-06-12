@@ -4,6 +4,7 @@ import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceWidth, deviceHeight, colors, fontSize, fontFamily } from '../styles/variables';
+import { connect } from 'react-redux'
 
 const resetAction = (routeName) => NavigationActions.reset({
   index: 0,
@@ -23,21 +24,21 @@ class LeftMenu extends Component {
 
   render() {
     let isActive = '';
-
+    const img = "https://covid19.mamed.care"+"/bundles/mamedcovid/assets/images/pictures/";
     return (
       <View style={styles.container}>
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
             <Image
-              source={require('../../img/person/avatar.png')}
-              style={{width: 70, height: 70}}
+              source={{ uri: img+ this.props.data.user.personne.image }}
+              style={{width: 70, height: 70, borderRadius: 20}}
             />
           </View>
           <Text style={styles.name}>
-            OSCAR BARRETT
+            {this.props.data.user.personne.prenom}{" "}{this.props.data.user.personne.nom}
           </Text>
           <Text style={styles.balance}>
-            Balance: $1,359.00
+            {this.props.data.user.personne.email}
           </Text>
         </View>
 
@@ -357,4 +358,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LeftMenu;
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    publishJournal: async (data) => {
+      dispatch({type: "PUBLISH_JOURNAL", data: data});
+    },
+
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);

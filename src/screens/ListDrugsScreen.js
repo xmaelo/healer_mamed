@@ -4,8 +4,9 @@ import { StyleSheet, View, Image, Platform, ScrollView, TouchableHighlight } fro
 import CommonStyles from '../styles/CommonStyles';
 import ItemWithDetail from '../components/ItemWithDetail';
 import GradientNavigationBar from '../elements/GradientNavigationBar';
+import { connect } from 'react-redux';
 
-export default class ListDrugsScreen extends Component {
+class ListDrugsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -83,7 +84,7 @@ export default class ListDrugsScreen extends Component {
         <GradientNavigationBar
           navigation={this.props.navigation}
           back
-          titleText='Drugs List'
+          titleText='Cas contact'
           rightButtons={
             [
               {
@@ -98,17 +99,16 @@ export default class ListDrugsScreen extends Component {
         />
         <ScrollView style={CommonStyles.noTabScrollView}>
           <View style={CommonStyles.wrapperBox}>
-            {
-              this.state.drugsList.map((item, index) => (
+            {this.props.data.user.personnes.map((item, index) => (
                 <ItemWithDetail
-                  key={item.id}
+                  key={index}
                   image={{
-                    url: item.image.url,
-                    width: item.image.width,
-                    height: item.image.height,
+                    url: require('../../img/healer/profile.png'),
+                    width: 22,
+                    height: 22,
                   }}
-                  header={item.drugName}
-                  onPressItem={this._handleClickListDrugsItem.bind(this)}
+                  header={item.personne.nom}
+                  onPressItem={()=>this.props.navigation.navigate('AddCasContactScreen', {item: item})}
                 />
               ))
             }
@@ -128,7 +128,7 @@ export default class ListDrugsScreen extends Component {
   }
 
   _handleClickSearchButton() {
-    // TODO: Click search button
+    // TODO: Click search button 
   }
 
   // Goto DoctorDetailsScreen
@@ -136,9 +136,9 @@ export default class ListDrugsScreen extends Component {
     this.props.navigation.navigate('DrugsDetailsScreen');
   }
 
-  // Goto AddDrugsScreen
+  // Goto AddCasContactScreen
   _handleClickAddDrugs() {
-    this.props.navigation.navigate('AddDrugsScreen');
+    this.props.navigation.navigate('AddCasContactScreen', {item: null});
   }
 }
 
@@ -163,3 +163,15 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    setDateToState: async (infos) => {
+      dispatch({type: "SET_DATE", date: infos});
+    },
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ListDrugsScreen);
