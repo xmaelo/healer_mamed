@@ -4,31 +4,107 @@ import { TextInput, View, StyleSheet, Image, TouchableHighlight, ScrollView, Sta
 
 import Text from '../elements/Text';
 import GradientButton from '../elements/GradientButton';
-import CheckBox from '../elements/CheckBox';
+import CheckBox from '../elements/CheckBox'; 
 
 import { deviceWidth, deviceHeight, shadowOpt, colors } from '../styles/variables';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import CommonStyles from '../styles/CommonStyles';
 import SignUpScreen from './SignUpScreen';
 import { connect } from 'react-redux'
 import ForgotPasswordScreen from './ForgotPasswordScreen';
-import { getPersonalData } from "./statefull/appStatefull";
+import { getPersonalData, login } from "./statefull/appStatefull";
 
 class SignInScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      remember: false
+      remember: false,
+      show: true,
+      message: "Connection en cours ...",
+      password: '',
+      username: '',
     };
   }
 
   async componentDidMount() {
     console.log('sign in componenet did mount before call api')
+    
+  }
+  initJournal = async () => { 
+    this.setState({message: 'Initialisation du Journal ...'});
+    this.messageWithPosition3();
     let data = await getPersonalData('/api_v1/apis/2/profiles.json');
     console.log('response from api',data)
+    this.setState({ show : false}) 
     this.props.publishJournal(data);
+    hideMessage(); 
+    this.props.navigation.navigate('MainServiceScreen')
   }
-
+  login = async () => {
+    this.messageWithPosition();
+    let ob = {
+      username: this.state.username,
+      password: this.state.password
+    }
+    let data = await login(ob);
+    if(data.data && data.data.success && data.data.success == true){
+      console.log('in login',data);
+      this.initJournal();
+    }
+    else{
+      this.setState({
+        message: "Une erreur inconnue est survenue"
+      })
+      this.messageWithPosition2(); 
+    }
+    
+  }
+   messageWithPosition = (position = "bottom",  extra = {}) => {
+    let message = {
+       message: "Connection en cours ...",
+      type: "default",
+      position,
+      autoHide: false,
+      // animationDuration: 1000, 
+      icon: { icon: "auto", position: "left" },
+      duration: 6000,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message)
+    
+  }
+  messageWithPosition2 = (position = "bottom",  extra = {}) => {
+    let message = {
+       message: "Une erreur inconnue est survenue",
+      type: "default",
+      position,
+      autoHide: false,
+      // animationDuration: 1000, 
+      duration: 6000,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message)
+    
+  }
+  messageWithPosition3 = (position = "bottom",  extra = {}) => {
+    let message = {
+       message: "Initialisation du Journal ...",
+      type: "default",
+      position,
+      autoHide: false,
+      icon: { icon: "auto", position: "left" },
+      animationDuration: 1000, 
+      autoHide: false,
+      duration: 6000,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message)
+    
+  }
 
   render() {
     console.log('data props', this.props.data)
@@ -54,6 +130,7 @@ class SignInScreen extends Component {
                 placeholder="Nom d'utilisateur"
                 style={CommonStyles.textInput}
                 underlineColorAndroid='transparent'
+                onChangeText = {(evt) => this.setState({username: evt})}
               />
             </View>
             <View style={CommonStyles.textInputField}>
@@ -65,6 +142,7 @@ class SignInScreen extends Component {
                 placeholder='Mot de passe'
                 style={CommonStyles.textInput}
                 underlineColorAndroid='transparent'
+                onChangeText = {(evt) => this.setState({password: evt})}
               />
             </View>
             <View style={styles.subFormBox}>
@@ -87,7 +165,7 @@ class SignInScreen extends Component {
           </View>
           <View style={[CommonStyles.buttonBox, {marginBottom: spaceHeight * 0.15}]}>
             <GradientButton
-              onPressButton={this._goToMainScreen.bind(this)}
+              onPressButton={() => this.login()}
               setting={shadowOpt}
               btnText="Se Connecter"
             />

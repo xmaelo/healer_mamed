@@ -111,9 +111,9 @@ class MainServiceScreen extends Component {
     this.props.navigation.navigate("NotificationScreen");
   }
 
-  // Click email button
+  // Click email button 
   _handleClickEmailButton() {
-    this.props.navigation.navigate("DoctorReviewScreen", {id: this.props.data.user.id});
+    this.props.navigation.navigate("DoctorReviewScreen", {id: this.props.data.user.personne.id});
   }
 
   // Go to FindDoctorScreen
@@ -126,7 +126,7 @@ class MainServiceScreen extends Component {
     this.props.navigation.navigate("ResultFindHospitalScreen", {toCentres: this.props.data.centres});
   }
 
-  // Go to NotificationScreenScreen
+  // Go to NotificationScreenScreen 
   _handleClickNotificationScreen() {
     this.props.navigation.navigate("NotificationScreen");
   }

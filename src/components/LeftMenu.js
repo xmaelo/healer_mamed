@@ -29,16 +29,20 @@ class LeftMenu extends Component {
       <View style={styles.container}>
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
+           { this.props.data ?
             <Image
               source={{ uri: img+ this.props.data.user.personne.image }}
               style={{width: 70, height: 70, borderRadius: 20}}
-            />
+            /> : null
+           }
           </View>
           <Text style={styles.name}>
-            {this.props.data.user.personne.prenom}{" "}{this.props.data.user.personne.nom}
+            {
+              this.props.data ? this.props.data.user.personne.prenom : null }{" "}
+            {this.props.data ? this.props.data.user.personne.nom : null}
           </Text>
           <Text style={styles.balance}>
-            {this.props.data.user.personne.email}
+            {this.props.data ? this.props.data.user.personne.email : null}
           </Text>
         </View>
 
@@ -63,11 +67,36 @@ class LeftMenu extends Component {
                   isActive == 'home' && styles.activeMenuText
                 ]}
               >
-                HOME
+                DASHBOARD
               </Text>
             </View>
           </TouchableHighlight>
 
+          <TouchableHighlight
+            underlayColor='#efefef'
+            style={styles.itemBox}
+            onPress={ this._handleClickDrug.bind(this) }>
+            <View style={styles.itemBox}>
+              {
+                (() => {
+                  if (isActive == 'drug') { 
+                    return (
+                      <View style={styles.activeItem} />
+                    )
+                  }
+                })()
+              }
+              <Text
+                style={[
+                  styles.menuText,
+                  isActive == 'drug' && styles.activeMenuText
+                ]}
+              >
+                MESSAGES
+              </Text>
+            </View>
+          </TouchableHighlight>
+        {/*
           <TouchableHighlight
             underlayColor='#efefef'
             style={styles.itemBox}
@@ -92,7 +121,7 @@ class LeftMenu extends Component {
               </Text>
             </View>
           </TouchableHighlight>
-
+        */}
           <TouchableHighlight
             underlayColor='#efefef'
             style={styles.itemBox}
@@ -113,111 +142,136 @@ class LeftMenu extends Component {
                   isActive == 'doctors' && styles.activeMenuText
                 ]}
               >
-                DOCTORS
+                DONNEES
               </Text>
             </View>
           </TouchableHighlight>
+        {
+          // <TouchableHighlight
+          //   underlayColor='#efefef'
+          //   style={styles.itemBox}
+          //   onPress={ this._handleClickDoctors.bind(this) }>
+          //   <View style={styles.itemBox}>
+          //     {
+          //       (() => {
+          //         if (isActive == 'doctors') {
+          //           return (
+          //             <View style={styles.activeItem} />
+          //           )
+          //         }
+          //       })()
+          //     }
+          //     <Text
+          //       style={[
+          //         styles.menuText,
+          //         isActive == 'doctors' && styles.activeMenuText
+          //       ]}
+          //     >
+          //       DOCTORS
+          //     </Text>
+          //   </View>
+          // </TouchableHighlight>
+        
+          // <TouchableHighlight
+          //   underlayColor='#efefef'
+          //   style={styles.itemBox}
+          //   onPress={ this._handleClickServices.bind(this) }>
+          //   <View style={styles.itemBox}>
+          //     {
+          //       (() => {
+          //         if (isActive == 'services') {
+          //           return (
+          //             <View style={styles.activeItem} />
+          //           )
+          //         }
+          //       })()
+          //     }
+          //     <Text
+          //       style={[
+          //         styles.menuText,
+          //         isActive == 'services' && styles.activeMenuText
+          //       ]}
+          //     >
+          //       SERVICES
+          //     </Text>
+          //   </View>
+          // </TouchableHighlight>
 
-          <TouchableHighlight
-            underlayColor='#efefef'
-            style={styles.itemBox}
-            onPress={ this._handleClickServices.bind(this) }>
-            <View style={styles.itemBox}>
-              {
-                (() => {
-                  if (isActive == 'services') {
-                    return (
-                      <View style={styles.activeItem} />
-                    )
-                  }
-                })()
-              }
-              <Text
-                style={[
-                  styles.menuText,
-                  isActive == 'services' && styles.activeMenuText
-                ]}
-              >
-                SERVICES
-              </Text>
-            </View>
-          </TouchableHighlight>
+          // <TouchableHighlight
+          //   underlayColor='#efefef'
+          //   style={styles.itemBox}
+          //   onPress={ this._handleClickDashboard.bind(this) }>
+          //   <View style={styles.itemBox}>
+          //     {
+          //       (() => {
+          //         if (isActive == 'dashboard') {
+          //           return (
+          //             <View style={styles.activeItem} />
+          //           )
+          //         }
+          //       })()
+          //     }
+          //     <Text
+          //       style={[
+          //         styles.menuText,
+          //         isActive == 'dashboard' && styles.activeMenuText
+          //       ]}
+          //     >
+          //       DASHBOARD
+          //     </Text>
+          //   </View>
+          // </TouchableHighlight>
 
-          <TouchableHighlight
-            underlayColor='#efefef'
-            style={styles.itemBox}
-            onPress={ this._handleClickDashboard.bind(this) }>
-            <View style={styles.itemBox}>
-              {
-                (() => {
-                  if (isActive == 'dashboard') {
-                    return (
-                      <View style={styles.activeItem} />
-                    )
-                  }
-                })()
-              }
-              <Text
-                style={[
-                  styles.menuText,
-                  isActive == 'dashboard' && styles.activeMenuText
-                ]}
-              >
-                DASHBOARD
-              </Text>
-            </View>
-          </TouchableHighlight>
+          // <TouchableHighlight
+          //   underlayColor='#efefef'
+          //   style={styles.itemBox}
+          //   onPress={ this._handleClickProfile.bind(this) }>
+          //   <View style={styles.itemBox}>
+          //     {
+          //       (() => {
+          //         if (isActive == 'profile') {
+          //           return (
+          //             <View style={styles.activeItem} />
+          //           )
+          //         }
+          //       })()
+          //     }
+          //     <Text
+          //       style={[
+          //         styles.menuText,
+          //         isActive == 'profile' && styles.activeMenuText
+          //       ]}
+          //     >
+          //       PROFILE
+          //     </Text>
+          //   </View>
+          // </TouchableHighlight>
 
-          <TouchableHighlight
-            underlayColor='#efefef'
-            style={styles.itemBox}
-            onPress={ this._handleClickProfile.bind(this) }>
-            <View style={styles.itemBox}>
-              {
-                (() => {
-                  if (isActive == 'profile') {
-                    return (
-                      <View style={styles.activeItem} />
-                    )
-                  }
-                })()
-              }
-              <Text
-                style={[
-                  styles.menuText,
-                  isActive == 'profile' && styles.activeMenuText
-                ]}
-              >
-                PROFILE
-              </Text>
-            </View>
-          </TouchableHighlight>
-
-          <TouchableHighlight
-            underlayColor='#efefef'
-            style={styles.itemBox}
-            onPress={ this._handleClickNewHealthy.bind(this) }>
-            <View style={styles.itemBox}>
-              {
-                (() => {
-                  if (isActive == 'newHealthy') {
-                    return (
-                      <View style={styles.activeItem} />
-                    )
-                  }
-                })()
-              }
-              <Text
-                style={[
-                  styles.menuText,
-                  isActive == 'newHealthy' && styles.activeMenuText
-                ]}
-              >
-                NEW HEALTHY
-              </Text>
-            </View>
-          </TouchableHighlight>
-
+          // <TouchableHighlight
+          //   underlayColor='#efefef'
+          //   style={styles.itemBox}
+          //   onPress={ this._handleClickNewHealthy.bind(this) }>
+          //   <View style={styles.itemBox}>
+          //     {
+          //       (() => {
+          //         if (isActive == 'newHealthy') {
+          //           return (
+          //             <View style={styles.activeItem} />
+          //           )
+          //         }
+          //       })()
+          //     }
+          //     <Text
+          //       style={[
+          //         styles.menuText,
+          //         isActive == 'newHealthy' && styles.activeMenuText
+          //       ]}
+          //     >
+          //       NEW HEALTHY
+          //     </Text>
+          //   </View>
+          // </TouchableHighlight>
+          }
           <TouchableHighlight
             style={styles.itemBox}
           >
@@ -237,13 +291,13 @@ class LeftMenu extends Component {
 
   _handleClickDrug() {
     this.setState({isActive:'drug'});
-    this.props.navigation.navigate('DrugScreen');
+    this.props.navigation.navigate('DoctorReviewScreen', {id: this.props.data.user.personne.id});
     this.props.drawer.close()
   }
 
-  _handleClickDoctors() {
+  _handleClickDoctors() { 
     this.setState({isActive:'doctors'});
-    this.props.navigation.navigate('ListDoctorsScreen');
+    this.props.navigation.navigate('InsurranceScreen', {toActivites: this.props.data.user.diagnostiques});
     this.props.drawer.close()
   }
 
@@ -371,3 +425,5 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);
+
+

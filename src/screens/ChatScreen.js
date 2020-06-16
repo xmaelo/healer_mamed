@@ -4,7 +4,7 @@ import {
   View,
   Image,
   Platform,
-} from 'react-native';
+} from 'react-native'; 
 import {
   GiftedChat,
   Actions,
@@ -13,7 +13,8 @@ import {
   Time,
   Avatar
 } from 'react-native-gifted-chat';
-
+import { getOneMessages, baseUri, onSendMessage } from "./statefull/appStatefull";
+import { connect } from 'react-redux'
 import Text from '../elements/Text';
 import GradientNavigationBar from '../elements/GradientNavigationBar';
 
@@ -26,7 +27,7 @@ import {
   deviceWidth
 } from '../styles/variables';
 
-export default class ChatScreen extends Component {
+class ChatScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,6 +35,7 @@ export default class ChatScreen extends Component {
       loadEarlier: true,
       typingText: null,
       isLoadingEarlier: false,
+      onConvert: [],
     };
 
     this._isMounted = false;
@@ -53,14 +55,47 @@ export default class ChatScreen extends Component {
   async UNSAFE_componentWillMount() {
     this._isMounted = true;
     this.setState(() => {
-      return {
-        messages: require('../data/messages.js'),
+      return { 
+        //messages: require('../data/messages.js'),
       };
     });
-  }
+  } 
 
   componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  async componentDidMount (){ 
+    console.log('component', this.props.data.user.personne.id);
+    //let ob  = require(baseUri+"/bundles/mamedcovid/assets/images/pictures/2.jpeg");
+      let messages;
+      let formatMessages;
+      if(this.props.converations[this.props.navigation.state.params.idMed]){
+        formatMessages = this.props.converations[this.props.navigation.state.params.idMed];
+      }
+      else {
+        let onConvert = await getOneMessages(this.props.data.user.personne.id, this.props.navigation.state.params.idMed)
+        if(onConvert){
+          messages = onConvert.data;
+          formatMessages = [];
+          messages.reverse().map((mess, ind) => {
+            let prototype = {
+                _id:  Math.round(Math.random() * 1000000000),
+                text: mess.message,
+                createdAt: new Date(mess.date),
+                user: {
+                  _id: mess.sender_id,
+                  name: mess.sender_nom,
+                },
+                sent: true,
+                received: true,
+              }
+            formatMessages.push(prototype);
+          })
+        }
+      }
+      this.setState({messages: formatMessages});
+      this.props.addConvert({idMed: this.props.navigation.state.params.idMed, converation: formatMessages})
   }
 
   onLoadEarlier() {
@@ -86,15 +121,39 @@ export default class ChatScreen extends Component {
     }, 1000); // simulating network
   }
 
-  onSend(messages = []) {
+  async onSend(messages = []) {
+    console.log('toSend', messages);
     this.setState((previousState) => {
       return {
         messages: GiftedChat.append(previousState.messages, messages),
       };
     });
+    let res = await onSendMessage(
+        {   
+          message: {
+                  msg: messages[0].text,  
+                  emetteur: this.props.data.user.personne.id, 
+                  recpteur: this.props.navigation.state.params.idMed,
+                }
+        }
+      );
+      let oldState = this.state.messages.slice();
+      oldState.splice(0, 1);
+      let newMess = { ...this.state.messages[0], sent: true };
+      console.log('oldState', oldState);
+      console.log('nexMess', newMess)
+    if(res.success){
 
+      this.setState((previousState) => {
+        return {
+          messages: GiftedChat.append(oldState, newMess),
+        };
+      });
+      this.props.actuConvert({idMed: this.props.navigation.state.params.idMed, converation: GiftedChat.append(oldState, newMess)})
+    }
+    console.log('response sedn mess', res);
     // for demo purpose
-    this.answerDemo(messages);
+    //this.answerDemo(messages);
   }
 
   answerDemo(messages) {
@@ -293,13 +352,19 @@ export default class ChatScreen extends Component {
   }
  
   render() {
-    console.log('component run')
+    const idMed = this.props.navigation.state.params.idMed;
+    console.log('conversation', this.props.converations[this.props.navigation.state.params.idMed])
+    // const months = ['Jan', 'March', 'April', 'June'];
+    // let m = months.splice(0, 1);
+    // console.log('b',months.splice(0, 1));
+    // console.log('this.state.messages', this.state.messages)
+    // console.log('component run', this.props.navigation.state.params.name, this.props.navigation.state.params.idMed)
     return (
       <View style={CommonStyles.normalPage}>
-        <GradientNavigationBar
+        <GradientNavigationBar 
           navigation={this.props.navigation}
           back
-          titleText='Alexander Wolfe'
+          titleText={this.props.navigation.state.params.name}
           rightButtons={
             [
               {
@@ -315,7 +380,7 @@ export default class ChatScreen extends Component {
         <View style={CommonStyles.chatView}>
           <GiftedChat
             messages={this.state.messages}
-            placeholder='Type something...'
+            placeholder='Votre message ...'
             onSend={this.onSend}
             loadEarlier={this.state.loadEarlier}
             onLoadEarlier={this.onLoadEarlier}
@@ -323,7 +388,7 @@ export default class ChatScreen extends Component {
             renderAvatarOnTop={true}
 
             user={{
-              _id: 1, // sent messages should have same user._id
+              _id: this.props.data.user.personne.id, // sent messages should have same user._id
             }}
 
             renderActions={this.renderCustomActions}
@@ -352,3 +417,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
 });
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    addConvert: async (data) => {
+      dispatch({type: "ADD_CONVERT", data: data});
+    },
+    actuConvert: async (data) => {
+      dispatch({type: "ACTU_CONVERT", data: data});
+    },
+
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatScreen);

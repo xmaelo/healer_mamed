@@ -84,7 +84,7 @@ export default class VerifyPhoneScreen extends Component {
 
   _handleVerify() {
     // TODO
-    this.props.navigation.navigate('StartNameScreen');
+    this.props.navigation.navigate('StartNameScreen', {arrs: this.props.navigation.state.params.arrs});
   }
 
   _handleResend() {

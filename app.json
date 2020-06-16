@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "expo-healer",
-    "description": "Download link: https://1.envato.market/qLrDq",
-    "slug": "expo-healer",
+    "name": "maMED",
+    "description": "maMED pour lutter efficassement contre le covid",
+    "slug": "maMED",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -24,14 +24,14 @@
       "**/*"
     ],
     "android": {
-      "package": "vn.timistudio.healer",
+      "package": "com.anang.anang",
       "intentFilters": [
         {
           "action": "VIEW",
           "data": [
             {
               "scheme": "https",
-              "host": "*.herokuapp.com"
+              "host": "*.covid19.care"
             }
           ],
           "category": [

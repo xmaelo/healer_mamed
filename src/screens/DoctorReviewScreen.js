@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, Platform, ScrollView, TouchableOpacity } from 'react-native';
 //import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { connect } from 'react-redux'
 import Text from '../elements/Text';
 import GradientButton from '../elements/GradientButton';
 import GradientNavigationBar from '../elements/GradientNavigationBar';
@@ -9,8 +9,9 @@ import Icon from 'react-native-vector-icons/Entypo';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceHeight, shadowOpt, colors, fontSize, fontFamily } from '../styles/variables';
 import { getAllMessages, baseUri } from "./statefull/appStatefull";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default class DoctorReviewScreen extends Component {
+class DoctorReviewScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,14 +40,38 @@ export default class DoctorReviewScreen extends Component {
         },
       ]
     }
-  }
+  } 
 
-  async componentDidMount (){
+  async componentDidMount (){ 
     console.log('component Did Mount messages run', this.props.navigation.state.params.id);
     //let ob  = require(baseUri+"/bundles/mamedcovid/assets/images/pictures/2.jpeg");
-    let allMessages = await getAllMessages(this.props.navigation.state.params.id)
+    let allMessages;
+    if(this.props.contact){
+      allMessages = this.props.contact;
+    }
+    else{
+      this.flash();
+      allMessages = await getAllMessages(this.props.navigation.state.params.id);
+      hideMessage();
+    }
     this.setState({messages: allMessages.data})
+    this.props.setContact(allMessages)
     console.log('response from api', allMessages) 
+  }
+
+  flash = (position = "bottom",  extra = {}) => {
+    let message = {
+       message: 'Chargement des conversations ...',
+      type: "default",
+      position,
+      autoHide: false,
+      // animationDuration: 1000, 
+      icon: { icon: "auto", position: "left" },
+      duration: 20000,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message)
   }
 
   render() {
@@ -72,18 +97,25 @@ export default class DoctorReviewScreen extends Component {
         />
         <ScrollView style={CommonStyles.noTabScrollView}>
           <View style={CommonStyles.wrapperBox}>
-            {this.state.messages!== null &&
+            {
+              this.state.messages!== null &&
               this.state.messages.map((item, index) => (
                 <Item
-                  key={index}
-                  avatar={uri+item.medecin.personne.image}
+                  _onGoToChat={()=>this.props.navigation.navigate('ChatScreen', {
+                                                          idMed: item.medecin.personne.id,
+                                                          name: item.medecin.personne.prenom+' '+item.medecin.personne.nom
+                                                        })}
+                  key={index} 
+                  avatar={item.medecin.personne.image ? uri+item.medecin.personne.image : require('../../img/person/profil2.jpg')}
+                  picture={item.medecin.personne.image ? true : false }
                   name={item.medecin.personne.prenom+' '+item.medecin.personne.nom}
                   birthDate={""}
                   comment={'ok demain je serai...'}
+
                 />
               ))
             }
-            {
+            { 
             // <View style={[CommonStyles.buttonBox, {marginTop: 80, marginBottom: 10}]}>
             //   <GradientButton
             //     onPressButton={this._handleClickWriteReview.bind(this)}
@@ -132,32 +164,34 @@ class Item extends React.Component {
     }
 
     return (
-      <View style={[CommonStyles.itemWhiteBox, {padding: 16}]}>
-        <View style={styles.info}>
-          <View style={styles.left}>
-            {
-              <Image
-                  source={{uri: avatar}}
-                  style={{width: 60, height: 60}}
-                />  
-            }
-            <View style={styles.name}>
-              <Text itemHeader black mediumBold style={{marginTop: -6}}>
-                {name}
-              </Text>
-        <Text normal lightGrey regular>{comment}</Text>
+      <TouchableOpacity onPress={this.props._onGoToChat}>
+        <View style={[CommonStyles.itemWhiteBox, {padding: 16}]}>
+            <View style={styles.info}>
+              <View style={styles.left}>
+                {  
+                  <Image
+                      source={ require('../../img/person/profil2.jpg')}
+                      style={{width: 60, height: 60, borderRadius: 20}}
+                    />  
+                }
+                <View style={styles.name}>
+                  <Text itemHeader black mediumBold style={{marginTop: -6}}>
+                    {name}
+                  </Text>
+                  <Text normal lightGrey regular>{comment}</Text>
+                </View>
+              </View>
+              <View style={styles.right}>
+                  <Icon
+                    size={19}
+                    style={{paddingLeft: 2}}
+                    name="chevron-thin-right"
+                    color="rgb(105,105,105)"
+                  />
+              </View>
             </View>
-          </View>
-          <View style={styles.right}>
-              <Icon
-                size={19}
-                style={{paddingLeft: 2}}
-                name="chevron-thin-right"
-                color="rgb(105,105,105)"
-              />
-          </View>
         </View>
-      </View>
+      </TouchableOpacity >
     );
   }
 }
@@ -186,3 +220,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    setContact: async (data) => {
+      dispatch({type: "SET_CONTACT", data: data});
+    },
+
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DoctorReviewScreen);

@@ -2,8 +2,9 @@ import * as axios from 'axios';
 
 export const baseUri = "https://covid19.mamed.care";
 export const urlMedia = baseUri + "/bundles/mamedcovid/assets/images/pictures/";
+
 export const getPersonalData = async (uri) => {
-	return await axios.get(baseUri+uri) 
+	return await axios.get(baseUri+uri)  
     .then( (response) => { 
       console.log(" =================",response.data);
       return response.data
@@ -13,9 +14,33 @@ export const getPersonalData = async (uri) => {
     });  
  
 }
+export const getArrondissementData = async () => {
+  const uri = "/api_v1/api/regions.json"
+  return await axios.get(baseUri+uri) 
+    .then( (response) => { 
+      console.log(" =================",response.data);
+      return response.data.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });  
+ 
+}
 
 export const updateCasContact = async (idUpdate, idPer, obj) => {
   const _com = '/api_v1/updates/'+idUpdate+'/cas/'+idPer+'contacts.json';
+  return await axios.post(baseUri+_com, obj , { headers: { "Content-type": "application/json" } }) 
+    .then( (response) => { 
+      console.log(" =================",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });  
+ 
+}
+export const updatePersonneUrgence = async (id, obj) => {
+  const _com = '/api_v1/edits/'+id+'/urgences.json';
   return await axios.post(baseUri+_com, obj , { headers: { "Content-type": "application/json" } }) 
     .then( (response) => { 
       console.log(" =================",response.data);
@@ -58,12 +83,23 @@ export const getAllMessages = async (id) => {
       console.log(error);    
     }); 
 }
+export const onSendMessage = async (obj) => {
+  console.log('obg', obj)
+  return await axios.post(baseUri+'/api_v1/messages.json', obj , { headers: { "Content-type": "application/json" } })
+    .then( (response) => {
+      console.log(" =================",response); 
+      return response.data;
+    })
+    .catch( (error) => {
+      console.log(error);    
+    }); 
+}
 export const getOneMessages = async (id1,id2) => {
   console.log(baseUri+'/api_v1/conversations/'+id1+'/recepteurs/'+id2+'.json')
   return await axios.get(baseUri+'/api_v1/conversations/'+id1+'/recepteurs/'+id2+'.json', { headers: { "Content-type": "application/json" } })
     .then( (response) => {
       console.log(" ====== response messages ===========",response); 
-      return response
+      return response.data
     })
     .catch( (error) => {
       console.log(error);    

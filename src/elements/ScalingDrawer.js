@@ -162,6 +162,7 @@ class ScalingDrawer extends Component {
 
     return (
       <View style={styles.container}>
+        {
         <Animated.View
           {...this.panResponder.panHandlers}
           ref={ref => this.frontRef = ref}
@@ -173,6 +174,7 @@ class ScalingDrawer extends Component {
         >
           {this.props.children}
         </Animated.View>
+        }
         <View style={[styles.drawer, this.props.contentWrapperStyle]}>
           {this.props.content}
         </View>

@@ -11,6 +11,7 @@ import CommonStyles from '../styles/CommonStyles';
 import StartNameScreen from './StartNameScreen';
 import FlashMessage, { showMessage, hideMessage } from "react-native-flash-message";
 // import SignInScreen from './SignInScreen';
+import { getArrondissementData } from "./statefull/appStatefull";
 
 class SignUpScreen extends Component {
   constructor(props) {
@@ -19,8 +20,14 @@ class SignUpScreen extends Component {
       username: "",
       tel: "",
       password: "",
-      repass: ""
+      repass: "",
+      arrs: null,
     }
+  }
+
+  async componentDidMount(){
+    let arrs = await getArrondissementData();
+    this.setState({ arrs: arrs});
   }
 
    messageWithPosition (position = "bottom",  extra = {}) {
@@ -130,7 +137,7 @@ class SignUpScreen extends Component {
       tel: this.state.tel
     }
     await this.props.dispatchBaseInfos(infos);
-    this.props.navigation.navigate('VerifyPhoneScreen');
+    this.props.navigation.navigate('VerifyPhoneScreen', {arrs: this.state.arrs});
   }
 
   _handleClickSignIn() {
