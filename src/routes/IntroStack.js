@@ -54,6 +54,7 @@ import IndicatorsDetailsScreen from '../screens/IndicatorsDetailsScreen';
 //Another routes
 import AddCasContactScreen from '../screens/AddCasContactScreen';
 import ContactUrgence from '../screens/ContactUrgence';
+import AddActiviteesScreen from '../screens/AddActiviteesScreen';
 
 import CartScreen from '../screens/CartScreen';
 import BillingScreen from '../screens/BillingScreen';
@@ -69,6 +70,9 @@ const AppRouter = StackRouter(
     },
     ContactUrgence: {
       screen: ContactUrgence,
+    },
+    AddActiviteesScreen: {
+      screen: AddActiviteesScreen,
     },
     IntroOneScreen: {
       screen: IntroOneScreen,

@@ -65,6 +65,21 @@ function app(state = initialState, action) {
 	  		curentState = {...curentState, converations: {...state.converations, [idMedecins] : converations}}
 	  		console.log('curentState', curentState);
 	      	return curentState;
+	    case 'ADD_DATA':
+	    	let slice = state.data.user.diagnostiques.slice();
+	    	console.log('after op', slice.length)
+	    	slice.push(action.data.diagnostique)
+	    	console.log('before op', slice.length)
+	    	console.log('before op slice', slice)
+	    	console.log('data', slice.diagnostique)
+	  		curentState = {...curentState,  
+	  			data: {...curentState.data, 
+	  			user: {...curentState.data.user,
+	  			diagnostiques: slice
+	  			}
+	  		  }
+	  		}
+	      	return curentState;
 	  	default:
     		return curentState;
   }

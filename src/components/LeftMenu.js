@@ -146,32 +146,32 @@ class LeftMenu extends Component {
               </Text>
             </View>
           </TouchableHighlight>
-        {
-          // <TouchableHighlight
-          //   underlayColor='#efefef'
-          //   style={styles.itemBox}
-          //   onPress={ this._handleClickDoctors.bind(this) }>
-          //   <View style={styles.itemBox}>
-          //     {
-          //       (() => {
-          //         if (isActive == 'doctors') {
-          //           return (
-          //             <View style={styles.activeItem} />
-          //           )
-          //         }
-          //       })()
-          //     }
-          //     <Text
-          //       style={[
-          //         styles.menuText,
-          //         isActive == 'doctors' && styles.activeMenuText
-          //       ]}
-          //     >
-          //       DOCTORS
-          //     </Text>
-          //   </View>
-          // </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='#efefef'
+            style={styles.itemBox}
+            onPress={ this._handleClickLocal.bind(this) }>
+            <View style={styles.itemBox}>
+              {
+                (() => {
+                  if (isActive == 'localisation') {
+                    return (
+                      <View style={styles.activeItem} />
+                    )
+                  }
+                })()
+              }
+              <Text
+                style={[
+                  styles.menuText,
+                  isActive == 'doctors' && styles.activeMenuText
+                ]}
+              >
+                LOCALISATION
+              </Text>
+            </View>
+          </TouchableHighlight>
         
+        {
           // <TouchableHighlight
           //   underlayColor='#efefef'
           //   style={styles.itemBox}
@@ -298,6 +298,11 @@ class LeftMenu extends Component {
   _handleClickDoctors() { 
     this.setState({isActive:'doctors'});
     this.props.navigation.navigate('InsurranceScreen', {toActivites: this.props.data.user.diagnostiques});
+    this.props.drawer.close()
+  }
+  _handleClickLocal() { 
+    this.setState({isActive:'localisation'});
+    this.props.navigation.navigate('MapScreen', {medecin: this.props.data.user.medecins});
     this.props.drawer.close()
   }
 

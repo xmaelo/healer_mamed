@@ -116,7 +116,7 @@ export default class PrimeNavigationBar extends Component {
 
   // Handle click back button
   _onClickBackButton() {
-    this.props.navigation.goBack();
+    this.props.navigation.goBack(null);
   }
 }
 

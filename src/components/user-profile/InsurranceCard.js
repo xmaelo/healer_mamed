@@ -45,7 +45,7 @@ export default class InsurranceCard extends Component {
   renderHeader() {
     return (
       <View style={styles.panelHeader}>
-        <Image
+        <Image 
           source={this.props.image}
           style={{
             width: this.props.imageWidth,

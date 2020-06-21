@@ -8,6 +8,8 @@ import { deviceHeight, NAV_HEIGHT, TAB_HEIGHT, STATUSBAR_HEIGHT } from '../style
 import { connect } from 'react-redux'
 import MenuItemBox from '../components/MenuItemBox';
 import CustomTabBar from '../components/CustomTabBar';  
+import { _storeData } from "./statefull/storeLocalStorage";
+
 
 class MainServiceScreen extends Component {
   constructor(props) {
@@ -15,7 +17,9 @@ class MainServiceScreen extends Component {
   }
 
   async componentDidMount() {
-    console.log('this.props.Journal',this.props)
+    console.log('this.props.Journal',this.props);
+    let rs = await _storeData(this.props.data);
+    console.log('after sstore data', rs)
   }
 
   render() {
@@ -115,7 +119,7 @@ class MainServiceScreen extends Component {
   _handleClickEmailButton() {
     this.props.navigation.navigate("DoctorReviewScreen", {id: this.props.data.user.personne.id});
   }
-
+ 
   // Go to FindDoctorScreen
   _handleInsurranceScreen() { 
     this.props.navigation.navigate("InsurranceScreen", {toActivites: this.props.data.user.diagnostiques});

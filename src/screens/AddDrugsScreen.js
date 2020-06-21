@@ -7,13 +7,16 @@ import {
   Image,
   Platform,
   TouchableHighlight,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 
 import GradientNavigationBar from '../elements/GradientNavigationBar';
 import GradientButton from '../elements/GradientButton';
-import SelectBox from '../elements/SelectBox';
+import SelectBox from '../elements/SelectBox'; 
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
 
 import CommonStyles from '../styles/CommonStyles';
 import {
@@ -33,7 +36,8 @@ export default class AddDrugsScreen extends Component {
       email: "",
       telephone: "",
       tel_urg: "",
-      con_urg: ""
+      con_urg: "",
+      image: null,
     }
   }
   async componentDidMount() {
@@ -47,7 +51,35 @@ export default class AddDrugsScreen extends Component {
       con_urg: perons.nom_contact_urgence,
       tel_urg: perons.telephone_contact_urgence
     })
+    this.getPermission();
   }
+
+  getPermission = async () => {
+    console.log('gt permissions run')
+      if (Constants.platform.ios) {
+        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+  }
+
+  pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({image: result.uri});
+      console.log('image uri', result.uri);
+    }
+  };
+
   render() {
     return (
       <View style={CommonStyles.normalPage}>
@@ -57,24 +89,33 @@ export default class AddDrugsScreen extends Component {
           titleText='Modifier profil'
         />
         <View style={styles.addDrugBtn}>
-          <Image
-            source={require('../../img/healer/addDrug.png')}
-            style={{width: 90, height: 90}}
-          />
+          <TouchableOpacity onPress={this.pickImage}>
+            {!this.state.image ?
+              <Image
+                source={require('../../img/healer/addDrug.png')}
+                style={{width: 90, height: 90}}
+              /> :
+              <Image 
+                source={{ uri: this.state.image }} 
+                style={{ width: 100, height: 100, borderRadius: 10 }} 
+              />
+            }
+          </TouchableOpacity>
         </View>
         <ScrollView style={CommonStyles.scrollView}>
         <View style={styles.form}>
           <View style={CommonStyles.textInputField}>
-              <Image
-                source={require('../../img/healer/avatar.png')}
-                style={{
-                  position:'absolute',
-                  bottom: 12,
-                  left: 20,
-                  width: 19,
-                  height: 22
-                }}
-              />
+              
+                <Image
+                  source={require('../../img/healer/avatar.png')}
+                  style={{
+                    position:'absolute',
+                    bottom: 12,
+                    left: 20,
+                    width: 19,
+                    height: 22
+                  }}
+                />
               <TextInput
                 placeholder="Nom"
                 onChangeText={(val)=>this.setState({nom: val})}

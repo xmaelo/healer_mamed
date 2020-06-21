@@ -15,7 +15,7 @@ import Text from '../elements/Text';
 import CommonStyles from '../styles/CommonStyles';
 import {
   deviceWidth,
-  deviceHeight,
+  deviceHeight, 
   blueGradient,
   colors
 } from '../styles/variables';
@@ -77,7 +77,7 @@ export default class CallDoctorScreen extends Component {
   }
 
   _handleClickEndCallButton() {
-    this.props.navigation.goBack();
+    this.props.navigation.goBack(null);
   }
 }
 

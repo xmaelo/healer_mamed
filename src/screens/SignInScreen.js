@@ -8,7 +8,7 @@ import CheckBox from '../elements/CheckBox';
 
 import { deviceWidth, deviceHeight, shadowOpt, colors } from '../styles/variables';
 import { showMessage, hideMessage } from "react-native-flash-message";
-
+import { _retrieveData } from "./statefull/storeLocalStorage";
 import CommonStyles from '../styles/CommonStyles';
 import SignUpScreen from './SignUpScreen';
 import { connect } from 'react-redux'
@@ -28,7 +28,8 @@ class SignInScreen extends Component {
   }
 
   async componentDidMount() {
-    console.log('sign in componenet did mount before call api')
+    console.log('sign in componenet did mount before call api');
+    await _retrieveData();
     
   }
   initJournal = async () => { 
@@ -44,8 +45,8 @@ class SignInScreen extends Component {
   login = async () => {
     this.messageWithPosition();
     let ob = {
-      username: this.state.username,
-      password: this.state.password
+      username: 'patient',//this.state.username,
+      password: 'admin'//this.state.password
     }
     let data = await login(ob);
     if(data.data && data.data.success && data.data.success == true){

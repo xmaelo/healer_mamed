@@ -5,12 +5,14 @@ import { Dimensions, StatusBar, View, Platform, AppRegistry } from 'react-native
 import { createNavigator, createAppContainer, addNavigationHelpers } from 'react-navigation';
 //import stores from "./mobx" 
 import ScalingDrawer from './elements/ScalingDrawer';
+import { _retrieveData } from "./screens/statefull/storeLocalStorage";
 
 import LeftMenu from './components/LeftMenu';
 import HealerRouter from './routes/IntroStack'; 
 import { Provider } from 'react-redux'
 import app from './reducer/appStore'
 import FlashMessage from "react-native-flash-message";
+import { connect } from 'react-redux'
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,6 +32,7 @@ class CustomDrawerView extends Component {
   }
 
   async componentDidMount() {
+    //console.log('this?props.init componenet', this.props)
     await Font.loadAsync({
       'Poppins-Light': require('../assets/fonts/Poppins-Light.ttf'),
       'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
@@ -37,7 +40,12 @@ class CustomDrawerView extends Component {
       'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
       'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf')
     });
-    this.setState({ fontLoaded: true });
+    this.setState({ fontLoaded: true }); 
+    let data = await _retrieveData();
+    if(data){
+      await this.props.publishJournal(data)
+      this.props.navigation.navigate("MainServiceScreen");
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -45,7 +53,7 @@ class CustomDrawerView extends Component {
     if (nextProps.navigation.state.index === 0)
       this._drawer.blockSwipeAbleDrawer(false);
 
-    if (
+    if ( 
       nextProps.navigation.state.index === 0
       && this.props.navigation.state.index === 0
     ) {
@@ -92,14 +100,37 @@ class CustomDrawerView extends Component {
   }
 }
 
-const AppNavigator = createNavigator(CustomDrawerView, HealerRouter, {});
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    publishJournal: async (data) => {  
+      dispatch({type: "PUBLISH_JOURNAL", data: data});
+    },
+
+  };
+}
+const Connect = connect(mapStateToProps, mapDispatchToProps)(CustomDrawerView);
+const AppNavigator = createNavigator((Connect), HealerRouter, {});
 const AppContainer = createAppContainer(AppNavigator);
 
-export default () => {
-  return (
-    <Provider store={app}>
-      <AppContainer />
-       <FlashMessage position="top" animated={true} />
-    </Provider>
-  )
-};
+class App extends Component{
+
+  componentDidMount() {
+    
+  }
+  render() {
+    return (
+      <Provider store={app}>
+        <AppContainer />
+        <FlashMessage position="top" animated={true} />
+      </Provider>
+    )
+  };
+}
+
+
+
+export default App;
+

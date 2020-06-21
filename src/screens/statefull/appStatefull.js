@@ -105,7 +105,7 @@ export const getOneMessages = async (id1,id2) => {
       console.log(error);    
     }); 
 }
-export const onSaveActivity = async (id, obj, idpers) => {
+export const onSaveActivity = async (id, obj) => {
   console.log('in sactiviter', baseUri+'/api_v1/diagnostiques/'+id+'.json')
   return await axios.post(baseUri+'/api_v1/diagnostiques/'+id+'.json', obj , { headers: { "Content-type": "application/json" } })
     .then( async (response) => {
@@ -116,6 +116,8 @@ export const onSaveActivity = async (id, obj, idpers) => {
       console.log(error);    
     }); 
 }
+
+
 
 
 //covid.mamed.care/api_v1/diagnostiques/2.json

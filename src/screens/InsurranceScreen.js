@@ -4,8 +4,9 @@ import { StyleSheet, Text, View, Image, Platform, ScrollView, TouchableHighlight
 import CommonStyles from '../styles/CommonStyles';
 import GradientNavigationBar from '../elements/GradientNavigationBar';
 import InsurranceCard from '../components/user-profile/InsurranceCard';
+import { connect } from 'react-redux'
 
-export default class InsurranceScreen extends Component {
+class InsurranceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,8 +53,11 @@ export default class InsurranceScreen extends Component {
 
   render() {
     console.log('this.props insuren', this.props.navigation.state.params)
-    const toActivites = this.props.navigation.state.params.toActivites
+    let toActivites = this.props.navigation.state.params.toActivites
+    toActivites = this.props.data.user.diagnostiques;
     const list = this.state.insurranceList;
+    let date = Date();
+    let tDate = new Date(date).toLocaleDateString('fr-CA') +' '+ new Date(date).getHours()+':' +new Date(date).getMinutes();
     return (
       <View style={CommonStyles.normalPage}>
         <GradientNavigationBar
@@ -61,7 +65,7 @@ export default class InsurranceScreen extends Component {
           back
           titleText='Activités' 
           rightButtons={
-            [
+            [ 
               {
                 key: 1,
                 buttonIcon: require('../../img/healer/add.png'),
@@ -75,10 +79,10 @@ export default class InsurranceScreen extends Component {
         <ScrollView style={CommonStyles.noTabScrollView}>
           <View style={CommonStyles.wrapperBox}> 
             {
-              toActivites.map((item, index) => (
+              toActivites.reverse().map((item, index) => (
                 <InsurranceCard
                   key={index}
-                  header={item.datesave}
+                  header={item.datesave ? item.datesave : tDate}
                   image={list[Math.floor(Math.random() * Math.floor(3))].image}
                   imageWidth={list[Math.floor(Math.random() * Math.floor(3))].imageWidth}
                   imageHeight={list[Math.floor(Math.random() * Math.floor(3))].imageHeight}
@@ -93,11 +97,51 @@ export default class InsurranceScreen extends Component {
             }
           </View>
         </ScrollView>
+        <TouchableHighlight
+          underlayColor={'transparent'}
+          style={styles.addBtn}
+          onPress={this._handleClickAddButton.bind(this)}
+          >
+          <Image
+            source={require('../../img/healer/icAdd.png')}
+            style={{width: 70, height: 75}}
+          />
+        </TouchableHighlight>
       </View>
     );
   }
 
   _handleClickAddButton() {
-    // TODO: 
+    this.props.navigation.navigate("AddActiviteesScreen");
   }
 }
+
+const styles = StyleSheet.create({
+  addBtn: {
+    position: 'absolute',
+    bottom: 3,
+    right: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(0,0,0,0.6)',
+        shadowOffset: {
+          width: 0,
+          height: 8
+        },
+        shadowRadius: 5,
+        shadowOpacity: 0.3
+      },
+      android: {
+        elevation: 12,
+      },
+    }),
+  },
+});
+
+
+
+const mapStateToProps = (state) => {
+  return state
+}
+
+export default connect(mapStateToProps)(InsurranceScreen);
