@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import * as Font from 'expo-font';
 //import { Provider } from "mobx-react";
-import { Dimensions, StatusBar, View, Platform, AppRegistry } from 'react-native';
+import { Dimensions, StatusBar, View, Platform, AppRegistry, Alert  } from 'react-native';
 import { createNavigator, createAppContainer, addNavigationHelpers } from 'react-navigation';
 //import stores from "./mobx" 
 import ScalingDrawer from './elements/ScalingDrawer';
 import { _retrieveData } from "./screens/statefull/storeLocalStorage";
 
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+ 
 import LeftMenu from './components/LeftMenu';
 import HealerRouter from './routes/IntroStack'; 
 import { Provider } from 'react-redux'
 import app from './reducer/appStore'
 import FlashMessage from "react-native-flash-message";
 import { connect } from 'react-redux'
-
+ 
 const {width, height} = Dimensions.get('window');
 
 const defaultScalingDrawerConfig = {
@@ -30,7 +33,7 @@ class CustomDrawerView extends Component {
       fontLoaded: false,
     }
   }
-
+ 
   async componentDidMount() {
     //console.log('this?props.init componenet', this.props)
     await Font.loadAsync({
@@ -40,13 +43,51 @@ class CustomDrawerView extends Component {
       'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
       'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf')
     });
-    this.setState({ fontLoaded: true }); 
+    this.setState({ fontLoaded: true });  
     let data = await _retrieveData();
+    this._getLocationAsync();
     if(data){
+      console.log('data _retrieveData', data)
       await this.props.publishJournal(data)
       this.props.navigation.navigate("MainServiceScreen");
     }
   }
+
+   createThreeButtonAlert = () =>
+    Alert.alert(
+      "Permissions Refusé",
+      "maMED a besoin de la localisation pour fonctionner correctement",
+      [
+        {
+          text: "Réessayer",
+          onPress: () => {console.log("Ask me later pressed"); this._getLocationAsync()}
+        }
+      ],
+      { cancelable: false }
+    );
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+      this.createThreeButtonAlert()
+
+      console.log('permission denied');
+      //this.messageWithPosition()
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    console.log('location location', location)
+    let region = {
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                  latitudeDelta: 0.015, 
+                  longitudeDelta: 0.0121,
+                }
+    await this.props.setLocalisation({region: region, location: location})
+  };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     /** Active Drawer Swipe **/
@@ -75,28 +116,28 @@ class CustomDrawerView extends Component {
     }
 
     const { routes, index } = this.props.navigation.state;
-
+    console.log('this.props.navigation', this.props.navigation)
     const ActiveScreen = HealerRouter.getComponentForState(this.props.navigation.state);
-
-    return (
-      <ScalingDrawer
-        ref={ref => this._drawer = ref}
-        content={ <LeftMenu drawer={this._drawer} navigation={this.props.navigation} /> }
-        {...defaultScalingDrawerConfig}
-      >
-        <StatusBar backgroundColor={'transparent'} translucent />
-        <View style={{ flex: 1, height: height }}>
-          <ActiveScreen
-            navigation={{
-              ...this.props.navigation,
-              state: routes[index],
-              openDrawer: () => this._drawer.open(),
-              closeDrawer: () => this._drawer.close(),
-            }}
-          />
-        </View>
-      </ScalingDrawer>
-    )
+    let data =  _retrieveData();
+      return (
+          <ScalingDrawer
+            ref={ref => this._drawer = ref}
+            content={ <LeftMenu drawer={this._drawer} navigation={this.props.navigation} /> }
+            {...defaultScalingDrawerConfig}
+          >
+            <StatusBar backgroundColor={'transparent'} translucent />
+            <View style={{ flex: 1, height: height }}>
+              <ActiveScreen 
+                navigation={{
+                  ...this.props.navigation,
+                  state: routes[index],
+                  openDrawer: () => this._drawer.open(),
+                  closeDrawer: () => this._drawer.close(),
+                }}
+              />
+            </View>
+          </ScalingDrawer>
+      )
   }
 }
 
@@ -108,7 +149,9 @@ const mapDispatchToProps = dispatch => {
     publishJournal: async (data) => {  
       dispatch({type: "PUBLISH_JOURNAL", data: data});
     },
-
+    setLocalisation: async (data) => {
+      dispatch({type: 'SET_LOCALISATION', data: data})
+    }
   };
 }
 const Connect = connect(mapStateToProps, mapDispatchToProps)(CustomDrawerView);

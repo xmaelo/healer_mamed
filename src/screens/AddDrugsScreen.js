@@ -17,8 +17,9 @@ import GradientButton from '../elements/GradientButton';
 import SelectBox from '../elements/SelectBox'; 
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
-
+import { updateProfils, setImageRest} from "./statefull/appStatefull";
 import CommonStyles from '../styles/CommonStyles';
+import { connect } from 'react-redux'
 import {
   deviceWidth,
   deviceHeight,
@@ -26,8 +27,8 @@ import {
   STATUSBAR_HEIGHT,
   shadowOpt
 } from '../styles/variables';
-
-export default class AddDrugsScreen extends Component {
+import { showMessage, hideMessage } from "react-native-flash-message";
+class AddDrugsScreen extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -76,9 +77,45 @@ export default class AddDrugsScreen extends Component {
 
     if (!result.cancelled) {
       this.setState({image: result.uri});
+      let data = {'pic-profile': result.uri}
+     let re =  await setImageRest(this.props.data.user.personne.id, data)
+      await this.props.setImage(re.data);
       console.log('image uri', result.uri);
-    }
+    } 
   };
+  _onSave = async () => {
+    const { navigation } = this.props;
+    const data = {
+      patient: {
+        nom: this.state.nom,
+        prenom: this.state.prenom,
+        email: this.state.email,
+        telephone: this.state.telephone,
+      }
+    }
+    this.messageWithPosition()
+    let res = await updateProfils(this.props.data.user.personne.id ,data)
+    await this.props.updateProfils(data.patient);
+    hideMessage();
+    //navigation.goBack(null)
+  }
+
+  messageWithPosition = (position = "bottom",  extra = {}) => {
+    let message = {
+       message: "Mise ajour en cours ...",
+      type: "default",
+      position,
+      autoHide: false,
+      // animationDuration: 1000, 
+      icon: { icon: "auto", position: "left" },
+      duration: 6000,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message)
+    
+  }
+
 
   render() {
     return (
@@ -272,7 +309,7 @@ export default class AddDrugsScreen extends Component {
 
         <View style={styles.btn}>
           <GradientButton
-            onPressButton={this._handleAddDrugs.bind(this)}
+            onPressButton={this._onSave}
             setting={shadowOpt}
             btnText="Mise A jour"
           />
@@ -330,3 +367,23 @@ const styles = StyleSheet.create({
     height: 30
   }
 });
+
+
+
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    updateProfils: async (data) => {
+      dispatch({type: "UPDATE_PROFILS", data: data});
+    },
+    setImage: async (data) => {
+      dispatch({type: "SET_IMAGE", data: data});
+    },
+
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddDrugsScreen);

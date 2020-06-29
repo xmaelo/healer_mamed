@@ -83,7 +83,7 @@ class ListDrugsScreen extends Component {
       <View style={CommonStyles.normalPage}>
         <GradientNavigationBar
           navigation={this.props.navigation}
-          back
+          back 
           titleText='Cas contact'
           rightButtons={
             [
@@ -94,12 +94,12 @@ class ListDrugsScreen extends Component {
                 buttonWidth: 22,
                 buttonHeight: 22,
               },
-            ]
+            ] 
           }
         />
         <ScrollView style={CommonStyles.noTabScrollView}>
           <View style={CommonStyles.wrapperBox}>
-            {this.props.data.user.personnes.map((item, index) => (
+            {this.props.data.user.personnes.reverse().map((item, index) => (
                 <ItemWithDetail
                   key={index}
                   image={{
@@ -108,7 +108,7 @@ class ListDrugsScreen extends Component {
                     height: 22,
                   }}
                   header={item.personne.nom}
-                  onPressItem={()=>this.props.navigation.navigate('AddCasContactScreen', {item: item})}
+                  onPressItem={()=>this.props.navigation.navigate('AddCasContactScreen', {item: item, index: index})}
                 />
               ))
             }

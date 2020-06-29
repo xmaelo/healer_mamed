@@ -3,15 +3,15 @@ import { View, StyleSheet, Image, Platform, ScrollView, TouchableHighlight } fro
 import  MapView  from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import { deviceWidth, deviceHeight, NAV_HEIGHT, STATUSBAR_HEIGHT } from '../styles/variables';
-
+import { connect } from 'react-redux'
 import GradientNavigationBar from '../elements/GradientNavigationBar';
 import CommonStyles from '../styles/CommonStyles';
 import MapCard from '../components/MapCard';
 
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
+// import * as Location from 'expo-location';
+// import * as Permissions from 'expo-permissions';
  
-export default class MapScreen extends Component {
+class MapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,31 +71,31 @@ export default class MapScreen extends Component {
   }
 
   async componentDidMount() {
-    this._getLocationAsync();
+    //this._getLocationAsync();
   }
 
 
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied',
-      });
+  // _getLocationAsync = async () => {
+  //   let { status } = await Permissions.askAsync(Permissions.LOCATION);
+  //   if (status !== 'granted') {
+  //     this.setState({
+  //       errorMessage: 'Permission to access location was denied',
+  //     });
 
-      console.log('permission denied');
-      this.messageWithPosition()
-      return;
-    }
-    let location = await Location.getCurrentPositionAsync({});
-    console.log('location location', location)
-    let region = {
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                  latitudeDelta: 0.015, 
-                  longitudeDelta: 0.0121,
-                }
-    this.setState({location: location, region: region});
-  };
+  //     console.log('permission denied');
+  //     this.messageWithPosition()
+  //     return;
+  //   }
+  //   let location = await Location.getCurrentPositionAsync({});
+  //   console.log('location location', location)
+  //   let region = {
+  //                 latitude: location.coords.latitude,
+  //                 longitude: location.coords.longitude,
+  //                 latitudeDelta: 0.015, 
+  //                 longitudeDelta: 0.0121,
+  //               }
+  //   this.setState({location: location, region: region});
+  // };
 
   render() {
     return (
@@ -107,10 +107,10 @@ export default class MapScreen extends Component {
         />
         <View style={CommonStyles.noTabScrollView}>
           <View style ={styles.container}>
-            {this.state.region ?
+            {this.props.region ?
               <MapView
                 style={styles.map}
-                region={this.state.region}
+                region={this.props.region}
               >
                 {
                   this.state.markers.map((marker,index) => (
@@ -200,3 +200,9 @@ const styles = StyleSheet.create({
     right: 15,
   }
 });
+
+const mapStateToProps = (state) => {
+  return state
+}
+
+export default connect(mapStateToProps)(MapScreen);

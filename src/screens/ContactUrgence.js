@@ -13,6 +13,10 @@ import StartBirthdayScreen from './StartBirthdayScreen';
 import RNPickerSelect from 'react-native-picker-select';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { updatePersonneUrgence } from "./statefull/appStatefull";
+import AlertDialog from '../elements/AlertDialog';
+import AlertDeleteDlMessage from '../components/list-item/AlertDeleteDlMessage';
+import AlertDeleteDlTitle from '../components/list-item/AlertDeleteDlTitle';
+
 
 class ContactUrgence extends Component {
   constructor(props) {
@@ -20,6 +24,7 @@ class ContactUrgence extends Component {
     this.state = {
       nom: "",
       tel: "",
+      lisible: false,
     }
   }
   componentDidMount () {
@@ -99,11 +104,35 @@ class ContactUrgence extends Component {
           </View>
           <View style={{height: 45, alignSelf: 'center'}}>
             <GradientButton
-              onPressButton={this.onStartYourBirthDayScreen.bind(this)}
+              onPressButton={()=>{this.setState({lisible: true})}}
               setting={shadowOpt}
               btnText="Continuer"
             />
           </View>
+          <AlertDialog
+          modalVisible={this.state.lisible}
+          onRequestClose={()=> this.setState({ lisible: false})}
+          dlTitle={{
+            component: <AlertDeleteDlTitle
+              text='Sauvgarde'
+            />
+          }}
+          dlMessage={{
+            component: <AlertDeleteDlMessage
+              frontText="Faut-il vraiment ajouter "//this.props.text1
+              highlightText='cet activité dans '//this.props.text2
+              behindText='votre liste?'
+            />
+          }}
+          dismissBtn={{
+            text: 'Non',
+            onPress: () => { this.setState({ lisible: false})},
+          }}
+          acceptBtn={{
+            text: 'Oui',
+            onPress: () => {this.onStartYourBirthDayScreen()},
+          }}
+        />
         </ScrollView >
       </View>
     );
@@ -130,6 +159,7 @@ class ContactUrgence extends Component {
   }
 
   async onStartYourBirthDayScreen() {
+    this.setState({lisible: false})
     this.flash();
     const nameOb = {
       nom_contact_urgence: this.state.nom,
@@ -139,18 +169,19 @@ class ContactUrgence extends Component {
     	patient: {
     		pu: this.state.nom,
     		telu: this.state.tel
-    	}
+    	} 
     }
     console.log('this.props.data.user.id', this.props.data.user.personne.id, data)
     this.props.upContactUrgence(nameOb)
     let res = await updatePersonneUrgence(this.props.data.user.personne.id, data);
     console.log('result', res);
     hideMessage();
-    const screen = StartBirthdayScreen;
-    const params = null;
-    const path = null; 
-    const { router } = screen;
-    const action = path && router.getActionForPathAndParams(path, params);
+    this.props.navigation.navigate('MainServiceScreen')
+    // const screen = StartBirthdayScreen;
+    // const params = null;
+    // const path = null; 
+    // const { router } = screen;
+    // const action = path && router.getActionForPathAndParams(path, params);
 
     //this.props.navigation.navigate('StartBirthdayScreen', {}, action);
   }

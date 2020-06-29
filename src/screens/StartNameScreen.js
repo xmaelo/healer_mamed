@@ -44,26 +44,26 @@ class StartNameScreen extends Component {
     this.setState({ Regions: Regions });
   }
   selectDep = (id) => {
-    let departs = id ? this.state.all[id].departements : [];
-    this.setState({allDep: departs, departements: null, arrondissements: null, a: null, b: null});
-    console.log('departs', departs)
-    let departements = [];
-    departs.map((dep, ind) =>{
-      let prototype = {label: dep.nom, value: ind};
-      departements.push(prototype);
-    })
-    this.setState({departements: departements});
+    // let departs = id ? this.state.all[id].departements : [];
+    // this.setState({allDep: departs, departements: null, arrondissements: null, a: null, b: null});
+    // console.log('departs', departs)
+    // let departements = [];
+    // departs.map((dep, ind) =>{
+    //   let prototype = {label: dep.nom, value: ind};
+    //   departements.push(prototype);
+    // })
+    // this.setState({departements: departements});
   }
   selectArr = (id) => {
-    this.setState({a: null, arrondissements: null})
-    let arrs = id ? this.state.allDep[id].arrondissements : [];
-    console.log('arrs', arrs)
-    let arrond = [];
-    arrs.map((dep, ind) =>{
-      let prototype = {label: dep.nom, value: dep.id};
-      arrond.push(prototype);
-    })
-    this.setState({arrondissements: arrond});
+    // this.setState({a: null, arrondissements: null})
+    // let arrs = id ? this.state.allDep[id].arrondissements : [];
+    // console.log('arrs', arrs)
+    // let arrond = [];
+    // arrs.map((dep, ind) =>{
+    //   let prototype = {label: dep.nom, value: dep.id};
+    //   arrond.push(prototype);
+    // })
+    // this.setState({arrondissements: arrond});
   }
 
   render() {
@@ -207,39 +207,41 @@ class StartNameScreen extends Component {
           <View style={{height: 10, alignSelf: 'center'}}>
             
           </View>
-          {this.state.departements ?
-            <View  style={{alignSelf: 'center'}}>
-              <RNPickerSelect
-                onValueChange={(value) => {
-                        console.log(value);
-                        this.setState({b: value})
-                        this.selectArr(value);
-                      }}
-                items={this.state.departements ? this.state.departements : []}
-                placeholder={Dep}
-                useNativeAndroidPickerStyle={false}
-                style = {{...pickerSelectStyles}}
-                value={this.state.b}
-            />
-            </View> : null
+          {
+            // this.state.departements ?
+            // <View  style={{alignSelf: 'center'}}>
+            //   <RNPickerSelect
+            //     onValueChange={(value) => {
+            //             console.log(value);
+            //             this.setState({b: value})
+            //             this.selectArr(value);
+            //           }}
+            //     items={this.state.departements ? this.state.departements : []}
+            //     placeholder={Dep}
+            //     useNativeAndroidPickerStyle={false}
+            //     style = {{...pickerSelectStyles}}
+            //     value={this.state.b}
+            // />
+            // </View> : null
           }
           <View style={{height: 10, alignSelf: 'center'}}>
             
           </View>
-          {this.state.arrondissements ?
-            <View  style={{alignSelf: 'center'}}>
-              <RNPickerSelect
-                onValueChange={(value) => {
-                  this.setState({a: value})
-                  console.log('value', value)
-                }}
-                items={this.state.arrondissements ? this.state.arrondissements : null}
-                placeholder={Arr}
-                useNativeAndroidPickerStyle={false}
-                style = {{...pickerSelectStyles}}
-                value={this.state.a}
-            />
-            </View> : null
+          {
+            // this.state.arrondissements ?
+            // <View  style={{alignSelf: 'center'}}>
+            //   <RNPickerSelect
+            //     onValueChange={(value) => {
+            //       this.setState({a: value})
+            //       console.log('value', value)
+            //     }}
+            //     items={this.state.arrondissements ? this.state.arrondissements : null}
+            //     placeholder={Arr}
+            //     useNativeAndroidPickerStyle={false}
+            //     style = {{...pickerSelectStyles}}
+            //     value={this.state.a}
+            // />
+            // </View> : null
           }
           <View style={{height: 15, alignSelf: 'center'}}>
             
@@ -274,15 +276,18 @@ class StartNameScreen extends Component {
 
   onStartYourBirthDayScreen() {
     if(!this.state.a){
-      return this.flash();
+      //return this.flash();
     }
     const nameOb = {
       nom: this.state.nom,
       prenom: this.state.prenom,
       email: this.state.email,
-      pu: this.state.pu,
-      telu: this.state.tu,
-      arondis: this.state.a,
+      pu: this.state.tu,
+      // telu: this.state.tu,
+      pucontact: this.state.pu,
+      arondis: 1,//this.state.a,
+      departement: 2,
+      region: 4,
       adresse: this.state.adresse
     }
     this.props.dispatchBaseInfos(nameOb)

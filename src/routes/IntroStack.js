@@ -62,18 +62,10 @@ import VerifyPhoneScreen from '../screens/VerifyPhoneScreen';
 
 const AppRouter = StackRouter(
   {
-    StartUpScreen: {
-      screen: StartUpScreen,
-    },
-    AddCasContactScreen: {
-      screen: AddCasContactScreen,
-    },
-    ContactUrgence: {
-      screen: ContactUrgence,
-    },
-    AddActiviteesScreen: {
-      screen: AddActiviteesScreen,
-    },
+    // StartUpScreen: {
+    //   screen: StartUpScreen,
+    // },
+    
     IntroOneScreen: {
       screen: IntroOneScreen,
     },
@@ -242,7 +234,7 @@ const AppRouter = StackRouter(
     BookmarkScreen: {
       screen: BookmarkScreen,
       path: 'bookmark',
-    },
+    }, 
     NewsCommentScreen: {
       screen: NewsCommentScreen,
       path: 'news_comment',
@@ -263,9 +255,18 @@ const AppRouter = StackRouter(
       screen: VerifyPhoneScreen,
       path: 'verifyphone'
     },
+    AddCasContactScreen: {
+      screen: AddCasContactScreen,
+    },
+    ContactUrgence: {
+      screen: ContactUrgence, 
+    },
+    AddActiviteesScreen: {
+      screen: AddActiviteesScreen,
+    }
   },
   {
-    initialRouteName: 'StartUpScreen',
+    initialRouteName: 'IntroOneScreen',
     headerMode: 'none',
     mode: 'card',
   }

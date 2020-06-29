@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text,
-  TextInput,
+  TextInput, 
   View,
   StyleSheet,
   Image,
@@ -10,15 +10,20 @@ import {
   ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
-
-import { updateCasContact } from "./statefull/appStatefull";
+import { connect } from 'react-redux'
 import GradientNavigationBar from '../elements/GradientNavigationBar';
 import GradientButton from '../elements/GradientButton';
 import SelectBox from '../elements/SelectBox';
-
+import { onSaveCasContact, updateCasContact } from "./statefull/appStatefull";
 import CommonStyles from '../styles/CommonStyles';
 import CheckBox from '../elements/CheckBox';
-import {
+
+import { showMessage, hideMessage } from "react-native-flash-message";
+import AlertDialog from '../elements/AlertDialog';
+import AlertDeleteDlMessage from '../components/list-item/AlertDeleteDlMessage';
+import AlertDeleteDlTitle from '../components/list-item/AlertDeleteDlTitle';
+
+import { 
   deviceWidth,
   deviceHeight,
   NAV_HEIGHT,
@@ -26,7 +31,7 @@ import {
   shadowOpt
 } from '../styles/variables';
 
-export default class AddCasContactScreen extends Component {
+class AddCasContactScreen extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -37,12 +42,14 @@ export default class AddCasContactScreen extends Component {
       date: null,
       sexe: null,
       lieu: null,
+      lisible: false,
+      lieurencontre: '',
     }
-  }
+  } 
   async componentDidMount() {
     const item = this.props.navigation.state.params.item;
     if(item !== null){
-	    this.setState({
+	    this.setState({ 
 	      nom: item.personne.nom, 
 	      prenom: item.personne.prenom,
 	      telephone: item.personne.telephone,
@@ -54,10 +61,55 @@ export default class AddCasContactScreen extends Component {
 	    console.log('update state succes', item);
 	}
   }
-  _onSave = async () => {
-  	let data = {
+  _onSave = async () => { 
+     const { navigation } = this.props;
+     const item = this.props.navigation.state.params.item;
+     const index = this.props.navigation.state.params.index;
+    this.setState({lisible: false})
+    	let data = {
+            contact: {
+              nom: this.state.nom,
+              prenom: this.state.prenom,
+              telephone: this.state.telephone,
+              email: this.state.email,
+              sexe: this.state.sexe,
+              lieurencontre: this.state.lieurencontre,
+              daterencontre: this.state.date
+            }
+    	   } 
+      console.log('data', data)
+      this.messageWithPosition();
+      if(!item){
+        let res = await onSaveCasContact(this.props.data.user.personne.id, data);
+        let dis = {
+                    lieurencontre: this.state.lieurencontre, 
+                    daterencontre: this.state.daterencontre,
+                    personne: data.contact
+                  }
+        await this.props.addCasContact(dis)
+      }else{
+        console.log('in elese')
+        let res = await updateCasContact(item.id, item.personne.id, data);
+        await this.props.updateCasContact(data.contact, item.id);
+      }
+    hideMessage();
+    navigation.goBack(null)
+  }
 
-  	}
+  messageWithPosition = (position = "bottom",  extra = {}) => {
+    let message = {
+       message: "Sauvegarde en cours ...",
+      type: "default",
+      position,
+      autoHide: false,
+      // animationDuration: 1000, 
+      icon: { icon: "auto", position: "left" },
+      duration: 6000,
+      ...extra,
+    };
+    message = { ...message, floating: true };
+    showMessage(message)
+    
   }
   render() {
     return (
@@ -189,8 +241,8 @@ export default class AddCasContactScreen extends Component {
               <TextInput
                 placeholder="Lieu"
                 type="text"
-                value={this.state.lieu}
-                onChangeText={(val)=>this.setState({lieu: val})}
+                value={this.state.lieurencontre}
+                onChangeText={(val)=>this.setState({lieurencontre: val})}
                 style={CommonStyles.textInput}
                 underlineColorAndroid='transparent'
               />
@@ -216,11 +268,36 @@ export default class AddCasContactScreen extends Component {
 
         <View style={styles.btn}>
           <GradientButton
-            onPressButton={this._onSave}
+            onPressButton={() => {this.setState({lisible: true})}}
             setting={shadowOpt}
             btnText="Enregistrer"
           />
         </View>
+
+        <AlertDialog
+          modalVisible={this.state.lisible}
+          onRequestClose={()=> this.setState({ lisible: false})}
+          dlTitle={{
+            component: <AlertDeleteDlTitle
+              text='Sauvgarde'
+            />
+          }}
+          dlMessage={{
+            component: <AlertDeleteDlMessage
+              frontText="Faut-il vraiment ajouter "//this.props.text1
+              highlightText='cet activité dans '//this.props.text2
+              behindText='votre liste?'
+            />
+          }}
+          dismissBtn={{
+            text: 'Non',
+            onPress: () => { this.setState({ lisible: false})},
+          }}
+          acceptBtn={{
+            text: 'Oui',
+            onPress: () => {this._onSave()},
+          }}
+        />
         </ScrollView>
       </View>
     );
@@ -281,3 +358,21 @@ const styles = StyleSheet.create({
     height: 30
   }
 });
+
+
+const mapStateToProps = (state) => {
+  return state
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    addCasContact: async (data) => {
+      dispatch({type: "ADD_CASCONTACT", data: data});
+    },
+    updateCasContact: async (data, id) => {
+      dispatch({type: "UPDATE_CASCONTACT", data: data, id: id});
+    },
+
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCasContactScreen);

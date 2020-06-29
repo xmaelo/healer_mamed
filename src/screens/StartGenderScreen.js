@@ -11,8 +11,6 @@ import { connect } from 'react-redux';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceWidth, deviceHeight, shadowOpt, blueGradient } from '../styles/variables';
 import StartWeightScreen from './StartWeightScreen';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { onRegister } from "./statefull/appStatefull";
 
@@ -28,23 +26,7 @@ class StartGenderScreen extends Component {
     };
   } 
   async componentDidMount() {
-    this._getLocationAsync();
   }
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied',
-      });
-
-      console.log('permission denied');
-      this.messageWithPosition()
-      return;
-    }
-    let location = await Location.getCurrentPositionAsync({});
-    console.log('location location', location)
-    this.setState({location: location});
-  };
  
   messageWithPosition (position = "bottom",  extra = {}) {
     let message = {
@@ -60,7 +42,11 @@ class StartGenderScreen extends Component {
     let message = {
       message: "Enregistrement Encours...",
       type: "default",
-      position,
+      position, 
+      autoHide: false,
+      // animationDuration: 1000, 
+      icon: { icon: "auto", position: "left" },
+      duration: 6000,
       ...extra,
     };
     message = { ...message, floating: true };
@@ -71,7 +57,7 @@ class StartGenderScreen extends Component {
   }
 
   render() {
-    const genders = ['FEMININ', 'MASCULIN', 'AUTRE', 'CONFIDENTIEL'];
+    const genders = ['FEMININ', 'MASCULIN'];
     const PickerItemIOS = PickerIOS.Item;
     const scrollHeight = 330;
 
@@ -84,13 +70,14 @@ class StartGenderScreen extends Component {
             <TouchableOpacity
               activeOpacity={0.6}
               onPress={this._handleClickNext.bind(this)}
-            >
-              <Text header softBlue regular>Saut</Text>
+            >{
+              // <Text header softBlue regular>Saut</Text>
+            }
             </TouchableOpacity>
           }
         />
         <View style={CommonStyles.labelField}>
-          <Text header grey mediumBold>YOUR GENDER</Text>
+          <Text header grey mediumBold>Votre Sexe</Text>
         </View>
         <View style={CommonStyles.pickerBox}>
           <ScrollPicker
@@ -142,15 +129,15 @@ class StartGenderScreen extends Component {
   onRegister = async() =>{
     console.log('this.props', this.props)
     let globalObj = {
-      latitude: this.state.location.coords.latitude,
-      longitude: this.state.location.coords.longitude,
+      latitude: this.props.location.coords.latitude,
+      longitude: this.props.location.coords.longitude,
       sexe: this.state.gender,
       ...this.props.infos, 
       ...this.props.nameOb,
       date: this.props.date,
-    }
+    } 
     this.showMessage2();
-    await onRegister(globalObj);
+    let dat = await onRegister(globalObj);
     console.log('globalObj', globalObj)
   }
 }

@@ -76,13 +76,14 @@ class StartBirthdayScreen extends Component {
             <TouchableOpacity
               activeOpacity={0.6}
               onPress={this._handleClickNext.bind(this)}
-            >
-              <Text header softBlue regular>Saut</Text>
+            >{
+              //<Text header softBlue regular>Saut</Text>
+            }
             </TouchableOpacity>
           }
         />
         <View style={CommonStyles.labelField}>
-          <Text header grey mediumBold>YOUR BIRTHDAY</Text>
+          <Text header grey mediumBold>Votre date de naissance</Text>
         </View>
         <View style={CommonStyles.pickerBox}>
           <ScrollPicker
@@ -159,7 +160,7 @@ class StartBirthdayScreen extends Component {
           <GradientButton
             onPressButton={this._handleClickNext.bind(this)}
             setting={shadowOpt}
-            btnText="NEXT"
+            btnText="Continuer"
           />
         </View>
       </View>

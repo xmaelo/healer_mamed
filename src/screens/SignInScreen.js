@@ -8,9 +8,9 @@ import CheckBox from '../elements/CheckBox';
 
 import { deviceWidth, deviceHeight, shadowOpt, colors } from '../styles/variables';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { _retrieveData } from "./statefull/storeLocalStorage";
+import { _retrieveData, _storeData } from "./statefull/storeLocalStorage";
 import CommonStyles from '../styles/CommonStyles';
-import SignUpScreen from './SignUpScreen';
+import SignUpScreen from './SignUpScreen'; 
 import { connect } from 'react-redux'
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import { getPersonalData, login } from "./statefull/appStatefull";
@@ -40,7 +40,9 @@ class SignInScreen extends Component {
     this.setState({ show : false}) 
     this.props.publishJournal(data);
     hideMessage(); 
-    this.props.navigation.navigate('MainServiceScreen')
+    let rs = await _storeData(data);
+    console.log('after sstore data', rs)
+    this.props.navigation.navigate('MainServiceScreen', {id: data.user.personne.id})
   }
   login = async () => {
     this.messageWithPosition();

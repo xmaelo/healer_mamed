@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { TextInput, View, StyleSheet, Image, ScrollView, Platform, StatusBar } from 'react-native';
 
 import Text from '../elements/Text';
-import GradientButton from '../elements/GradientButton';
+import GradientButton from '../elements/GradientButton'; 
 import CheckBox from '../elements/CheckBox'; 
 
 import { deviceHeight, shadowOpt, colors } from '../styles/variables';
@@ -134,10 +134,11 @@ class SignUpScreen extends Component {
     let infos = {
       username: this.state.username,
       password: this.state.password,
-      tel: this.state.tel
-    }
+      tel1: this.state.tel
+    } 
     await this.props.dispatchBaseInfos(infos);
-    this.props.navigation.navigate('VerifyPhoneScreen', {arrs: this.state.arrs});
+    //this.props.navigation.navigate('VerifyPhoneScreen', {arrs: this.state.arrs});
+    this.props.navigation.navigate('StartNameScreen', {arrs: this.state.arrs});
   }
 
   _handleClickSignIn() {

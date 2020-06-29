@@ -14,6 +14,8 @@ initialState = {
 	nom_contact_urgence: null,
 	telephone_contact_urgence: null,
 	contact: null,
+	region: {},
+	location: {},
 }
 
 function app(state = initialState, action) {
@@ -37,7 +39,7 @@ function app(state = initialState, action) {
 	  		curentState = {...curentState, infos: action.infos}
 	  		console.log('curentState', curentState);
 	      	return curentState;
-	    case 'DISPATCH_NAME':
+	    case 'DISPATCH_NAME': 
 	  		curentState = {...curentState, nameOb: action.nameOb}
 	  		console.log('curentState', curentState);
 	      	return curentState;
@@ -49,6 +51,12 @@ function app(state = initialState, action) {
 	  		curentState = {...curentState, contact: action.data}
 	  		console.log('curentState', curentState);
 	      	return curentState;
+
+	    case 'SET_LOCALISATION':
+	  		curentState = {...curentState, region: action.data.region, location: action.data.location}
+	  		console.log('curentState', curentState);
+	      	return curentState;
+
 	    case 'ADD_CONVERT':
 	    	let converation = action.data.converation;
 	    	let idMedecin = action.data.idMed;
@@ -76,6 +84,75 @@ function app(state = initialState, action) {
 	  			data: {...curentState.data, 
 	  			user: {...curentState.data.user,
 	  			diagnostiques: slice
+	  			}
+	  		  }
+	  		}
+	      	return curentState;
+	    case 'UPDATE_PROFILS':
+	    	let personne = state.data.user.personne;
+	    	personne.nom = action.data.nom;
+	    	personne.prenom = action.data.prenom;
+	    	personne.telephone = action.data.telephone;
+	    	personne.email = action.data.email;
+	  		curentState = {...curentState,  
+	  			data: {...curentState.data, 
+	  			user: {...curentState.data.user,
+	  			personne: personne
+	  			}
+	  		  }
+	  		}
+	      	return curentState; 
+	    case 'SET_IMAGE':
+	    	let perss = state.data.user.personne;
+	    	perss.image = action.data;
+	  		curentState = {...curentState,  
+	  			data: {...curentState.data, 
+	  			user: {...curentState.data.user,
+	  			personne: perss
+	  			}
+	  		  }
+	  		}
+	      	return curentState;
+	    case 'ADD_CASCONTACT':
+	    	let slices = state.data.user.personnes.slice();
+	    	console.log('slice', slices.length)
+	    	slices.push(action.data)
+	    	console.log('before op', slices.length)
+	    	console.log('before op slice', slices)
+	    	console.log('data', slices.diagnostique)
+	  		curentState = {...curentState,  
+	  			data: {...curentState.data, 
+	  			user: {...curentState.data.user,
+	  			personnes: slices
+	  			}
+	  		  }
+	  		} 
+	      	return curentState;
+	    case 'UPDATE_CASCONTACT':
+	    	let pers = state.data.user.personnes.filter(per => per.id  === action.id)
+	    	const items = state.data.user.personnes.slice();
+	    	console.log('item', items)
+	    	console.log('pers', pers)
+	    	pers = pers[0];
+	    	pers.personne.nom = action.data.nom
+	    	pers.personne.prenom = action.data.prenom
+	    	pers.personne.email = action.data.email
+	    	pers.personne.sexe = action.data.sexe
+	    	pers.lieurencontre = action.data.lieurencontre
+	    	pers.daterencontre = action.data.daterencontre
+	    	// console.log('pers after', pers)
+	    	items.reverse().map((ss,i)=>{
+			  if(ss.id===action.id){
+			    items[i]=pers
+			    console.log('mog ok')
+			  }
+			})
+	    	console.log('item after', items)
+
+	  		curentState = {...curentState,  
+	  			data: {...curentState.data, 
+	  			user: {...curentState.data.user,
+	  			personnes: items
 	  			}
 	  		  }
 	  		}

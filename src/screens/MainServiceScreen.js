@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import MenuItemBox from '../components/MenuItemBox';
 import CustomTabBar from '../components/CustomTabBar';  
 import { _storeData } from "./statefull/storeLocalStorage";
-
+import { getPersonalData } from "./statefull/appStatefull";
 
 class MainServiceScreen extends Component {
   constructor(props) {
@@ -17,13 +17,20 @@ class MainServiceScreen extends Component {
   }
 
   async componentDidMount() {
-    console.log('this.props.Journal',this.props);
-    let rs = await _storeData(this.props.data);
-    console.log('after sstore data', rs)
+    console.log('this.props.Journal',this.props, this.props.navigation.state.params);
+    const idpers = this.props.navigation.state.params;
+    let data = this.props.data;
+    if(!idpers){
+      console.log('before onGo');
+      data = await getPersonalData('/api_v1/apis/'+this.props.data.user.personne.id+'/profiles.json');
+      this.props.publishJournal(data);
+    }
+    //let rs = await _storeData(data);
+    //console.log('after sstore data', rs)
   }
 
   render() {
-    return (
+    return ( 
       <View style={CommonStyles.normalPage}>
         <GradientNavigationBar
           navigation={this.props.navigation}
@@ -167,5 +174,13 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return state
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    publishJournal: async (data) => {
+      dispatch({type: "PUBLISH_JOURNAL", data: data});
+    },
 
-export default connect(mapStateToProps)(MainServiceScreen);
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainServiceScreen);
