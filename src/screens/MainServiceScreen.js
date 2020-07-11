@@ -14,17 +14,17 @@ import { getPersonalData } from "./statefull/appStatefull";
 class MainServiceScreen extends Component {
   constructor(props) {
     super(props);
-  }
+  } 
 
   async componentDidMount() {
     console.log('this.props.Journal',this.props, this.props.navigation.state.params);
-    const idpers = this.props.navigation.state.params;
-    let data = this.props.data;
-    if(!idpers){
-      console.log('before onGo');
-      data = await getPersonalData('/api_v1/apis/'+this.props.data.user.personne.id+'/profiles.json');
-      this.props.publishJournal(data);
-    }
+    // const idpers = this.props.navigation.state.params;
+    // let data = this.props.data;
+    // if(!idpers){
+    //   console.log('before onGo');
+    //   data = await getPersonalData('/api_v1/apis/'+this.props.data.personne.id+'/profiles.json');
+    //   this.props.publishJournal(data);
+    // }
     //let rs = await _storeData(data);
     //console.log('after sstore data', rs)
   }
@@ -71,7 +71,7 @@ class MainServiceScreen extends Component {
           <View style={styles.colMainLeft}>
             <MenuItemBox
               header='Activités'
-              subHeader={this.props.data.user.diagnostiques.length +' Trouvés'}
+              subHeader={this.props.data.diagnostiques.length +' Trouvés'}
               icon={require('../../img/healer/surgeonIcon.png')}
               iconWidth={20}
               iconHeight={26}
@@ -115,7 +115,7 @@ class MainServiceScreen extends Component {
 
   // Go to AppointmentScreen 
   _handleClickDrugsShopScreen() {
-    this.props.navigation.navigate("DrugsShopScreen", {toFichiers: this.props.data.user.fichiers});
+    this.props.navigation.navigate("DrugsShopScreen", {toFichiers: this.props.data.fichiers});
   }
 
   _handleClickNotificationButton() {
@@ -124,12 +124,12 @@ class MainServiceScreen extends Component {
 
   // Click email button 
   _handleClickEmailButton() {
-    this.props.navigation.navigate("DoctorReviewScreen", {id: this.props.data.user.personne.id});
+    this.props.navigation.navigate("DoctorReviewScreen", {id: this.props.data.personne.id});
   }
  
   // Go to FindDoctorScreen
   _handleInsurranceScreen() { 
-    this.props.navigation.navigate("InsurranceScreen", {toActivites: this.props.data.user.diagnostiques});
+    this.props.navigation.navigate("InsurranceScreen", {toActivites: this.props.data.diagnostiques});
   }
 
   // Go to FindHospitalScreen

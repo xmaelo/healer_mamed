@@ -27,22 +27,22 @@ class LeftMenu extends Component {
     const img = "https://covid19.mamed.care"+"/bundles/mamedcovid/assets/images/pictures/";
     return (
       <View style={styles.container}>
-        <View style={styles.userInfo}>
+        <View style={styles.userInfo}> 
           <View style={styles.avatar}>
            { this.props.data ?
             <Image
-              source={{ uri: img+ this.props.data.user.personne.image }}
+              source={{ uri: img+ this.props.data.personne.image }}
               style={{width: 70, height: 70, borderRadius: 20}}
             /> : null
            }
           </View>
           <Text style={styles.name}>
             {
-              this.props.data ? this.props.data.user.personne.prenom : null }{" "}
-            {this.props.data ? this.props.data.user.personne.nom : null}
+              this.props.data ? this.props.data.personne.prenom : null }{" "}
+            {this.props.data ? this.props.data.personne.nom : null}
           </Text>
           <Text style={styles.balance}>
-            {this.props.data ? this.props.data.user.personne.email : null}
+            {this.props.data ? this.props.data.personne.email : null}
           </Text>
         </View>
 
@@ -291,18 +291,18 @@ class LeftMenu extends Component {
 
   _handleClickDrug() {
     this.setState({isActive:'drug'});
-    this.props.navigation.navigate('DoctorReviewScreen', {id: this.props.data.user.personne.id});
+    this.props.navigation.navigate('DoctorReviewScreen', {id: this.props.data.personne.id});
     this.props.drawer.close()
   }
 
   _handleClickDoctors() { 
     this.setState({isActive:'doctors'});
-    this.props.navigation.navigate('InsurranceScreen', {toActivites: this.props.data.user.diagnostiques});
+    this.props.navigation.navigate('InsurranceScreen', {toActivites: this.props.data.diagnostiques});
     this.props.drawer.close()
   }
   _handleClickLocal() { 
     this.setState({isActive:'localisation'});
-    this.props.navigation.navigate('MapScreen', {medecin: this.props.data.user.medecins});
+    this.props.navigation.navigate('MapScreen', {medecin: this.props.data.medecins});
     this.props.drawer.close()
   }
 

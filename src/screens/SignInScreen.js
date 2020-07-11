@@ -18,7 +18,7 @@ import { getPersonalData, login } from "./statefull/appStatefull";
 class SignInScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = { 
       remember: false,
       show: true,
       message: "Connection en cours ...",
@@ -48,7 +48,7 @@ class SignInScreen extends Component {
     this.messageWithPosition();
     let ob = {
       username: 'patient',//this.state.username,
-      password: 'admin'//this.state.password
+      password: 'romain'//this.state.password
     }
     let data = await login(ob);
     if(data.data && data.data.success && data.data.success == true){
