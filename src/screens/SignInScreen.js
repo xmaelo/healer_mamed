@@ -25,7 +25,7 @@ class SignInScreen extends Component {
       password: '',
       username: '',
     };
-  }
+  } 
 
   async componentDidMount() {
     console.log('sign in componenet did mount before call api');
@@ -42,13 +42,13 @@ class SignInScreen extends Component {
     hideMessage(); 
     let rs = await _storeData(data);
     console.log('after sstore data', rs)
-    this.props.navigation.navigate('MainServiceScreen', {id: data.user.personne.id})
+    this.props.navigation.navigate('MainServiceScreen', {id: data.personne.id})
   }
   login = async () => {
     this.messageWithPosition();
     let ob = {
-      username: 'patient',//this.state.username,
-      password: 'romain'//this.state.password
+      username: this.state.username,//'patient',//
+      password: this.state.password //'romain'//
     }
     let data = await login(ob);
     if(data.data && data.data.success && data.data.success == true){

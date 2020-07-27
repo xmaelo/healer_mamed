@@ -18,15 +18,15 @@ class MainServiceScreen extends Component {
 
   async componentDidMount() {
     console.log('this.props.Journal',this.props, this.props.navigation.state.params);
-    // const idpers = this.props.navigation.state.params;
-    // let data = this.props.data;
-    // if(!idpers){
-    //   console.log('before onGo');
-    //   data = await getPersonalData('/api_v1/apis/'+this.props.data.personne.id+'/profiles.json');
-    //   this.props.publishJournal(data);
-    // }
-    //let rs = await _storeData(data);
-    //console.log('after sstore data', rs)
+    const idpers = this.props.navigation.state.params.id;
+    let data = this.props.data;
+    if(!idpers){
+      console.log('before onGo');
+      data = await getPersonalData('/api_v1/apis/'+this.props.data.personne.id+'/profiles.json');
+      this.props.publishJournal(data);
+    }
+    let rs = await _storeData(data);
+    console.log('after sstore data', rs)
   }
 
   render() {

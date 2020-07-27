@@ -42,16 +42,16 @@ class UserProfileScreen extends Component {
         <ScrollView style={CommonStyles.scrollView}>
           <View style={styles.avaCont}>
             <Image
-              source={{uri: urlMedia+this.props.data.user.personne.image}}
+              source={{uri: urlMedia+this.props.data.personne.image}}
               style={{width: 160, height: 160}}
             />
           </View>
           <View style={styles.nameCont}>
             <Text header black mediumBold>
-              {this.props.data.user.personne.prenom}{" "}{this.props.data.user.personne.nom}
+              {this.props.data.personne.prenom}{" "}{this.props.data.personne.nom}
             </Text>
             <Text header black mediumBold>
-              {this.props.data.user.personne.email}
+              {this.props.data.personne.email}
             </Text>
           </View>
           <View style={CommonStyles.itemWhiteBox}>
@@ -62,7 +62,7 @@ class UserProfileScreen extends Component {
                   image={require('../../img/healer/add.png')}
                   imageWidth={55}
                   imageHeight={55}
-                  item={this.props.data.user}
+                  item={this.props.data}
                   name={"item.name"}
                   code={"item.code"}
                   group={"item.group"}
@@ -121,7 +121,7 @@ class UserProfileScreen extends Component {
   }
 
   navigateToAddDrugs = () =>{
-    this.props.navigation.navigate("AddDrugsScreen", {personne: this.props.data.user})
+    this.props.navigation.navigate("AddDrugsScreen", {personne: this.props.data})
   }
 
   onClickSettingButton() {

@@ -74,7 +74,7 @@ function app(state = initialState, action) {
 	  		console.log('curentState', curentState);
 	      	return curentState;
 	    case 'ADD_DATA':
-	    	let slice = state.data.user.diagnostiques.slice();
+	    	let slice = state.data.diagnostiques.slice();
 	    	console.log('after op', slice.length)
 	    	slice.push(action.data.diagnostique)
 	    	console.log('before op', slice.length)
@@ -89,7 +89,7 @@ function app(state = initialState, action) {
 	  		}
 	      	return curentState;
 	    case 'UPDATE_PROFILS':
-	    	let personne = state.data.user.personne;
+	    	let personne = state.data.personne;
 	    	personne.nom = action.data.nom;
 	    	personne.prenom = action.data.prenom;
 	    	personne.telephone = action.data.telephone;
@@ -103,7 +103,7 @@ function app(state = initialState, action) {
 	  		}
 	      	return curentState; 
 	    case 'SET_IMAGE':
-	    	let perss = state.data.user.personne;
+	    	let perss = state.data.personne;
 	    	perss.image = action.data;
 	  		curentState = {...curentState,  
 	  			data: {...curentState.data, 
@@ -114,7 +114,7 @@ function app(state = initialState, action) {
 	  		}
 	      	return curentState;
 	    case 'ADD_CASCONTACT':
-	    	let slices = state.data.user.personnes.slice();
+	    	let slices = state.data.personnes.slice();
 	    	console.log('slice', slices.length)
 	    	slices.push(action.data)
 	    	console.log('before op', slices.length)
@@ -129,8 +129,8 @@ function app(state = initialState, action) {
 	  		} 
 	      	return curentState;
 	    case 'UPDATE_CASCONTACT':
-	    	let pers = state.data.user.personnes.filter(per => per.id  === action.id)
-	    	const items = state.data.user.personnes.slice();
+	    	let pers = state.data.personnes.filter(per => per.id  === action.id)
+	    	const items = state.data.personnes.slice();
 	    	console.log('item', items)
 	    	console.log('pers', pers)
 	    	pers = pers[0];

@@ -13,6 +13,8 @@ import { deviceWidth, deviceHeight, shadowOpt, blueGradient } from '../styles/va
 import StartWeightScreen from './StartWeightScreen';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { onRegister } from "./statefull/appStatefull";
+import { getPersonalData, login } from "./statefull/appStatefull";
+import { _retrieveData, _storeData } from "./statefull/storeLocalStorage";
 
 class StartGenderScreen extends Component {
   constructor(props) {
@@ -116,7 +118,7 @@ class StartGenderScreen extends Component {
   }
 
   _handleClickNext() {
-    this.onRegister();
+    this._onRegister();
     return;
     const screen = StartWeightScreen;
     const params = null;
@@ -126,7 +128,7 @@ class StartGenderScreen extends Component {
 
     // this.props.navigation.navigate('StartWeightScreen', {}, action);
   }
-  onRegister = async() =>{
+  _onRegister = async() =>{
     console.log('this.props', this.props)
     let globalObj = {
       latitude: this.props.location.coords.latitude,
@@ -139,6 +141,24 @@ class StartGenderScreen extends Component {
     this.showMessage2();
     let dat = await onRegister(globalObj);
     console.log('globalObj', globalObj)
+    console.log('result onRegister', dat)
+    if(dat.data.success){
+      let ob = {
+        username: this.props.infos.username,//'patient',//
+        password: this.props.infos.password //'romain'//
+      }
+      let data = await login(ob);
+      if(data.data && data.data.success && data.data.success == true){
+        console.log('in data rgister',data);
+        data = await getPersonalData('/api_v1/apis/2/profiles.json');
+        hideMessage();
+        this.props.publishJournal(data);
+        hideMessage(); 
+        let rs = await _storeData(data);
+      }
+    }else {
+      hideMessage();
+    }
   }
 }
 
@@ -160,6 +180,9 @@ const mapDispatchToProps = dispatch => {
   return {
     setDateToState: async (infos) => {
       dispatch({type: "SET_DATE", date: infos});
+    },
+    publishJournal: async (data) => {
+      dispatch({type: "PUBLISH_JOURNAL", data: data});
     },
   };
 }

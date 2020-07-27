@@ -54,7 +54,7 @@ class InsurranceScreen extends Component {
   render() {
     console.log('this.props insuren', this.props.navigation.state.params)
     let toActivites = this.props.navigation.state.params.toActivites
-    toActivites = this.props.data.user.diagnostiques;
+    toActivites = this.props.data.diagnostiques;
     const list = this.state.insurranceList;
     let date = Date();
     let tDate = new Date(date).toLocaleDateString('fr-CA') +' '+ new Date(date).getHours()+':' +new Date(date).getMinutes();

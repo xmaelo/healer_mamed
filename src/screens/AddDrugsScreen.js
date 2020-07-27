@@ -78,7 +78,7 @@ class AddDrugsScreen extends Component {
     if (!result.cancelled) {
       this.setState({image: result.uri});
       let data = {'pic-profile': result.uri}
-     let re =  await setImageRest(this.props.data.user.personne.id, data)
+     let re =  await setImageRest(this.props.data.personne.id, data)
       await this.props.setImage(re.data);
       console.log('image uri', result.uri);
     } 
@@ -94,7 +94,7 @@ class AddDrugsScreen extends Component {
       }
     }
     this.messageWithPosition()
-    let res = await updateProfils(this.props.data.user.personne.id ,data)
+    let res = await updateProfils(this.props.data.personne.id ,data)
     await this.props.updateProfils(data.patient);
     hideMessage();
     //navigation.goBack(null)

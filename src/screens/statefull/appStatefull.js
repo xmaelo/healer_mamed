@@ -4,10 +4,23 @@ export const baseUri = "https://covid19.mamed.care";
 export const urlMedia = baseUri + "/bundles/mamedcovid/assets/images/pictures/";
 
 export const getPersonalData = async (uri) => {
-  console.log('before getJournale')
+  console.log('before getJournale') 
 	return await axios.get(baseUri+uri)  
     .then( (response) => { 
       console.log(" =================",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });  
+ 
+}
+export const getMessageNonLue = async (id) => {
+  console.log('before getJournale') 
+  const uri = "/api_v1/messagenonlups/"+id+".json"
+  return await axios.get(baseUri+uri)  
+    .then( (response) => { 
+      console.log(" ========Non Lus=========",response.data);
       return response.data
     }) 
     .catch( (error) => {
@@ -20,7 +33,7 @@ export const getArrondissementData = async () => {
   return await axios.get(baseUri+uri) 
     .then( (response) => { 
       console.log(" =================",response.data);
-      return response.data.data
+      return response.data
     }) 
     .catch( (error) => {
       console.log(error);  
@@ -29,6 +42,7 @@ export const getArrondissementData = async () => {
 }
 
 export const updateCasContact = async (idUpdate, idPer, obj) => {
+  console.log('beore ______________>', obj)
   const _com = '/api_v1/updates/'+idUpdate+'/cas/'+idPer+'/contacts.json';
   console.log('url', _com)
   return await axios.post(baseUri+_com, obj , { headers: { "Content-type": "application/json" } }) 
@@ -52,9 +66,10 @@ export const updateProfils = async (idPer, obj) => {
     .catch( (error) => {
       console.log(error);  
     });  
- 
+  
 }
 export const setImageRest = async (idPer, pic) => {
+  console.log('pic', pic)
   const _com = '/api_v1/pictures/'+idPer+'/profileforapis.json';
   console.log('url', _com)
   return await axios.post(baseUri+_com, pic , { headers: { "Content-type": "multipart/form-data" } }) 
@@ -91,6 +106,7 @@ export const login = async (obj) => {
     }); 
 }
 export const onRegister = async (obj) => {
+  console.log('onRegister run', obj)
   return await axios.post(baseUri+'/api_v1/apis/registers.json', obj , { headers: { "Content-type": "application/json" } })
     .then( (response) => {
       console.log(" =================",response); 
@@ -146,6 +162,7 @@ export const onSaveActivity = async (id, obj) => {
 }
 
 export const onSaveCasContact = async (id, obj) => {
+  console.log('beore ______________>', obj)
   console.log('in sactiviter', baseUri+'/api_v1/contacts/'+id+'.json')
   return await axios.post(baseUri+'/api_v1/contacts/'+id+'.json', obj , { headers: { "Content-type": "application/json" } })
     .then( async (response) => {

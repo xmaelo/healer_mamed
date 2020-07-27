@@ -20,13 +20,14 @@ class SignUpScreen extends Component {
       username: "",
       tel: "",
       password: "",
-      repass: "",
+      repass: "", 
       arrs: null,
     }
   }
 
   async componentDidMount(){
     let arrs = await getArrondissementData();
+    console.log('arrs commeback', arrs)
     this.setState({ arrs: arrs});
   }
 
@@ -133,10 +134,11 @@ class SignUpScreen extends Component {
     } 
     let infos = {
       username: this.state.username,
-      password: this.state.password,
+      password: this.state.password, 
       tel1: this.state.tel
-    } 
+    }  
     await this.props.dispatchBaseInfos(infos);
+    console.log('this.state.arrs', this.state.arrs)
     //this.props.navigation.navigate('VerifyPhoneScreen', {arrs: this.state.arrs});
     this.props.navigation.navigate('StartNameScreen', {arrs: this.state.arrs});
   }

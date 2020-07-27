@@ -25,8 +25,9 @@ class StartNameScreen extends Component {
       arrondis: "",
       adresse: "",
       Regions: [],
+      reg: "",
       departements: null,
-      all: [],
+      all: [], 
       allDep: [],
       a: null,
       b: null,
@@ -44,30 +45,30 @@ class StartNameScreen extends Component {
     this.setState({ Regions: Regions });
   }
   selectDep = (id) => {
-    // let departs = id ? this.state.all[id].departements : [];
-    // this.setState({allDep: departs, departements: null, arrondissements: null, a: null, b: null});
-    // console.log('departs', departs)
-    // let departements = [];
-    // departs.map((dep, ind) =>{
-    //   let prototype = {label: dep.nom, value: ind};
-    //   departements.push(prototype);
-    // })
-    // this.setState({departements: departements});
+    let departs = id ? this.state.all[id].departements : [];
+    this.setState({allDep: departs, departements: null, arrondissements: null, a: null, b: null});
+    console.log('departs', departs)
+    let departements = [];
+    departs.map((dep, ind) =>{
+      let prototype = {label: dep.nom, value: ind};
+      departements.push(prototype);
+    })
+    this.setState({departements: departements});
   }
   selectArr = (id) => {
-    // this.setState({a: null, arrondissements: null})
-    // let arrs = id ? this.state.allDep[id].arrondissements : [];
-    // console.log('arrs', arrs)
-    // let arrond = [];
-    // arrs.map((dep, ind) =>{
-    //   let prototype = {label: dep.nom, value: dep.id};
-    //   arrond.push(prototype);
-    // })
-    // this.setState({arrondissements: arrond});
+    this.setState({a: null, arrondissements: null})
+    let arrs = id ? this.state.allDep[id].arrondissements : [];
+    console.log('arrs', arrs)
+    let arrond = [];
+    arrs.map((dep, ind) =>{
+      let prototype = {label: dep.nom, value: dep.id};
+      arrond.push(prototype);
+    })
+    this.setState({arrondissements: arrond});
   }
 
   render() {
-    console.log('this.props.navigation.state.params.arrs', this.props.navigation.state.params.arrs)
+    console.log('this.props', this.state.departements)
     const Reg = {
       label: 'Votre région',
       value: null,
@@ -197,6 +198,7 @@ class StartNameScreen extends Component {
               onValueChange={(value) => { 
                               this.selectDep(value);
                               console.log(value)
+                              this.setState({reg: value})
                             }}
               items={this.state.Regions}
               placeholder={Reg}
@@ -208,40 +210,40 @@ class StartNameScreen extends Component {
             
           </View>
           {
-            // this.state.departements ?
-            // <View  style={{alignSelf: 'center'}}>
-            //   <RNPickerSelect
-            //     onValueChange={(value) => {
-            //             console.log(value);
-            //             this.setState({b: value})
-            //             this.selectArr(value);
-            //           }}
-            //     items={this.state.departements ? this.state.departements : []}
-            //     placeholder={Dep}
-            //     useNativeAndroidPickerStyle={false}
-            //     style = {{...pickerSelectStyles}}
-            //     value={this.state.b}
-            // />
-            // </View> : null
+            this.state.departements ?
+            <View  style={{alignSelf: 'center'}}>
+              <RNPickerSelect
+                onValueChange={(value) => {
+                        console.log(value);
+                        this.setState({b: value})
+                        this.selectArr(value);
+                      }}
+                items={this.state.departements ? this.state.departements : []}
+                placeholder={Dep}
+                useNativeAndroidPickerStyle={false}
+                style = {{...pickerSelectStyles}}
+                value={this.state.b}
+            />
+            </View> : null
           }
           <View style={{height: 10, alignSelf: 'center'}}>
             
           </View>
           {
-            // this.state.arrondissements ?
-            // <View  style={{alignSelf: 'center'}}>
-            //   <RNPickerSelect
-            //     onValueChange={(value) => {
-            //       this.setState({a: value})
-            //       console.log('value', value)
-            //     }}
-            //     items={this.state.arrondissements ? this.state.arrondissements : null}
-            //     placeholder={Arr}
-            //     useNativeAndroidPickerStyle={false}
-            //     style = {{...pickerSelectStyles}}
-            //     value={this.state.a}
-            // />
-            // </View> : null
+            this.state.arrondissements ?
+            <View  style={{alignSelf: 'center'}}>
+              <RNPickerSelect
+                onValueChange={(value) => {
+                  this.setState({a: value})
+                  console.log('value', value)
+                }}
+                items={this.state.arrondissements ? this.state.arrondissements : null}
+                placeholder={Arr}
+                useNativeAndroidPickerStyle={false}
+                style = {{...pickerSelectStyles}}
+                value={this.state.a}
+            />
+            </View> : null
           }
           <View style={{height: 15, alignSelf: 'center'}}>
             
@@ -283,15 +285,15 @@ class StartNameScreen extends Component {
       prenom: this.state.prenom,
       email: this.state.email,
       pu: this.state.tu,
-      // telu: this.state.tu,
+      telu: this.state.tu,
       pucontact: this.state.pu,
-      arondis: 1,//this.state.a,
-      departement: 2,
-      region: 4,
+      arondis: this.state.a,
+      departement: this.state.b,
+      region: this.state.reg,
       adresse: this.state.adresse
     }
     this.props.dispatchBaseInfos(nameOb)
-    const screen = StartBirthdayScreen;
+    const screen = StartBirthdayScreen; 
     const params = null;
     const path = null; 
     const { router } = screen;

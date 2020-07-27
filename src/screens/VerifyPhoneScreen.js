@@ -80,7 +80,7 @@ export default class VerifyPhoneScreen extends Component {
 
   _onFulfill(code) {
     // TODO
-  }
+  } 
 
   _handleVerify() {
     // TODO

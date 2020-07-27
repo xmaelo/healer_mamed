@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import GradientNavigationBar from '../elements/GradientNavigationBar';
 import GradientButton from '../elements/GradientButton';
 import SelectBox from '../elements/SelectBox';
-import { onSaveCasContact, updateCasContact } from "./statefull/appStatefull";
+import { onSaveCasContact, updateCasContact, getPersonalData } from "./statefull/appStatefull";
 import CommonStyles from '../styles/CommonStyles';
 import CheckBox from '../elements/CheckBox';
 
@@ -55,7 +55,7 @@ class AddCasContactScreen extends Component {
 	      telephone: item.personne.telephone,
 	      email: item.personne.email,
 	      sexe: item.personne.sexe,
-	      lieu: item.lieurencontre,
+	      lieurencontre: item.lieurencontre,
 	      date: item.daterencontre
 	    })
 	    console.log('update state succes', item);
@@ -77,21 +77,26 @@ class AddCasContactScreen extends Component {
               daterencontre: this.state.date
             }
     	   } 
+      let res = await onSaveCasContact(this.props.data.personne.id, data);
       console.log('data', data)
       this.messageWithPosition();
       if(!item){
-        let res = await onSaveCasContact(this.props.data.user.personne.id, data);
-        let dis = {
-                    lieurencontre: this.state.lieurencontre, 
-                    daterencontre: this.state.daterencontre,
-                    personne: data.contact
-                  }
-        await this.props.addCasContact(dis)
+
+        // let dis = {
+        //             lieurencontre: this.state.lieurencontre, 
+        //             daterencontre: this.state.daterencontre,
+        //             personne: data.contact
+        //           }
+        // await this.props.addCasContact(dis)
       }else{
         console.log('in elese')
         let res = await updateCasContact(item.id, item.personne.id, data);
-        await this.props.updateCasContact(data.contact, item.id);
+        // await this.props.updateCasContact(data.contact, item.id);
       }
+
+    let journal = await getPersonalData('/api_v1/apis/2/profiles.json');
+    console.log('response from api',journal) 
+    this.props.publishJournal(journal);
     hideMessage();
     navigation.goBack(null)
   }
@@ -370,6 +375,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateCasContact: async (data, id) => {
       dispatch({type: "UPDATE_CASCONTACT", data: data, id: id});
+    },
+    publishJournal: async (data) => {
+      dispatch({type: "PUBLISH_JOURNAL", data: data});
     },
 
   };

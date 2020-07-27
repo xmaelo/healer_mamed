@@ -35,7 +35,7 @@ import {
   STATUSBAR_HEIGHT,
   shadowOpt
 } from '../styles/variables';
-import { onSaveActivity } from "./statefull/appStatefull";
+import { onSaveActivity, getPersonalData } from "./statefull/appStatefull";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 class AddActiviteesScreen extends Component {
@@ -120,12 +120,15 @@ class AddActiviteesScreen extends Component {
           contact: this.state.contact,
           datesave: tDate
         }
-    }
-    console.log('this.props.data.user.personne.id', ob)
-    let rs = await onSaveActivity(this.props.data.user.personne.id, ob);
+    } 
+    console.log('this.props.data.personne.id', ob)
+    let rs = await onSaveActivity(this.props.data.personne.id, ob);
     console.log('rsrsrsrsrsrsrsrs rs',rs)
     if(rs.data.success){
-	    this.props.addNewInDiag(ob);
+      let data = await getPersonalData('/api_v1/apis/2/profiles.json');
+      console.log('response from api',data) 
+      this.props.publishJournal(data);
+	    // this.props.addNewInDiag(ob);
 	    navigation.goBack(null)
 	    hideMessage();
 	    console.log(ob)
@@ -328,6 +331,9 @@ const mapDispatchToProps = dispatch => {
   return {
     addNewInDiag: async (data) => {
       dispatch({type: "ADD_DATA", data: data});
+    },
+    publishJournal: async (data) => {
+      dispatch({type: "PUBLISH_JOURNAL", data: data});
     },
 
   };

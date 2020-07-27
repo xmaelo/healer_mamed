@@ -8,9 +8,9 @@ import GradientNavigationBar from '../elements/GradientNavigationBar';
 import Icon from 'react-native-vector-icons/Entypo';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceHeight, shadowOpt, colors, fontSize, fontFamily } from '../styles/variables';
-import { getAllMessages, baseUri } from "./statefull/appStatefull";
+import { getAllMessages, baseUri, getMessageNonLue } from "./statefull/appStatefull";
 import { showMessage, hideMessage } from "react-native-flash-message";
-
+ 
 class DoctorReviewScreen extends Component {
   constructor(props) {
     super(props);
@@ -73,10 +73,19 @@ class DoctorReviewScreen extends Component {
     message = { ...message, floating: true };
     showMessage(message)
   }
+  // setIntervals = async() => {
+  //   console.log('start setIntervals');
+  //   let nonLue = await getMessageNonLue(this.props.navigation.state.params.id);
+  //   // if(nonLue.data){
 
+  //   //   nonLue.data.map((one, ind)=>{
+  //   //     if(one.sender_id ==)
+  //   //   })
+  //   // }
+  //   console.log('non lue', nonLue)
+  // }
   render() {
     const uri = baseUri+"/bundles/mamedcovid/assets/images/pictures/";
-    this.state.messages !== null ?  console.log('èèèèèèèèè ',uri+this.state.messages[0].medecin.personne.image):null
     return (
       <View style={CommonStyles.normalPage}>
         <GradientNavigationBar
@@ -102,15 +111,15 @@ class DoctorReviewScreen extends Component {
               this.state.messages.map((item, index) => (
                 <Item
                   _onGoToChat={()=>this.props.navigation.navigate('ChatScreen', {
-                                                          idMed: item.medecin.personne.id,
-                                                          name: item.medecin.personne.prenom+' '+item.medecin.personne.nom
+                                                          idMed: item.id,
+                                                          name: item.prenom+' '+item.nom
                                                         })}
                   key={index} 
-                  avatar={item.medecin.personne.image ? uri+item.medecin.personne.image : require('../../img/person/profil2.jpg')}
-                  picture={item.medecin.personne.image ? true : false }
-                  name={item.medecin.personne.prenom+' '+item.medecin.personne.nom}
+                  avatar={item.image ? uri+item.image : require('../../img/person/profil2.jpg')}
+                  picture={item.image ? true : false }
+                  name={item.prenom+' '+item.nom}
                   birthDate={""}
-                  comment={'ok demain je serai...'}
+                  comment={item.message[0].message}
 
                 />
               ))

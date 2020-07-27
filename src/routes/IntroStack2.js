@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, ScrollView, Text } from 'react-native';
 import { StackRouter } from 'react-navigation';
 
-import StartUpScreen from '../screens/StartUpScreen';
+import StartUpScreen from '../screens/StartUpScreen'; 
 import IntroOneScreen from '../screens/IntroOneScreen';
 import IntroTwoScreen from '../screens/IntroTwoScreen';
 import IntroThreeScreen from '../screens/IntroThreeScreen';
@@ -266,7 +266,7 @@ const AppRouter = StackRouter(
     }
   },
   {
-    initialRouteName: 'IntroOneScreen',
+    initialRouteName: 'MainServiceScreen',
     headerMode: 'none',
     mode: 'card',
   }

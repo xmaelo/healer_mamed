@@ -15,7 +15,7 @@ import StartGenderScreen from './StartGenderScreen';
 class StartBirthdayScreen extends Component {
   constructor(props) {
     super(props);
-
+ 
     this.state = {
       monthIndex: 'JANUARY',
       dayIndex: 1,
@@ -166,7 +166,7 @@ class StartBirthdayScreen extends Component {
       </View>
     );
   }
-
+ 
   _handleClickNext() {
     let strToDate = this.state.month+' '+this.state.day+', '+this.state.year;
     const toDate = new Date(strToDate);

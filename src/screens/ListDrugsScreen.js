@@ -99,7 +99,7 @@ class ListDrugsScreen extends Component {
         />
         <ScrollView style={CommonStyles.noTabScrollView}>
           <View style={CommonStyles.wrapperBox}>
-            {this.props.data.user.personnes.reverse().map((item, index) => (
+            {this.props.data.personnes.reverse().map((item, index) => (
                 <ItemWithDetail
                   key={index}
                   image={{

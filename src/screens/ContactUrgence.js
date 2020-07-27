@@ -35,8 +35,8 @@ class ContactUrgence extends Component {
   		telephone_contact_urgence = this.props.telephone_contact_urgence;
   	}
   	else{
-  		nom_contact_urgence = this.props.data.user.nom_contact_urgence
-  		telephone_contact_urgence = this.props.data.user.telephone_contact_urgence;
+  		nom_contact_urgence = this.props.data.nom_contact_urgence
+  		telephone_contact_urgence = this.props.data.telephone_contact_urgence;
   	}
   	
   	let obj = {
@@ -171,9 +171,9 @@ class ContactUrgence extends Component {
     		telu: this.state.tel
     	} 
     }
-    console.log('this.props.data.user.id', this.props.data.user.personne.id, data)
+    console.log('this.props.data.id', this.props.data.personne.id, data)
     this.props.upContactUrgence(nameOb)
-    let res = await updatePersonneUrgence(this.props.data.user.personne.id, data);
+    let res = await updatePersonneUrgence(this.props.data.personne.id, data);
     console.log('result', res);
     hideMessage();
     this.props.navigation.navigate('MainServiceScreen')

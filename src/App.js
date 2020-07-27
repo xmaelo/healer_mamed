@@ -9,7 +9,7 @@ import { _retrieveData } from "./screens/statefull/storeLocalStorage";
 
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
- 
+  
 import LeftMenu from './components/LeftMenu';
 import HealerRouter from './routes/IntroStack'; 
 import { Provider } from 'react-redux'
@@ -31,6 +31,7 @@ class CustomDrawerView extends Component {
 
     this.state = {
       fontLoaded: false,
+      open: false,
     }
   }
  
@@ -43,13 +44,15 @@ class CustomDrawerView extends Component {
       'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
       'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf')
     });
-    this.setState({ fontLoaded: true });  
     let data = await _retrieveData();
-    this._getLocationAsync();
+    await this._getLocationAsync();
     if(data){
+      this.setState({ fontLoaded: true, open: true });  
       console.log('data _retrieveData', data)
       await this.props.publishJournal(data)
       this.props.navigation.navigate("MainServiceScreen");
+    }else{
+      this.setState({ fontLoaded: true, open: false });  
     }
   }
 
@@ -92,14 +95,14 @@ class CustomDrawerView extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     /** Active Drawer Swipe **/
     if (nextProps.navigation.state.index === 0)
-      this._drawer.blockSwipeAbleDrawer(false);
+      //this._drawer.blockSwipeAbleDrawer(false);
 
     if ( 
       nextProps.navigation.state.index === 0
       && this.props.navigation.state.index === 0
     ) {
-      this._drawer.blockSwipeAbleDrawer(false);
-      this._drawer.close();
+     // this._drawer.blockSwipeAbleDrawer(false);
+      //this._drawer.close();
     }
 
     /** Block Drawer Swipe **/
@@ -116,8 +119,9 @@ class CustomDrawerView extends Component {
     }
 
     const { routes, index } = this.props.navigation.state;
-    console.log('this.props.navigation', this.props.navigation)
     const ActiveScreen = HealerRouter.getComponentForState(this.props.navigation.state);
+    console.log('ActiveScreen',ActiveScreen)
+    console.log('this.props.navigation',  this.props.navigation)
     let data =  _retrieveData();
       return (
           <ScalingDrawer

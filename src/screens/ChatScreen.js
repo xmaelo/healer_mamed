@@ -13,7 +13,7 @@ import {
   Time,
   Avatar
 } from 'react-native-gifted-chat';
-import { getOneMessages, baseUri, onSendMessage } from "./statefull/appStatefull";
+import { getOneMessages, baseUri, onSendMessage, getMessageNonLue } from "./statefull/appStatefull";
 import { connect } from 'react-redux'
 import Text from '../elements/Text';
 import GradientNavigationBar from '../elements/GradientNavigationBar';
@@ -66,7 +66,7 @@ class ChatScreen extends Component {
   }
 
   async componentDidMount (){ 
-    console.log('component', this.props.data.user.personne.id);
+    console.log('component', this.props.data.personne.id);
     //let ob  = require(baseUri+"/bundles/mamedcovid/assets/images/pictures/2.jpeg");
       let messages;
       let formatMessages;
@@ -74,7 +74,7 @@ class ChatScreen extends Component {
         formatMessages = this.props.converations[this.props.navigation.state.params.idMed];
       }
       else {
-        let onConvert = await getOneMessages(this.props.data.user.personne.id, this.props.navigation.state.params.idMed)
+        let onConvert = await getOneMessages(this.props.data.personne.id, this.props.navigation.state.params.idMed)
         if(onConvert){
           messages = onConvert.data;
           formatMessages = [];
@@ -132,7 +132,7 @@ class ChatScreen extends Component {
         {   
           message: {
                   msg: messages[0].text,  
-                  emetteur: this.props.data.user.personne.id, 
+                  emetteur: this.props.data.personne.id, 
                   recpteur: this.props.navigation.state.params.idMed,
                 }
         }
@@ -350,9 +350,40 @@ class ChatScreen extends Component {
       />
     );
   }
- 
+  setIntervals = async() => {
+    console.log('start setIntervals');
+    let nonLue = await getMessageNonLue(this.props.data.personne.id);
+    console.log("nonLue", nonLue)
+    if(nonLue.data){
+      const idMed = this.props.navigation.state.params.idMed;
+      nonLue.data.map((one, ind)=>{
+        if(one.sender_id == idMed){
+          let ob = {
+            text: one.message,
+            sent: true,
+            received: true,
+            createdAt: new Date(one.date),
+            user: {
+              _id: idMed,
+              name: one.sender_nom
+            },
+            _id: Math.round(Math.random() * 1000000000)
+          }
+          this.setState((previousState) => {
+            return {
+              messages: GiftedChat.append(previousState.messages,ob)
+            };
+          });
+        }
+      })
+    }
+    console.log('non lue', nonLue) 
+  }
   render() {
     const idMed = this.props.navigation.state.params.idMed;
+    setTimeout(() => {
+      this.setIntervals();
+    }, 1000);
     console.log('conversation', this.props.converations[this.props.navigation.state.params.idMed])
     // const months = ['Jan', 'March', 'April', 'June'];
     // let m = months.splice(0, 1);
@@ -388,7 +419,7 @@ class ChatScreen extends Component {
             renderAvatarOnTop={true}
 
             user={{
-              _id: this.props.data.user.personne.id, // sent messages should have same user._id
+              _id: this.props.data.personne.id, // sent messages should have same user._id
             }}
 
             renderActions={this.renderCustomActions}
