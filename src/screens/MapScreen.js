@@ -113,13 +113,19 @@ class MapScreen extends Component {
                 region={this.props.region}
               >
                 {
-                  this.state.markers.map((marker,index) => (
+                  //this.state.markers.map((marker,index) => (
                     <MapView.Marker
-                      key={marker.id}
-                      coordinate={marker.latlng}
+                      // key={marker.id}
+                      // coordinate={marker.latlng}
+                      coordinate={
+                        {
+                          longitude: this.props.region.longitude,
+                          latitude: this.props.region.latitude
+                        }
+                      }
                       image={require('../../img/person/pixta21931547M.png')}
                     />
-                  ))
+                  //))
                 } 
               </MapView> : null
             }

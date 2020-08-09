@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   Image,
-  Platform,
+  Platform, 
 } from 'react-native'; 
 import {
   GiftedChat,
@@ -52,14 +52,14 @@ class ChatScreen extends Component {
     this._isAlright = null;
   }
 
-  async UNSAFE_componentWillMount() {
-    this._isMounted = true;
-    this.setState(() => {
-      return { 
-        //messages: require('../data/messages.js'),
-      };
-    });
-  } 
+  // async UNSAFE_componentWillMount() {
+  //   this._isMounted = true;
+  //   this.setState(() => {
+  //     return { 
+  //       //messages: require('../data/messages.js'),
+  //     };
+  //   });
+  // } 
 
   componentWillUnmount() {
     this._isMounted = false;
@@ -75,6 +75,7 @@ class ChatScreen extends Component {
       }
       else {
         let onConvert = await getOneMessages(this.props.data.personne.id, this.props.navigation.state.params.idMed)
+        console.log('on conver', onConvert)
         if(onConvert){
           messages = onConvert.data;
           formatMessages = [];
@@ -96,7 +97,10 @@ class ChatScreen extends Component {
       }
       this.setState({messages: formatMessages});
       this.props.addConvert({idMed: this.props.navigation.state.params.idMed, converation: formatMessages})
-  }
+      setInterval(() => {
+      this.setIntervals(); 
+      }, 1000);
+  } 
 
   onLoadEarlier() {
     this.setState((previousState) => {
@@ -149,7 +153,7 @@ class ChatScreen extends Component {
           messages: GiftedChat.append(oldState, newMess),
         };
       });
-      this.props.actuConvert({idMed: this.props.navigation.state.params.idMed, converation: GiftedChat.append(oldState, newMess)})
+      this.props.addConvert({idMed: this.props.navigation.state.params.idMed, converation: GiftedChat.append(oldState, newMess)})
     }
     console.log('response sedn mess', res);
     // for demo purpose
@@ -348,13 +352,12 @@ class ChatScreen extends Component {
       <CustomInputToolbar
         {...props}
       />
-    );
-  }
+    ); 
+  } 
   setIntervals = async() => {
-    console.log('start setIntervals');
-    let nonLue = await getMessageNonLue(this.props.data.personne.id);
-    console.log("nonLue", nonLue)
-    if(nonLue.data){
+    let nonLue =  await getMessageNonLue(this.props.data.personne.id);
+    let toDispatch;
+    if(nonLue.data && nonLue.data.length > 0){
       const idMed = this.props.navigation.state.params.idMed;
       nonLue.data.map((one, ind)=>{
         if(one.sender_id == idMed){
@@ -374,17 +377,15 @@ class ChatScreen extends Component {
               messages: GiftedChat.append(previousState.messages,ob)
             };
           });
+          this.props.addConvert({idMed: this.props.navigation.state.params.idMed, 
+            converation: this.state.messages})
         }
       })
     }
-    console.log('non lue', nonLue) 
   }
   render() {
     const idMed = this.props.navigation.state.params.idMed;
-    setTimeout(() => {
-      this.setIntervals();
-    }, 1000);
-    console.log('conversation', this.props.converations[this.props.navigation.state.params.idMed])
+
     // const months = ['Jan', 'March', 'April', 'June'];
     // let m = months.splice(0, 1);
     // console.log('b',months.splice(0, 1));
@@ -413,9 +414,9 @@ class ChatScreen extends Component {
             messages={this.state.messages}
             placeholder='Votre message ...'
             onSend={this.onSend}
-            loadEarlier={this.state.loadEarlier}
-            onLoadEarlier={this.onLoadEarlier}
-            isLoadingEarlier={this.state.isLoadingEarlier}
+            // loadEarlier={this.state.loadEarlier}
+            // onLoadEarlier={this.onLoadEarlier}
+            // isLoadingEarlier={this.state.isLoadingEarlier}
             renderAvatarOnTop={true}
 
             user={{
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return state
 }
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => { 
   return {
     addConvert: async (data) => {
       dispatch({type: "ADD_CONVERT", data: data});

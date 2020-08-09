@@ -131,31 +131,24 @@ class StartGenderScreen extends Component {
   _onRegister = async() =>{
     console.log('this.props', this.props)
     let globalObj = {
-      latitude: this.props.location.coords.latitude,
-      longitude: this.props.location.coords.longitude,
-      sexe: this.state.gender,
-      ...this.props.infos, 
-      ...this.props.nameOb,
-      date: this.props.date,
+     patient: {
+        latitude: this.props.location.coords.latitude,
+        longitude: this.props.location.coords.longitude,
+        sexe: this.state.gender,
+        ...this.props.infos, 
+        ...this.props.nameOb, 
+        date: this.props.date,
+      }
     } 
     this.showMessage2();
     let dat = await onRegister(globalObj);
     console.log('globalObj', globalObj)
     console.log('result onRegister', dat)
-    if(dat.data.success){
-      let ob = {
-        username: this.props.infos.username,//'patient',//
-        password: this.props.infos.password //'romain'//
-      }
-      let data = await login(ob);
-      if(data.data && data.data.success && data.data.success == true){
-        console.log('in data rgister',data);
-        data = await getPersonalData('/api_v1/apis/2/profiles.json');
+    if(dat.success){
+        data = await getPersonalData('/api_v1/apis/'+dat.data+'/profiles.json'); 
+        await this.props.publishJournal(data)
         hideMessage();
-        this.props.publishJournal(data);
-        hideMessage(); 
-        let rs = await _storeData(data);
-      }
+        this.props.navigation.navigate("MainServiceScreen");
     }else {
       hideMessage();
     }

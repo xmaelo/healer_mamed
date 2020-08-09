@@ -75,10 +75,10 @@ class AddDrugsScreen extends Component {
 
     console.log(result);
 
-    if (!result.cancelled) {
+    if (!result.cancelled) { 
       this.setState({image: result.uri});
       let data = {'pic-profile': result.uri}
-     let re =  await setImageRest(this.props.data.personne.id, data)
+     let re =  await setImageRest(this.props.data.personne.id, result.uri)
       await this.props.setImage(re.data);
       console.log('image uri', result.uri);
     } 

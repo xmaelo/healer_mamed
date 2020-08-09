@@ -37,6 +37,7 @@ import CallDoctorScreen from '../screens/CallDoctorScreen';
 import ChatScreen from '../screens/ChatScreen';
 import ResultFindHospitalScreen from '../screens/ResultFindHospitalScreen';
 import NotificationScreen from '../screens/NotificationScreen';
+import AntecedentScreen from '../screens/AntecedentScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import GoalSettingsScreen from '../screens/GoalSettingsScreen';
 import DoctorFavoritesScreen from '../screens/DoctorFavoritesScreen';
@@ -186,6 +187,10 @@ const AppRouter = StackRouter(
     NotificationScreen: {
       screen: NotificationScreen,
       path: 'notification',
+    },
+    AntecedentScreen: {
+      screen: AntecedentScreen,
+      path: 'antecedent',
     },
     SettingsScreen: {
       screen: SettingsScreen,

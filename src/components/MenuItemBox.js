@@ -51,7 +51,7 @@ export default class MenuItemBox extends Component {
 
 const styles = StyleSheet.create({
   card: {
-    height: 135,
+    height: 118,
     borderWidth: 0,
     borderRadius: 8,
     marginTop: 15,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     opacity: 0.6
   },
   icon: {
-    marginBottom: 24,
+    marginBottom: 12,
   },
 });
 

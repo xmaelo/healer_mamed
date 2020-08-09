@@ -6,10 +6,12 @@ import GradientNavigationBar from '../elements/GradientNavigationBar';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceHeight, NAV_HEIGHT, TAB_HEIGHT, STATUSBAR_HEIGHT } from '../styles/variables';
 import { connect } from 'react-redux'
-import MenuItemBox from '../components/MenuItemBox';
+import MenuItemBox from '../components/MenuItemBox'; 
 import CustomTabBar from '../components/CustomTabBar';  
 import { _storeData } from "./statefull/storeLocalStorage";
 import { getPersonalData } from "./statefull/appStatefull";
+import { colors, fontSize, fontFamily } from '../styles/variables';
+import GradientButton from '../elements/GradientButton';
 
 class MainServiceScreen extends Component {
   constructor(props) {
@@ -30,6 +32,12 @@ class MainServiceScreen extends Component {
   }
 
   render() {
+    const smallShadowOpt = {
+      btnWidth: 125,
+      btnHeight: 35,
+      shadowHeight: 65,
+      fontSize: 15,
+    }
     return ( 
       <View style={CommonStyles.normalPage}>
         <GradientNavigationBar
@@ -38,8 +46,8 @@ class MainServiceScreen extends Component {
           titleText={"Journal"}
           titleImgStyle={{
             width: 73,
-            height: 18,
-          }}
+            height: 18, 
+          }} 
           rightButtons={
             [
               {
@@ -60,13 +68,37 @@ class MainServiceScreen extends Component {
           }
         />
         <View style={styles.titleBox}>
-          <Text title black mediumBold style={{lineHeight: 49, marginBottom: 10}}>
+          <Text medium black mediumBold style={{lineHeight: 49, marginBottom: 10}}>
             Mon Journal,
           </Text>
-          <Text title lightGrey extraBold>
-            Comment prendre soins de vous?
-          </Text>
         </View>
+
+        <View style={[CommonStyles.itemWhiteBox,styles.card]}>
+          <View style={styles.left}>
+            <Image
+              source={require('../../img/person/profil2.jpg')}
+              style={{width: 40, height: 40}}
+            />
+          </View>
+          <View style={styles.right}>
+            <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
+              Suivi par: Dr.Atemkeng
+            </Text>
+            <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23, paddingBottom: 10}}>
+              5 mois déja
+            </Text>
+            <GradientButton
+              // onPressButton={this._handleClickReply.bind(this)}
+              setting={smallShadowOpt}
+              btnText="Arreter "
+            />
+          </View>
+        </View>
+
+
+
+
+
         <View style={styles.fullField}>
           <View style={styles.colMainLeft}>
             <MenuItemBox
@@ -119,7 +151,7 @@ class MainServiceScreen extends Component {
   }
 
   _handleClickNotificationButton() {
-    this.props.navigation.navigate("NotificationScreen");
+    this.props.navigation.navigate("AntecedentScreen");
   }
 
   // Click email button 
@@ -139,7 +171,7 @@ class MainServiceScreen extends Component {
 
   // Go to NotificationScreenScreen 
   _handleClickNotificationScreen() {
-    this.props.navigation.navigate("NotificationScreen");
+    this.props.navigation.navigate("AntecedentScreen");
   }
 }
 
@@ -168,6 +200,18 @@ const styles = StyleSheet.create({
   colMainRight: {
     flex: 1,
     marginLeft: 8,
+  },
+  left: {
+    flexDirection: 'row',
+    width: 44,
+  },
+  right: {
+    flex: 1,
+  },
+  card: {
+    flexDirection: 'row',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
   },
 });
 

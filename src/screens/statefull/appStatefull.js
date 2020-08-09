@@ -16,16 +16,15 @@ export const getPersonalData = async (uri) => {
  
 }
 export const getMessageNonLue = async (id) => {
-  console.log('before getJournale') 
   const uri = "/api_v1/messagenonlups/"+id+".json"
-  return await axios.get(baseUri+uri)  
-    .then( (response) => { 
-      console.log(" ========Non Lus=========",response.data);
+  let data =  await axios.get(baseUri+uri)  
+    .then( (response) => {
       return response.data
     }) 
     .catch( (error) => {
       console.log(error);  
-    });  
+    });
+    return data; 
  
 }
 export const getArrondissementData = async () => {
@@ -65,14 +64,17 @@ export const updateProfils = async (idPer, obj) => {
     }) 
     .catch( (error) => {
       console.log(error);  
-    });  
+    });   
   
 }
 export const setImageRest = async (idPer, pic) => {
   console.log('pic', pic)
+  var bodyFormData = new FormData();
+  bodyFormData.append('pic-profile', pic, 'file');
+  console.log("bodyFormData", bodyFormData)
   const _com = '/api_v1/pictures/'+idPer+'/profileforapis.json';
   console.log('url', _com)
-  return await axios.post(baseUri+_com, pic , { headers: { "Content-type": "multipart/form-data" } }) 
+  return await axios.post(baseUri+_com, bodyFormData , { headers: { "Content-type": "multipart/form-data" } }) 
     .then( (response) => { 
       console.log(" =================",response.data);
       return response.data
