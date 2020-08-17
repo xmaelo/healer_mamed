@@ -47,7 +47,7 @@ class AddDrugsScreen extends Component {
     this.setState({
       nom: peron.nom,
       prenom: peron.prenom,
-      telephone: peron.prenom,
+      telephone: peron.telephone,
       email: peron.email,
       con_urg: perons.nom_contact_urgence,
       tel_urg: perons.telephone_contact_urgence
@@ -163,7 +163,7 @@ class AddDrugsScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/edit.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,
@@ -182,13 +182,13 @@ class AddDrugsScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/envelope.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,
                   left: 20,
                   width: 19,
-                  height: 22
+                  height: 15
                 }}
               />
               <TextInput
@@ -202,7 +202,7 @@ class AddDrugsScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/smartphone.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,

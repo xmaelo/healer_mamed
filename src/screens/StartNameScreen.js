@@ -136,7 +136,7 @@ class StartNameScreen extends Component {
           <View style={{alignSelf: 'center'}}>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/envelope.png')}
                 style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
               />
               <TextInput
@@ -166,7 +166,7 @@ class StartNameScreen extends Component {
           <View style={{alignSelf: 'center'}}>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/emergency-call.png')}
                 style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
               />
               <TextInput
@@ -181,7 +181,7 @@ class StartNameScreen extends Component {
           <View style={{alignSelf: 'center'}}>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/location.png')}
                 style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
               />
               <TextInput

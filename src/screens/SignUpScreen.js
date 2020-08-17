@@ -91,8 +91,8 @@ class SignUpScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/envelope.png')}
-                style={{position:'absolute',bottom: 12,left: 20,width: 22, height: 17}}
+                source={require('../../img/healer/smartphone.png')}
+                style={{position:'absolute',bottom: 12,left: 20,width: 22, height: 22}}
               />
               <TextInput
                 placeholder='Télephone'

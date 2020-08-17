@@ -182,13 +182,13 @@ class AddActiviteesScreen extends Component {
 
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/high-temperature.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,
                   left: 20,
-                  width: 19,
-                  height: 22
+                  width: 22,
+                  height: 25
                 }}
               />
               <TextInput

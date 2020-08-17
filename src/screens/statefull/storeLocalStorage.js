@@ -17,7 +17,7 @@ export const _retrieveData = async () => {
   try {
     console.log('value value value AsyncStorage')
     const value = await AsyncStorage.getItem('_journal');
-    if (value !== null) {
+    if (value !== null && value !=='') {
       return JSON.parse(value);
       console.log("data found",JSON.parse(value));
     }

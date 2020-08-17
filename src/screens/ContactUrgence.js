@@ -87,7 +87,7 @@ class ContactUrgence extends Component {
           <View style={{alignSelf: 'center'}}>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/smartphone.png')}
                 style={{position:'absolute',bottom: 12,left: 20,width: 19, height: 22}}
               />
               <TextInput
@@ -119,9 +119,9 @@ class ContactUrgence extends Component {
           }}
           dlMessage={{
             component: <AlertDeleteDlMessage
-              frontText="Faut-il vraiment ajouter "//this.props.text1
-              highlightText='cet activité dans '//this.props.text2
-              behindText='votre liste?'
+              frontText="Faut-il editer votre"//this.props.text1
+              highlightText="contact d'urgence ?"//this.props.text2
+              behindText=''
             />
           }}
           dismissBtn={{

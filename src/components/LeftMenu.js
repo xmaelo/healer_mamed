@@ -1,28 +1,50 @@
 import React, { Component } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions, TouchableHighlight, Platform } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions, Vibration, TouchableHighlight, Platform, Linking } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceWidth, deviceHeight, colors, fontSize, fontFamily } from '../styles/variables';
 import { connect } from 'react-redux'
+import { _storeData } from "../screens/statefull/storeLocalStorage";
+import { getCall } from "../screens/statefull/appStatefull";
+import AlertDialog from '../elements/AlertDialog'; 
+import AlertDeleteDlMessage from './list-item/AlertDeleteDlMessage';
+import AlertDeleteDlTitle from './list-item/AlertDeleteDlTitle';
 
 const resetAction = (routeName) => NavigationActions.reset({
   index: 0,
-  actions: [
+  actions: [ 
     NavigationActions.navigate({routeName: routeName, drawer: 'close'}),
   ]
 });
 
 class LeftMenu extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
+    this.state = {
+      visible: false,
+    }
   }
-
+  async componentDidMount() {
+    this._isMounted = true;
+    setInterval(async() => {
+      let res = await getCall(this.props.data.personne.id);
+      if(res.length != 0 && this._isMounted){
+        console.log('link',res[0].link);
+          this.setState({visible: true, link: res[0].link});
+          Vibration.vibrate(1000 * 10);
+      }
+      }, 1000);
+  }
   onNavigate(route) {
     this.props.navigation.dispatch(resetAction(route))
   }
-
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
   render() {
+    
     let isActive = '';
     const img = "https://covid19.mamed.care"+"/bundles/mamedcovid/assets/images/pictures/";
     return (
@@ -274,15 +296,52 @@ class LeftMenu extends Component {
           }
           <TouchableHighlight
             style={styles.itemBox}
+            onPress={this.logout.bind(this)}
           >
             <Text style={styles.menuText}>LOG OUT</Text>
           </TouchableHighlight>
         </View>
+        <AlertDialog
+          modalVisible={this.state.visible}
+          onRequestClose={() => {
+            this.setState({
+              modalVisible: false,
+              visible: false,
+            });
+          }}
+          dlTitle={{
+            component: <AlertDeleteDlTitle
+              text='Appel en cours...'
+            />
+          }}
+          dlMessage={{
+            component: <AlertDeleteDlMessage
+              frontText="Un appel a éte planifier "
+              highlightText=''
+              behindText=''
+            />
+          }}
+          dismissBtn={{
+            text: 'Lancer',
+            onPress: () => { 
+              Linking.openURL(this.state.link); 
+            },
+          }}
+          acceptBtn={{
+            text: 'Annuler',
+            onPress: () => {this.setState({visible: false}); Vibration.cancel() },
+          }}
+        />      
       </View>
     );
   }
 
   // PRIVATE
+
+  async logout(){
+    await _storeData("");
+    this.props.navigation.navigate('IntroOneScreen');
+  }
   _handleClickHome() {
     this.setState({isActive:'home'});
     this.props.navigation.navigate('MainServiceScreen');

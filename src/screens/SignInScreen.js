@@ -32,10 +32,10 @@ class SignInScreen extends Component {
     await _retrieveData();
     
   }
-  initJournal = async () => { 
+  initJournal = async (id) => { 
     this.setState({message: 'Initialisation du Journal ...'});
     this.messageWithPosition3();
-    let data = await getPersonalData('/api_v1/apis/2/profiles.json');
+    let data = await getPersonalData('/api_v1/apis/'+id+'/profiles.json');
     console.log('response from api',data)
     this.setState({ show : false}) 
     this.props.publishJournal(data);
@@ -53,7 +53,7 @@ class SignInScreen extends Component {
     let data = await login(ob);
     if(data.data && data.data.success && data.data.success == true){
       console.log('in login',data);
-      this.initJournal();
+      this.initJournal(data.data.id);
     }
     else{
       this.setState({
@@ -128,7 +128,7 @@ class SignInScreen extends Component {
                   width: 19,
                   height: 22
                 }}
-              />
+              /> 
               <TextInput
                 placeholder="Nom d'utilisateur"
                 style={CommonStyles.textInput}

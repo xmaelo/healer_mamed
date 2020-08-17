@@ -155,7 +155,7 @@ class AddCasContactScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/edit.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,
@@ -174,13 +174,13 @@ class AddCasContactScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/envelope.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,
                   left: 20,
                   width: 19,
-                  height: 22
+                  height: 15
                 }}
               />
               <TextInput
@@ -194,7 +194,7 @@ class AddCasContactScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/smartphone.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,
@@ -234,7 +234,7 @@ class AddCasContactScreen extends Component {
             </View>
             <View style={CommonStyles.textInputField}>
               <Image
-                source={require('../../img/healer/avatar.png')}
+                source={require('../../img/healer/placeholder.png')}
                 style={{
                   position:'absolute',
                   bottom: 12,

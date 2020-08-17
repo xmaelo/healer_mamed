@@ -103,9 +103,9 @@ class ListDrugsScreen extends Component {
                 <ItemWithDetail
                   key={index}
                   image={{
-                    url: require('../../img/healer/profile.png'),
-                    width: 22,
-                    height: 22,
+                    url: require('../../img/healer/male.png'),
+                    width: 25,
+                    height: 25,
                   }}
                   header={item.personne.nom}
                   onPressItem={()=>this.props.navigation.navigate('AddCasContactScreen', {item: item, index: index})}

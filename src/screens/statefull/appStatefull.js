@@ -15,6 +15,19 @@ export const getPersonalData = async (uri) => {
     });  
  
 }
+export const getCall = async (id) => {
+  //console.log('before getCall') 
+  const uri = "/api_v1/videonotifs/"+id+".json"
+  return await axios.get(baseUri+uri)  
+    .then( (response) => { 
+      //console.log(" =================",response.data);
+      return response.data.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });  
+ 
+}
 export const getMessageNonLue = async (id) => {
   const uri = "/api_v1/messagenonlups/"+id+".json"
   let data =  await axios.get(baseUri+uri)  

@@ -12,25 +12,58 @@ import { _storeData } from "./statefull/storeLocalStorage";
 import { getPersonalData } from "./statefull/appStatefull";
 import { colors, fontSize, fontFamily } from '../styles/variables';
 import GradientButton from '../elements/GradientButton';
+import Constants from 'expo-constants';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 class MainServiceScreen extends Component {
   constructor(props) {
     super(props);
   } 
-
+ //507F0gFWWBkueKQOj2MpbO  1
+ //
   async componentDidMount() {
+    await this.registerForPushNotificationsAsync();
     console.log('this.props.Journal',this.props, this.props.navigation.state.params);
-    const idpers = this.props.navigation.state.params.id;
-    let data = this.props.data;
-    if(!idpers){
-      console.log('before onGo');
-      data = await getPersonalData('/api_v1/apis/'+this.props.data.personne.id+'/profiles.json');
-      this.props.publishJournal(data);
-    }
-    let rs = await _storeData(data);
-    console.log('after sstore data', rs)
+    // const idpers = this.props.navigation.state.params.id;
+    // let data = this.props.data;
+    // if(!idpers){
+    //   console.log('before onGo');
+    //   data = await getPersonalData('/api_v1/apis/'+this.props.data.personne.id+'/profiles.json');
+    //   this.props.publishJournal(data);
+    // }
+    // let rs = await _storeData(data);
+    // console.log('after sstore data', rs)
   }
+  registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      console.log('finalStatus', finalStatus)
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      const token = await Notifications.getExpoPushTokenAsync();
+      console.log('token token token' ,token);
+      this.setState({ expoPushToken: token });
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
 
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('default', {
+        name: 'default',
+        sound: true,
+        priority: 'max',
+        vibrate: [0, 250, 250, 250],
+      });
+    }
+  };
   render() {
     const smallShadowOpt = {
       btnWidth: 125,

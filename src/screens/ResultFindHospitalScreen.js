@@ -87,7 +87,7 @@ export default class ResultFindHospitalScreen extends Component {
             <View style={styles.result}>
               <Text medium lightGrey regular>
                 <Text black mediumBold>{toCentres.length} </Text>
-                 hospitals 
+                 hopitaux
                 <Text> Trouvés </Text>
               </Text>
             </View>
