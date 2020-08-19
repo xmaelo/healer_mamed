@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { TextInput, View, StyleSheet, Image, Platform, TouchableHighlight } from 'react-native';
+import { TextInput, View, 
+  StyleSheet, Image, TouchableHighlight, 
+  Vibration, Platform } from 'react-native';
 
 import Text from '../elements/Text';
 import GradientNavigationBar from '../elements/GradientNavigationBar'; 
@@ -9,12 +11,14 @@ import { connect } from 'react-redux'
 import MenuItemBox from '../components/MenuItemBox'; 
 import CustomTabBar from '../components/CustomTabBar';  
 import { _storeData } from "./statefull/storeLocalStorage";
-import { getPersonalData } from "./statefull/appStatefull";
+import { getPersonalData, getSaveToken } from "./statefull/appStatefull";
 import { colors, fontSize, fontFamily } from '../styles/variables';
 import GradientButton from '../elements/GradientButton';
 import Constants from 'expo-constants';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+
+
 
 class MainServiceScreen extends Component {
   constructor(props) {
@@ -24,6 +28,8 @@ class MainServiceScreen extends Component {
  //
   async componentDidMount() {
     await this.registerForPushNotificationsAsync();
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    //Vibration.vibrate(1000 * 10);
     console.log('this.props.Journal',this.props, this.props.navigation.state.params);
     // const idpers = this.props.navigation.state.params.id;
     // let data = this.props.data;
@@ -35,6 +41,11 @@ class MainServiceScreen extends Component {
     // let rs = await _storeData(data);
     // console.log('after sstore data', rs)
   }
+  _handleNotification = notification => {
+    Vibration.vibrate();
+    this.setState({ notification: notification });
+    console.log(notification);
+  };
   registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -51,6 +62,7 @@ class MainServiceScreen extends Component {
       const token = await Notifications.getExpoPushTokenAsync();
       console.log('token token token' ,token);
       this.setState({ expoPushToken: token });
+      await getSaveToken(this.props.data.personne.id, token)
     } else {
       alert('Must use physical device for Push Notifications');
     }

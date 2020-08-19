@@ -15,6 +15,19 @@ export const getPersonalData = async (uri) => {
     });  
  
 }
+export const getSaveToken = async (id, tokens) => {
+  console.log('before tokens', tokens, id)
+  //https://covid19.mamed.care/api_v1/apis/{id}/updatetokens/{token}.json
+   const uri = "/api_v1/apis/"+id+"/updatetokens/"+tokens+".json"
+   return await axios.get(baseUri+uri)  
+    .then( (response) => { 
+      console.log(" ==========tokens=======",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });
+}
 export const getCall = async (id) => {
   //console.log('before getCall') 
   const uri = "/api_v1/videonotifs/"+id+".json"
