@@ -7,10 +7,29 @@ import GradientNavigationBar from '../elements/GradientNavigationBar';
 
 import CommonStyles from '../styles/CommonStyles';
 import { colors, fontSize, fontFamily } from '../styles/variables';
+import { connect } from 'react-redux'
+import { listSuivie, aceptSuivie } from "./statefull/appStatefull";
 
-export default class NotificationScreen extends Component {
+class NotificationScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      list: null
+    }
+  }
+  async componentDidMount() {
+    this.init();
+  }
+  init = async () => {
+    let list = await listSuivie(this.props.data.personne.id)
+    console.log('list list list', list);
+    this.setState({list: list})
+  }
+
+  confirmNotif = async(id) => {
+    await aceptSuivie(id);
+    console.log('confirmNotif')
+    this.init();
   }
 
   render() {
@@ -29,93 +48,35 @@ export default class NotificationScreen extends Component {
           titleText='Notification'
         />
         <ScrollView style={CommonStyles.noTabScrollView}>
-          <View style={CommonStyles.wrapperBox}>
-            <View style={[CommonStyles.itemWhiteBox,styles.card]}>
-              <View style={styles.left}>
-                <Image
-                  source={require('../../img/healer/drugs.png')}
-                  style={{width: 24, height: 24}}
-                />
-              </View>
-              <View style={styles.right}>
-                <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
-                  It's time to take medication
-                </Text>
-                <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23}}>
-                  3 hours ago
-                </Text>
-              </View>
+            <View style={CommonStyles.wrapperBox}>
+            {this.state.list && this.state.list.map((list, index) => {
+              // true && [1].map((list, index) => {
+              return(
+                <View style={[CommonStyles.itemWhiteBox,styles.card]} key={index}>
+                  <View style={styles.left}>
+                    <Image
+                      source={require('../../img/person/pixta21931547M.png')}
+                      style={{width: 30, height: 30}}
+                    />
+                  </View>
+                  <View style={styles.right}>
+                    <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
+                      Dr.Alexander 
+                    </Text>
+                    <GradientButton
+                      onPressButton={()=> this.confirmNotif(1)}
+                      setting={smallShadowOpt}
+                      btnText="Acepter"
+                    />
+                  </View>
+                </View>
+             )})}
+            {this.state.list && this.state.list.length == 0 &&
+              <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27, textAlign: "center"}}>
+                Aucune nouvelle notifications
+              </Text> 
+            }
             </View>
-            <View style={[CommonStyles.itemWhiteBox,styles.card]}>
-              <View style={styles.left}>
-                <Image
-                  source={require('../../img/person/pixta21931547M.png')}
-                  style={{width: 30, height: 30}}
-                />
-              </View>
-              <View style={styles.right}>
-                <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
-                  Dr.Alexander John send you a messages
-                </Text>
-                <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23, paddingBottom: 10}}>
-                  1 hours ago
-                </Text>
-                <GradientButton
-                  onPressButton={this._handleClickReply.bind(this)}
-                  setting={smallShadowOpt}
-                  btnText="REPLY"
-                />
-              </View>
-            </View>
-            <View style={[CommonStyles.itemWhiteBox,styles.card]}>
-              <View style={styles.left}>
-                <Image
-                  source={require('../../img/healer/greyClipboard1.png')}
-                  style={{width: 19, height: 22}}
-                />  
-              </View>
-              <View style={styles.right}>
-                <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
-                  Meet with Dr.Janna at 11:00
-                </Text>
-                <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23}}>
-                  39 mins ago
-                </Text>
-              </View>
-            </View>
-            <View style={[CommonStyles.itemWhiteBox,styles.card]}>
-              <View style={styles.left}>
-                <Image
-                  source={require('../../img/healer/drugs.png')}
-                  style={{width: 24, height: 24}}
-                />
-              </View>
-              <View style={styles.right}>
-                <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
-                  Heart tonic drink now
-                </Text>
-                <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23}}>
-                  45 mins ago
-                </Text>
-              </View>
-            </View>
-            <View style={[CommonStyles.itemWhiteBox,styles.card]}>
-              <View style={styles.left}>
-                <Image
-                  source={require('../../img/healer/drugs.png')}
-                  style={{width: 24, height: 24}}
-                />
-              </View>
-              <View style={styles.right}>
-                <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
-                  Tonic drink eyes right now
-                </Text>
-                <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23}}>
-                  45 mins ago
-                </Text>
-              </View>
-            </View>
-          </View>
         </ScrollView>
       </View>
     );
@@ -125,6 +86,12 @@ export default class NotificationScreen extends Component {
      this.props.navigation.navigate('ChatScreen');
   }
 }
+
+const mapStateToProps = (state) => {
+  return state
+}
+
+export default connect(mapStateToProps)(NotificationScreen)
 
 const styles = StyleSheet.create({
   card: {

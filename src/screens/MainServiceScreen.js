@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import MenuItemBox from '../components/MenuItemBox'; 
 import CustomTabBar from '../components/CustomTabBar';  
 import { _storeData } from "./statefull/storeLocalStorage";
-import { getPersonalData, getSaveToken } from "./statefull/appStatefull";
+import { getPersonalData, getSaveToken, arretSuivie } from "./statefull/appStatefull";
 import { colors, fontSize, fontFamily } from '../styles/variables';
 import GradientButton from '../elements/GradientButton';
 import Constants from 'expo-constants';
@@ -46,6 +46,10 @@ class MainServiceScreen extends Component {
     this.setState({ notification: notification });
     console.log(notification);
   };
+  arretSuivie = async() => {
+     console.log('arretSuivie Suivi')
+     //await arretSuivie();
+  }
   registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -133,7 +137,7 @@ class MainServiceScreen extends Component {
               5 mois déja
             </Text>
             <GradientButton
-              // onPressButton={this._handleClickReply.bind(this)}
+              onPressButton={()=>this.arretSuivie()}
               setting={smallShadowOpt}
               btnText="Arreter "
             />
@@ -196,7 +200,7 @@ class MainServiceScreen extends Component {
   }
 
   _handleClickNotificationButton() {
-    this.props.navigation.navigate("AntecedentScreen");
+    this.props.navigation.navigate("NotificationScreen");
   }
 
   // Click email button 

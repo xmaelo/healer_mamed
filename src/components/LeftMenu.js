@@ -27,19 +27,30 @@ class LeftMenu extends Component {
     }
   }
   async componentDidMount() {
-    this._isMounted = true;
+    this._isMounted = true; 
     setInterval(async() => {
-      let res = await getCall(this.props.data.personne.id);
-      if(res.length != 0 && this._isMounted){
-        console.log('link',res[0].link);
-          this.setState({visible: true, link: res[0].link});
-          Vibration.vibrate(1000 * 10);
-      }
-      }, 1000);
+        try{
+          let res = await getCall(this.props.data.personne.id);
+          if(res.length != 0 && this._isMounted){
+            console.log('link',res[0].link); 
+              const ONE_SECOND_IN_MS = 1000;
+              const PATTERN = [
+                1 * ONE_SECOND_IN_MS,
+                2 * ONE_SECOND_IN_MS,
+                3 * ONE_SECOND_IN_MS
+              ];
+              //this.setState({visible: true, link: res[0].link});
+              this.props.navigation.navigate('CallDoctorScreen', {link: res[0].link});
+              Vibration.vibrate(PATTERN);
+          }
+        }catch(e){
+          console.log('err', e)
+        }
+    }, 1000);
   }
   onNavigate(route) {
     this.props.navigation.dispatch(resetAction(route))
-  }
+  } 
   componentWillUnmount() {
     this._isMounted = false;
   }

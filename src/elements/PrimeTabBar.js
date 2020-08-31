@@ -48,76 +48,67 @@ export default class PrimeTabBar extends Component {
               />
             }
           </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={styles.btn}
-            onPress={this.props.tabTwoBtn.action}>
-            {this.props.isActive == 'tabTwo' &&
-              <Image
-                source={this.props.tabTwoBtn.active}
-                style={{
-                  width: this.props.tabTwoBtn.width,
-                  height: this.props.tabTwoBtn.height
-                }}
-              />
-            }
-            {this.props.isActive != 'tabTwo' &&
-              <Image
-                source={this.props.tabTwoBtn.inactive}
-                style={{
-                  width: this.props.tabTwoBtn.width,
-                  height: this.props.tabTwoBtn.height
-                }}
-              />
-            }
-          </TouchableOpacity>
+          {
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={styles.btn}
+              onPress={this.props.tabTwoBtn.action}>
+             
+              
+            </TouchableOpacity>
+          }
           <View style={styles.btn} />
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={styles.btn}
-            onPress={this.props.tabThreeBtn.action}>
-            {this.props.isActive == 'tabThree' &&
-              <Image
-                source={this.props.tabThreeBtn.active}
-                style={{
-                  width: this.props.tabThreeBtn.width,
-                  height: this.props.tabThreeBtn.height
-                }}
-              />
-            }
-            {this.props.isActive != 'tabThree' &&
-              <Image
-                source={this.props.tabThreeBtn.inactive}
-                style={{
-                  width: this.props.tabThreeBtn.width,
-                  height: this.props.tabThreeBtn.height
-                }}
-              />
-            }
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={styles.btn}
-            onPress={this.props.tabFourBtn.action}>
-            {this.props.isActive == 'tabFour' &&
-              <Image
-                source={this.props.tabFourBtn.active}
-                style={{
-                  width: this.props.tabFourBtn.width,
-                  height: this.props.tabFourBtn.height
-                }}
-              />
-            }
-            {this.props.isActive != 'tabFour' &&
-              <Image
-                source={this.props.tabFourBtn.inactive}
-                style={{
-                  width: this.props.tabFourBtn.width,
-                  height: this.props.tabFourBtn.height
-                }}
-              />
-            }
-          </TouchableOpacity>
+          {
+
+          // <TouchableOpacity
+          //   activeOpacity={0.6}
+          //   style={styles.btn}
+          //   onPress={this.props.tabThreeBtn.action}>
+          //   {this.props.isActive == 'tabThree' &&
+          //     <Image
+          //       source={this.props.tabThreeBtn.active}
+          //       style={{
+          //         width: this.props.tabThreeBtn.width,
+          //         height: this.props.tabThreeBtn.height
+          //       }}
+          //     />
+          //   }
+          //   {this.props.isActive != 'tabThree' &&
+          //     <Image
+          //       source={this.props.tabThreeBtn.inactive}
+          //       style={{
+          //         width: this.props.tabThreeBtn.width,
+          //         height: this.props.tabThreeBtn.height
+          //       }}
+          //     />
+          //   }
+          // </TouchableOpacity>
+          }
+          {
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={styles.btn}
+              onPress={this.props.tabFourBtn.action}>
+              {this.props.isActive == 'tabFour' &&
+                <Image
+                  source={this.props.tabFourBtn.active}
+                  style={{
+                    width: this.props.tabFourBtn.width,
+                    height: this.props.tabFourBtn.height
+                  }}
+                />
+              }
+              {this.props.isActive != 'tabFour' &&
+                <Image
+                  source={this.props.tabFourBtn.inactive}
+                  style={{
+                    width: this.props.tabFourBtn.width,
+                    height: this.props.tabFourBtn.height
+                  }}
+                />
+              }
+            </TouchableOpacity>
+          }
         </View>
         {
           <TouchableOpacity
@@ -152,7 +143,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   btn: {
-    width: deviceWidth / 5,
+    width: deviceWidth / 4,
     height: TAB_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',

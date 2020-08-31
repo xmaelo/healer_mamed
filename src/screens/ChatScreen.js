@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent } from 'react';
 import {
   StyleSheet,
   View,
@@ -27,7 +27,7 @@ import {
   deviceWidth
 } from '../styles/variables';
 
-class ChatScreen extends Component {
+class ChatScreen extends PureComponent  {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,7 +79,9 @@ class ChatScreen extends Component {
         if(onConvert){
           messages = onConvert.data;
           formatMessages = [];
-          messages.reverse().map((mess, ind) => {
+          let ds = messages.reverse().slice(0, 100);
+          ds.reverse();
+          ds.reverse().map((mess, ind) => {
             let prototype = {
                 _id:  Math.round(Math.random() * 1000000000),
                 text: mess.message,
@@ -355,11 +357,14 @@ class ChatScreen extends Component {
     ); 
   } 
   setIntervals = async() => {
+    //console.log('setIntervals')
     let nonLue =  await getMessageNonLue(this.props.data.personne.id);
+    console.log('nonLue.data', nonLue.data, nonLue)
     let toDispatch;
     if(nonLue.data && nonLue.data.length > 0){
       const idMed = this.props.navigation.state.params.idMed;
       nonLue.data.map((one, ind)=>{
+        console.log('nonLue')
         if(one.sender_id == idMed){
           let ob = {
             text: one.message,
@@ -368,7 +373,7 @@ class ChatScreen extends Component {
             createdAt: new Date(one.date),
             user: {
               _id: idMed,
-              name: one.sender_nom
+              name: one.sender_nom 
             },
             _id: Math.round(Math.random() * 1000000000)
           }

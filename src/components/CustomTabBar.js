@@ -20,8 +20,8 @@ export default class CustomTabBar extends Component {
           onPressButton: this._onHomeIconClick.bind(this),
         }}
         tabOneBtn={{
-          active: require('../../img/healer/activeDrugs.png'),
-          inactive: require('../../img/healer/drugs.png'),
+          active: require('../../img/healer/sos.png'),
+          inactive: require('../../img/healer/sos.png'),
           width: 24,
           height: 24,
           action: this._onDrugsIconClick.bind(this),
@@ -41,8 +41,8 @@ export default class CustomTabBar extends Component {
           action: this._onDashboardIconClick.bind(this),
         }}
         tabFourBtn={{
-          active: require('../../img/healer/activeProfile.png'),
-          inactive: require('../../img/healer/profile.png'),
+          active: require('../../img/healer/couple.png'),
+          inactive: require('../../img/healer/couple.png'),
           width: 20,
           height: 24,
           action: this._onProfileIconClick.bind(this),

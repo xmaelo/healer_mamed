@@ -6,10 +6,9 @@ import { createNavigator, createAppContainer, addNavigationHelpers } from 'react
 //import stores from "./mobx" 
 import ScalingDrawer from './elements/ScalingDrawer';
 import { _retrieveData } from "./screens/statefull/storeLocalStorage";
-
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-  
+import * as Progress from 'react-native-progress';
 import LeftMenu from './components/LeftMenu';
 import HealerRouter from './routes/IntroStack'; 
 import { Provider } from 'react-redux'
@@ -58,14 +57,14 @@ class CustomDrawerView extends Component {
 
    createThreeButtonAlert = () =>
     Alert.alert(
-      "Permissions Refusé",
+      "Permissions Refusée",
       "maMED a besoin de la localisation pour fonctionner correctement",
       [
         {
           text: "Réessayer",
           onPress: () => {console.log("Ask me later pressed"); this._getLocationAsync()}
         }
-      ],
+      ], 
       { cancelable: false }
     );
 
@@ -114,7 +113,9 @@ class CustomDrawerView extends Component {
   render() {
     if (this.state.fontLoaded === false) {
       return (
-        <View />
+        <View>
+          <Progress.Circle size={30} indeterminate={true} />
+        </View>
       )
     }
 

@@ -6,12 +6,14 @@ import {
   Image,
   Platform,
   TouchableHighlight,
-  StatusBar
+  StatusBar,
+  Vibration, 
+  Linking,
+  TouchableOpacity
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
 import Text from '../elements/Text';
-
+ 
 import CommonStyles from '../styles/CommonStyles';
 import {
   deviceWidth,
@@ -23,6 +25,16 @@ import {
 export default class CallDoctorScreen extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount(){
+    const ONE_SECOND_IN_MS = 500;
+    const PATTERN = [
+      1 * ONE_SECOND_IN_MS,
+      2 * ONE_SECOND_IN_MS,
+      3 * ONE_SECOND_IN_MS
+    ];
+    Vibration.vibrate(PATTERN, true);
   }
 
   render() {
@@ -40,7 +52,7 @@ export default class CallDoctorScreen extends Component {
           <Text header black semiBold>Dr. Nguefack Maurice</Text>
         </View>
         <View style={styles.parentCir}>
-          <View style={styles.childCir}>
+          <View style={styles.childCir}> 
             <Image
               source={require('../../img/person/doc_portrait.png')}
               style={{width: 160, height: 184}}
@@ -53,30 +65,40 @@ export default class CallDoctorScreen extends Component {
               style={{width: 160, height: 84}}
             />
           </View>
-        <TouchableHighlight
+        <View
           style={styles.buttonBox}
-          underlayColor={'transparent'} 
-          onPress={this._handleClickEndCallButton.bind(this)}>
-          <View style={styles.panelBody}>
-            <View style={[styles.leftItem]}>
-              <Image
-                source={require('../../img/healer/icCall.png')}
-                style={{alignItems: 'center', width: 85, height: 90}}
-              />
-            </View>
-            <View style={styles.rightItem}>
-              <Image
-                source={require('../../img/healer/esclip.png')}
-                style={{alignItems: 'center', width: 85, height: 90}}
-              />
-            </View>
+          >
+          <View style={styles.panelBody}> 
+              <TouchableOpacity 
+                onPress={this._handleClickEndCallButton.bind(this)}
+                style={styles.buttonBox} 
+              >
+                <View style={[styles.leftItem]}>
+                    <Image
+                      source={require('../../img/healer/icCall.png')}
+                      style={{alignItems: 'center', width: 85, height: 90}}
+                    /> 
+                </View>
+              </TouchableOpacity >
+              <TouchableOpacity
+                style={styles.buttonBox}
+                onPress={()=>Linking.openURL(this.props.navigation.state.params.link)}
+              >
+                <View style={styles.rightItem}>
+                  <Image
+                    source={require('../../img/healer/esclip.png')}
+                    style={{alignItems: 'center', width: 85, height: 90}}
+                  />
+                </View>
+              </TouchableOpacity >
           </View>
-        </TouchableHighlight>
+        </View>
       </View>
     );
   }
 
   _handleClickEndCallButton() {
+    Vibration.cancel()
     this.props.navigation.goBack(null);
   }
 }

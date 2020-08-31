@@ -36,6 +36,7 @@ class StartNameScreen extends Component {
   }
   componentDidMount () {
     const Regs = this.props.navigation.state.params.arrs;
+    console.log('Regs Regs ', Regs)
     this.setState({all: Regs})
     const Regions = [];
     Regs.map((reg, ind) => {

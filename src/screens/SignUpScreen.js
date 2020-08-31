@@ -28,7 +28,7 @@ class SignUpScreen extends Component {
   async componentDidMount(){
     let arrs = await getArrondissementData();
     console.log('arrs commeback', arrs)
-    this.setState({ arrs: arrs});
+    this.setState({ arrs: arrs.data});
   }
 
    messageWithPosition (position = "bottom",  extra = {}) {

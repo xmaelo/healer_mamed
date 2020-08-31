@@ -15,6 +15,46 @@ export const getPersonalData = async (uri) => {
     });  
  
 }
+
+export const listSuivie = async (id) => {
+  console.log('idpers listSuivie',id)
+  //https://covid19.mamed.care/api_v1/apis/{id}/updatetokens/{token}.json
+   const uri = "/api_v1/apilistedemandesuivies/"+id+".json"
+   return await axios.get(baseUri+uri)  
+    .then( (response) => { 
+      console.log(" ==========tokens=======",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });
+}
+export const aceptSuivie = async (idSuivie) => {
+  console.log('idpers aceptSuivie',idSuivie)
+  //https://covid19.mamed.care/api_v1/apis/{id}/updatetokens/{token}.json
+   const uri = "/api_v1/apiaceptdemandesuivies/"+idSuivie+".json"
+   return await axios.get(baseUri+uri)  
+    .then( (response) => { 
+      console.log(" ==========tokens=======",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });
+}
+export const arretSuivie = async (idSuivie) => {
+  console.log('idpers arretSuivie',idSuivie)
+  //https://covid19.mamed.care/api_v1/apis/{id}/updatetokens/{token}.json
+   const uri = "/api_v1/apiaretdemandesuivies/"+idSuivie+".json"
+   return await axios.get(baseUri+uri)  
+    .then( (response) => { 
+      console.log(" ==========tokens=======",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });
+}
 export const getSaveToken = async (id, tokens) => {
   console.log('before tokens', tokens, id)
   //https://covid19.mamed.care/api_v1/apis/{id}/updatetokens/{token}.json
