@@ -8,10 +8,10 @@ import GradientNavigationBar from '../elements/GradientNavigationBar';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceHeight, NAV_HEIGHT, TAB_HEIGHT, STATUSBAR_HEIGHT } from '../styles/variables';
 import { connect } from 'react-redux'
-import MenuItemBox from '../components/MenuItemBox'; 
+import MenuItemBox from '../components/MenuItemBox';  
 import CustomTabBar from '../components/CustomTabBar';  
 import { _storeData } from "./statefull/storeLocalStorage";
-import { getPersonalData, getSaveToken, arretSuivie } from "./statefull/appStatefull";
+import { getPersonalData, getSaveToken, arretSuivie, getMedecinSuivie } from "./statefull/appStatefull";
 import { colors, fontSize, fontFamily } from '../styles/variables';
 import GradientButton from '../elements/GradientButton';
 import Constants from 'expo-constants';
@@ -23,23 +23,39 @@ import * as Permissions from 'expo-permissions';
 class MainServiceScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      noSuivie: false,
+    }
   } 
  //507F0gFWWBkueKQOj2MpbO  1
  //
   async componentDidMount() {
     await this.registerForPushNotificationsAsync();
     this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    this.initSuivie()
     //Vibration.vibrate(1000 * 10);
     console.log('this.props.Journal',this.props, this.props.navigation.state.params);
     // const idpers = this.props.navigation.state.params.id;
-    // let data = this.props.data;
+    let data = this.props.data;
     // if(!idpers){
     //   console.log('before onGo');
     //   data = await getPersonalData('/api_v1/apis/'+this.props.data.personne.id+'/profiles.json');
     //   this.props.publishJournal(data);
     // }
-    // let rs = await _storeData(data);
-    // console.log('after sstore data', rs)
+    let rs = await _storeData(data);
+    console.log('after sstore data', rs)
+  }
+
+  initSuivie = async () => {
+    let resil = await getMedecinSuivie(this.props.data.personne.id);
+    console.log('Suivi', resil)
+    if(resil && resil[0] &&resil[0].medecin){
+      this.props.setSuive({name: resil[0].medecin, id: resil[0].idmed, idSuivie: resil[0].id})
+    }
+    if(resil && resil.length === 0){
+      this.setState({noSuivie: true})
+      this.props.setSuive({})
+    }
   }
   _handleNotification = notification => {
     Vibration.vibrate();
@@ -63,7 +79,7 @@ class MainServiceScreen extends Component {
         alert('Failed to get push token for push notification!');
         return;
       }
-      const token = await Notifications.getExpoPushTokenAsync();
+      const token = await Notifications.getExpoPushTokenAsync(); 
       console.log('token token token' ,token);
       this.setState({ expoPushToken: token });
       await getSaveToken(this.props.data.personne.id, token)
@@ -115,37 +131,41 @@ class MainServiceScreen extends Component {
               }
             ]
           }
-        />
+        /> 
         <View style={styles.titleBox}>
           <Text medium black mediumBold style={{lineHeight: 49, marginBottom: 10}}>
             Mon Journal,
           </Text>
         </View>
 
-        <View style={[CommonStyles.itemWhiteBox,styles.card]}>
-          <View style={styles.left}>
-            <Image
-              source={require('../../img/person/profil2.jpg')}
-              style={{width: 40, height: 40}}
-            />
+        {(!this.state.noSuivie || this.props.data.suivie && this.props.data.suivie.name) &&
+          <View style={[CommonStyles.itemWhiteBox,styles.card]}>
+            <View style={styles.left}>
+              <Image
+                source={require('../../img/person/profil2.jpg')}
+                style={{width: 40, height: 40}}
+              />
+            </View>
+            <View style={styles.right}>
+              <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
+                 Suivi par: Dr. {this.props.data.suivie.name}
+              </Text>
+              <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23, paddingBottom: 10}}>
+                5 mois déja
+              </Text>
+              <GradientButton
+                onPressButton={async()=>{
+                    //this.props.navigation.navigate("CallDoctorScreen");
+                    await arretSuivie(this.props.data.suivie.idSuivie);
+                    this.initSuivie();
+                  }
+                }
+                setting={smallShadowOpt}
+                btnText="Arreter "
+              />
+            </View>
           </View>
-          <View style={styles.right}>
-            <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
-              Suivi par: Dr.Atemkeng
-            </Text>
-            <Text lightGrey regular style={{fontSize: fontSize.small, lineHeight: 23, paddingBottom: 10}}>
-              5 mois déja
-            </Text>
-            <GradientButton
-              onPressButton={()=>this.arretSuivie()}
-              setting={smallShadowOpt}
-              btnText="Arreter "
-            />
-          </View>
-        </View>
-
-
-
+        }
 
 
         <View style={styles.fullField}>
@@ -219,7 +239,7 @@ class MainServiceScreen extends Component {
   }
 
   // Go to NotificationScreenScreen 
-  _handleClickNotificationScreen() {
+  _handleClickNotificationScreen = () => {
     this.props.navigation.navigate("AntecedentScreen");
   }
 }
@@ -271,6 +291,9 @@ const mapDispatchToProps = dispatch => {
   return {
     publishJournal: async (data) => {
       dispatch({type: "PUBLISH_JOURNAL", data: data});
+    },
+    setSuive: async (data) => {
+      dispatch({type: "SET_SUIVIE", data: data});
     },
 
   };

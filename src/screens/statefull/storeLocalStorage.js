@@ -1,10 +1,10 @@
 import { AsyncStorage } from 'react-native';
 
 export const _storeData = async(journal) => {
-  let dataString = JSON.stringify(journal);
+  let dataString = JSON.stringify(journal); 
   console.log('data stringify', dataString)
   console.log('journale elle meme', journal)
-  try {
+  try { 
     await AsyncStorage.setItem('_journal', dataString);
     return true;
   } catch (error) {

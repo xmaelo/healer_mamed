@@ -106,7 +106,7 @@ class ContactUrgence extends Component {
             <GradientButton
               onPressButton={()=>{this.setState({lisible: true})}}
               setting={shadowOpt}
-              btnText="Continuer"
+              btnText="Enregister"
             />
           </View>
           <AlertDialog

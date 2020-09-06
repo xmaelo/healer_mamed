@@ -25,9 +25,28 @@ import {
 export default class CallDoctorScreen extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
+    this.state = {
+      ms: false,
+      i: 0
+    }
+  }
+  async UNSAFE_componentWillMount() {
+    this._isMounted = true;
+  } 
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+  async componentDidMount(){
+    this.setState({i: 0})
+    
+    this.vibrate()
+    this.sleep();
+    
   }
 
-  componentDidMount(){
+  vibrate = () => {
     const ONE_SECOND_IN_MS = 500;
     const PATTERN = [
       1 * ONE_SECOND_IN_MS,
@@ -36,8 +55,23 @@ export default class CallDoctorScreen extends Component {
     ];
     Vibration.vibrate(PATTERN, true);
   }
+  sleep = ms => {
+    let i = this.state.i;
+    setInterval(()=>{
+        console.log('5 segond passed', i)
+        i = i +1
+        if(i==7){
+          this._handleClickEndCallButton();
+        }
+        
+      },3000)
+  };
 
   render() {
+    if(this.state.ms){
+      console.log("ms state", this.state.ms)
+      //this._handleClickEndCallButton();
+    }
     return (
       <View style={[CommonStyles.normalPage, {alignItems: 'center'}]}>
         <StatusBar
@@ -70,24 +104,26 @@ export default class CallDoctorScreen extends Component {
           >
           <View style={styles.panelBody}> 
               <TouchableOpacity 
+                //onPress={()=>console.log('pressedd cancel')}
                 onPress={this._handleClickEndCallButton.bind(this)}
                 style={styles.buttonBox} 
               >
                 <View style={[styles.leftItem]}>
                     <Image
-                      source={require('../../img/healer/icCall.png')}
-                      style={{alignItems: 'center', width: 85, height: 90}}
+                      source={require('../../img/healer/telephone2.png')}
+                      style={{alignItems: 'center', width: 85, height: 90, marginTop: 30}}
                     /> 
                 </View>
               </TouchableOpacity >
               <TouchableOpacity
                 style={styles.buttonBox}
+                //onPress={()=>console.log('pressedd opend')}
                 onPress={()=>Linking.openURL(this.props.navigation.state.params.link)}
               >
                 <View style={styles.rightItem}>
                   <Image
-                    source={require('../../img/healer/esclip.png')}
-                    style={{alignItems: 'center', width: 85, height: 90}}
+                    source={require('../../img/healer/telephone1.png')}
+                    style={{alignItems: 'center', width: 55, height: 60}}
                   />
                 </View>
               </TouchableOpacity >

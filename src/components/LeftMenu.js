@@ -6,7 +6,7 @@ import CommonStyles from '../styles/CommonStyles';
 import { deviceWidth, deviceHeight, colors, fontSize, fontFamily } from '../styles/variables';
 import { connect } from 'react-redux'
 import { _storeData } from "../screens/statefull/storeLocalStorage";
-import { getCall } from "../screens/statefull/appStatefull";
+import { getCall, image } from "../screens/statefull/appStatefull";
 import AlertDialog from '../elements/AlertDialog'; 
 import AlertDeleteDlMessage from './list-item/AlertDeleteDlMessage';
 import AlertDeleteDlTitle from './list-item/AlertDeleteDlTitle';
@@ -57,14 +57,13 @@ class LeftMenu extends Component {
   render() {
     
     let isActive = '';
-    const img = "https://covid19.mamed.care"+"/bundles/mamedcovid/assets/images/pictures/";
     return (
       <View style={styles.container}>
         <View style={styles.userInfo}> 
           <View style={styles.avatar}>
            { this.props.data ?
             <Image
-              source={{ uri: img+ this.props.data.personne.image }}
+              source={{ uri: image+ this.props.data.personne.image }}
               style={{width: 70, height: 70, borderRadius: 20}}
             /> : null
            }

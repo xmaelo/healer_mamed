@@ -3,11 +3,24 @@ import * as axios from 'axios';
 export const baseUri = "https://covid19.mamed.care";
 export const urlMedia = baseUri + "/bundles/mamedcovid/assets/images/pictures/";
 
+export const image = baseUri + "/web/uploads/images/personne/";
 export const getPersonalData = async (uri) => {
   console.log('before getJournale') 
 	return await axios.get(baseUri+uri)  
     .then( (response) => { 
       console.log(" =================",response.data);
+      return response.data
+    }) 
+    .catch( (error) => {
+      console.log(error);  
+    });  
+ 
+}
+export const getMedecinSuivie = async (id) => {
+  const _com = '/api_v1/apilistedemandesuivie2s/'+id+'.json';
+  return await axios.get(baseUri+_com)  
+    .then( (response) => { 
+      console.log(" =========apilistedemandesuivie2s========",response.data);
       return response.data
     }) 
     .catch( (error) => {

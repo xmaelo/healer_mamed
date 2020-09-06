@@ -8,7 +8,6 @@ import ScalingDrawer from './elements/ScalingDrawer';
 import { _retrieveData } from "./screens/statefull/storeLocalStorage";
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import * as Progress from 'react-native-progress';
 import LeftMenu from './components/LeftMenu';
 import HealerRouter from './routes/IntroStack'; 
 import { Provider } from 'react-redux'
@@ -113,8 +112,7 @@ class CustomDrawerView extends Component {
   render() {
     if (this.state.fontLoaded === false) {
       return (
-        <View>
-          <Progress.Circle size={30} indeterminate={true} />
+        <View style={{ flex: 1, height: height }}>
         </View>
       )
     }

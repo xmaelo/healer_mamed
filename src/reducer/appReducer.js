@@ -27,6 +27,10 @@ function app(state = initialState, action) {
 	  		curentState = {...curentState, data: action.data}
 	  		console.log('curentState', curentState);
 	      	return curentState;
+	    case 'SET_SUIVIE':
+	  		curentState = {...curentState, data: {...curentState.data, suivie: action.data}}
+	  		console.log('curentState', curentState);
+	      	return curentState;
 	    case 'UP_CONTACT_URGENCE':
 	  		curentState = {
 	  				...curentState, 

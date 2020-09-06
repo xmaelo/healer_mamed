@@ -52,14 +52,14 @@ class ChatScreen extends PureComponent  {
     this._isAlright = null;
   }
 
-  // async UNSAFE_componentWillMount() {
-  //   this._isMounted = true;
-  //   this.setState(() => {
-  //     return { 
-  //       //messages: require('../data/messages.js'),
-  //     };
-  //   });
-  // } 
+  async UNSAFE_componentWillMount() {
+    this._isMounted = true;
+    // this.setState(() => {
+    //   return { 
+    //     //messages: require('../data/messages.js'),
+    //   };
+    // });
+  } 
 
   componentWillUnmount() {
     this._isMounted = false;
@@ -129,35 +129,39 @@ class ChatScreen extends PureComponent  {
 
   async onSend(messages = []) {
     console.log('toSend', messages);
-    this.setState((previousState) => {
-      return {
-        messages: GiftedChat.append(previousState.messages, messages),
-      };
-    });
-    let res = await onSendMessage(
-        {   
-          message: {
-                  msg: messages[0].text,  
-                  emetteur: this.props.data.personne.id, 
-                  recpteur: this.props.navigation.state.params.idMed,
-                }
-        }
-      );
-      let oldState = this.state.messages.slice();
-      oldState.splice(0, 1);
-      let newMess = { ...this.state.messages[0], sent: true };
-      console.log('oldState', oldState);
-      console.log('nexMess', newMess)
-    if(res.success){
-
+    try{
       this.setState((previousState) => {
         return {
-          messages: GiftedChat.append(oldState, newMess),
+          messages: GiftedChat.append(previousState.messages, messages),
         };
       });
-      this.props.addConvert({idMed: this.props.navigation.state.params.idMed, converation: GiftedChat.append(oldState, newMess)})
+      let res = await onSendMessage(
+          {   
+            message: {
+                    msg: messages[0].text,  
+                    emetteur: this.props.data.personne.id, 
+                    recpteur: this.props.navigation.state.params.idMed,
+                  }
+          }
+        );
+        let oldState = this.state.messages.slice();
+        oldState.splice(0, 1);
+        let newMess = { ...this.state.messages[0], sent: true };
+        console.log('oldState', oldState);
+        console.log('nexMess', newMess)
+      if(res.success){
+
+        this.setState((previousState) => {
+          return {
+            messages: GiftedChat.append(oldState, newMess),
+          };
+        });
+        this.props.addConvert({idMed: this.props.navigation.state.params.idMed, converation: GiftedChat.append(oldState, newMess)})
+      }
+      console.log('response sedn mess', res);
+    }catch(e){
+      console.log('errrr messages', e)
     }
-    console.log('response sedn mess', res);
     // for demo purpose
     //this.answerDemo(messages);
   }
@@ -358,34 +362,40 @@ class ChatScreen extends PureComponent  {
   } 
   setIntervals = async() => {
     //console.log('setIntervals')
-    let nonLue =  await getMessageNonLue(this.props.data.personne.id);
-    console.log('nonLue.data', nonLue.data, nonLue)
-    let toDispatch;
-    if(nonLue.data && nonLue.data.length > 0){
-      const idMed = this.props.navigation.state.params.idMed;
-      nonLue.data.map((one, ind)=>{
-        console.log('nonLue')
-        if(one.sender_id == idMed){
-          let ob = {
-            text: one.message,
-            sent: true,
-            received: true,
-            createdAt: new Date(one.date),
-            user: {
-              _id: idMed,
-              name: one.sender_nom 
-            },
-            _id: Math.round(Math.random() * 1000000000)
-          }
-          this.setState((previousState) => {
-            return {
-              messages: GiftedChat.append(previousState.messages,ob)
-            };
-          });
-          this.props.addConvert({idMed: this.props.navigation.state.params.idMed, 
-            converation: this.state.messages})
+    try{
+      if(this._isMounted === true){
+        let nonLue =  await getMessageNonLue(this.props.data.personne.id);
+        console.log('nonLue.data', nonLue.data, nonLue)
+        let toDispatch;
+        if(nonLue.data && nonLue.data.length > 0){
+          const idMed = this.props.navigation.state.params.idMed;
+          nonLue.data.map((one, ind)=>{
+            console.log('nonLue')
+            if(one.sender_id == idMed){
+              let ob = {
+                text: one.message,
+                sent: true,
+                received: true,
+                createdAt: new Date(one.date),
+                user: {
+                  _id: idMed,
+                  name: one.sender_nom 
+                },
+                _id: Math.round(Math.random() * 1000000000)
+              }
+              this.setState((previousState) => {
+                return {
+                  messages: GiftedChat.append(previousState.messages,ob)
+                };
+              });
+              this.props.addConvert({idMed: this.props.navigation.state.params.idMed, 
+                converation: this.state.messages})
+            }
+          })
         }
-      })
+      }
+    }catch(e){
+      console.log('errrr onSend',e) 
     }
   }
   render() {

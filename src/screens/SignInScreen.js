@@ -13,7 +13,7 @@ import CommonStyles from '../styles/CommonStyles';
 import SignUpScreen from './SignUpScreen'; 
 import { connect } from 'react-redux'
 import ForgotPasswordScreen from './ForgotPasswordScreen';
-import { getPersonalData, login } from "./statefull/appStatefull";
+import { getPersonalData, login  } from "./statefull/appStatefull";
 
 class SignInScreen extends Component {
   constructor(props) {

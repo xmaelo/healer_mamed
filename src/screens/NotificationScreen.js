@@ -61,13 +61,13 @@ class NotificationScreen extends Component {
                   </View>
                   <View style={styles.right}>
                     <Text black regular style={{fontSize: fontSize.itemHeader, lineHeight: 27}}>
-                      Dr.Alexander 
+                      {"Dr. "+list.medecin}
                     </Text>
                     <GradientButton
-                      onPressButton={()=> this.confirmNotif(1)}
+                      onPressButton={()=> this.confirmNotif(list.id)}
                       setting={smallShadowOpt}
                       btnText="Acepter"
-                    />
+                    /> 
                   </View>
                 </View>
              )})}
