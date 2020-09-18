@@ -25,43 +25,43 @@ export default class DevicesContent extends Component {
           itemImg: require('../../../img/person/appleHealth.png'),
           iconWidth: 40,
           iconHeight: 40,
-          itemHeaderText: 'Apple Health'
+          itemHeaderText: 'Suivi de grossesse'
         },
         {
           id: 1,
           itemImg: require('../../../img/person/type2.png'),
           iconWidth: 40,
           iconHeight: 40,
-          itemHeaderText: 'Fitbit'
+          itemHeaderText: 'Covid 19'
         },
-        {
-          id: 2,
-          itemImg: require('../../../img/person/type3.png'),
-          iconWidth: 40,
-          iconHeight: 40,
-          itemHeaderText: 'Withings'
-        },
+        // {
+        //   id: 2,
+        //   itemImg: require('../../../img/person/type3.png'),
+        //   iconWidth: 40,
+        //   iconHeight: 40,
+        //   itemHeaderText: 'Withings'
+        // },
         {
           id: 3,
           itemImg: require('../../../img/person/iHealthCompanyLogo.png'),
           iconWidth: 50,
           iconHeight: 16,
-          itemHeaderText: 'iHealh'
+          itemHeaderText: 'Surveillance du diabète'
         },
-        {
-          id: 4,
-          itemImg: require('../../../img/person/xiaomi.png'),
-          iconWidth: 40,
-          iconHeight: 40,
-          itemHeaderText: 'MiBand'
-        },
-        {
-          id: 5,
-          itemImg: require('../../../img/person/cernerCorporationLogo.png'),
-          iconWidth: 39.9,
-          iconHeight: 40,
-          itemHeaderText: 'Cerner'
-        },
+        // {
+        //   id: 4,
+        //   itemImg: require('../../../img/person/xiaomi.png'),
+        //   iconWidth: 40,
+        //   iconHeight: 40,
+        //   itemHeaderText: 'MiBand'
+        // },
+        // {
+        //   id: 5,
+        //   itemImg: require('../../../img/person/cernerCorporationLogo.png'),
+        //   iconWidth: 39.9,
+        //   iconHeight: 40,
+        //   itemHeaderText: 'Cerner'
+        // },
       ]
     }
   }

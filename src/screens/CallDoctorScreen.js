@@ -39,8 +39,6 @@ export default class CallDoctorScreen extends Component {
     this._isMounted = false;
   }
   async componentDidMount(){
-    this.setState({i: 0})
-    
     this.vibrate()
     this.sleep();
     
@@ -118,7 +116,12 @@ export default class CallDoctorScreen extends Component {
               <TouchableOpacity
                 style={styles.buttonBox}
                 //onPress={()=>console.log('pressedd opend')}
-                onPress={()=>Linking.openURL(this.props.navigation.state.params.link)}
+                onPress={()=>{
+                  Vibration.cancel()
+
+                  Linking.openURL(this.props.navigation.state.params.link)
+                  this.props.navigation.navigate("MainServiceScreen");
+                }}
               >
                 <View style={styles.rightItem}>
                   <Image
@@ -135,7 +138,7 @@ export default class CallDoctorScreen extends Component {
 
   _handleClickEndCallButton() {
     Vibration.cancel()
-    this.props.navigation.goBack(null);
+    this.props.navigation.navigate("MainServiceScreen");
   }
 }
 

@@ -25,14 +25,15 @@ class MainServiceScreen extends Component {
     super(props);
     this.state = {
       noSuivie: false,
+      fromNetwork: false,
     }
   } 
  //507F0gFWWBkueKQOj2MpbO  1
  //
   async componentDidMount() {
+    this.initSuivie()
     await this.registerForPushNotificationsAsync();
     this._notificationSubscription = Notifications.addListener(this._handleNotification);
-    this.initSuivie()
     //Vibration.vibrate(1000 * 10);
     console.log('this.props.Journal',this.props, this.props.navigation.state.params);
     // const idpers = this.props.navigation.state.params.id;
@@ -42,8 +43,8 @@ class MainServiceScreen extends Component {
     //   data = await getPersonalData('/api_v1/apis/'+this.props.data.personne.id+'/profiles.json');
     //   this.props.publishJournal(data);
     // }
-    let rs = await _storeData(data);
-    console.log('after sstore data', rs)
+    // let rs = await _storeData(data);
+    // console.log('after sstore data', rs)
   }
 
   initSuivie = async () => {
@@ -138,7 +139,8 @@ class MainServiceScreen extends Component {
           </Text>
         </View>
 
-        {(!this.state.noSuivie || this.props.data.suivie && this.props.data.suivie.name) &&
+        {
+          (!this.state.noSuivie && this.props.data && this.props.data.suivie && this.props.data.suivie.name) &&
           <View style={[CommonStyles.itemWhiteBox,styles.card]}>
             <View style={styles.left}>
               <Image
@@ -190,7 +192,7 @@ class MainServiceScreen extends Component {
           <View style={styles.colMainRight}>
             <MenuItemBox
               header='Centres'
-              subHeader={this.props.data.centres.length +' Hospitals'}
+              subHeader={this.props.data.centres.length +' Hospitaux'}
               icon={require('../../img/healer/hospital.png')}
               iconWidth={26}
               iconHeight={25}

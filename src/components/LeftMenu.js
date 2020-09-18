@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions, Vibration, TouchableHighlight, Platform, Linking } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation'; 
 import Icon from 'react-native-vector-icons/EvilIcons';
 import CommonStyles from '../styles/CommonStyles';
 import { deviceWidth, deviceHeight, colors, fontSize, fontFamily } from '../styles/variables';
@@ -18,42 +18,42 @@ const resetAction = (routeName) => NavigationActions.reset({
   ]
 });
 
-class LeftMenu extends Component {
-  _isMounted = false;
+class LeftMenu extends PureComponent {
   constructor(props) {
     super(props);
+    this._isMounted = false;
     this.state = {
       visible: false,
     }
+  }
+
+  async UNSAFE_componentWillMount() {
+    this._isMounted = true;
+  } 
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
   async componentDidMount() {
     this._isMounted = true; 
     setInterval(async() => {
         try{
-          let res = await getCall(this.props.data.personne.id);
-          if(res.length != 0 && this._isMounted){
-            console.log('link',res[0].link); 
-              const ONE_SECOND_IN_MS = 1000;
-              const PATTERN = [
-                1 * ONE_SECOND_IN_MS,
-                2 * ONE_SECOND_IN_MS,
-                3 * ONE_SECOND_IN_MS
-              ];
-              //this.setState({visible: true, link: res[0].link});
-              this.props.navigation.navigate('CallDoctorScreen', {link: res[0].link});
-              Vibration.vibrate(PATTERN);
+
+          if(this.props.data && this.props.data.personne){
+            let res = await getCall(this.props.data.personne.id);
+            if(res.length != 0){
+              console.log('link',res[0].link); 
+                this.props.navigation.navigate('CallDoctorScreen', {link: res[0].link});
+            }
           }
         }catch(e){
           console.log('err', e)
         }
-    }, 1000);
+    }, 100);
   }
   onNavigate(route) {
-    this.props.navigation.dispatch(resetAction(route))
+    //this.props.navigation.dispatch(resetAction(route))
   } 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
   render() {
     
     let isActive = '';
@@ -61,7 +61,7 @@ class LeftMenu extends Component {
       <View style={styles.container}>
         <View style={styles.userInfo}> 
           <View style={styles.avatar}>
-           { this.props.data ?
+           { this.props.data && this.props.data.personne?
             <Image
               source={{ uri: image+ this.props.data.personne.image }}
               style={{width: 70, height: 70, borderRadius: 20}}
@@ -70,11 +70,11 @@ class LeftMenu extends Component {
           </View>
           <Text style={styles.name}>
             {
-              this.props.data ? this.props.data.personne.prenom : null }{" "}
-            {this.props.data ? this.props.data.personne.nom : null}
+              this.props.data && this.props.data.personne? this.props.data.personne.prenom : null }{" "}
+            {this.props.data && this.props.data.personne? this.props.data.personne.nom : null}
           </Text>
           <Text style={styles.balance}>
-            {this.props.data ? this.props.data.personne.email : null}
+            {this.props.data && this.props.data.personne? this.props.data.personne.email : null}
           </Text>
         </View>
 
@@ -175,6 +175,30 @@ class LeftMenu extends Component {
                 ]}
               >
                 DONNEES
+              </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='#efefef'
+            style={styles.itemBox}
+            onPress={ this._handleClickModules.bind(this) }>
+            <View style={styles.itemBox}>
+              {
+                (() => {
+                  if (isActive == 'modules') {
+                    return (
+                      <View style={styles.activeItem} />
+                    )
+                  }
+                })()
+              }
+              <Text
+                style={[
+                  styles.menuText,
+                  isActive == 'modules' && styles.activeMenuText
+                ]}
+              >
+                MODULES
               </Text>
             </View>
           </TouchableHighlight>
@@ -384,6 +408,11 @@ class LeftMenu extends Component {
   _handleClickProfile() {
     this.setState({isActive:'profile'});
     this.props.navigation.navigate('UserProfileScreen');
+    this.props.drawer.close()
+  }
+  _handleClickModules() {
+    this.setState({isActive:'modules'});
+    this.props.navigation.navigate('ModulesScreen');
     this.props.drawer.close()
   }
 

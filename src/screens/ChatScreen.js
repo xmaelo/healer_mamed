@@ -1,4 +1,4 @@
-import React, {Component, PureComponent } from 'react';
+import React, {Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -27,7 +27,7 @@ import {
   deviceWidth
 } from '../styles/variables';
 
-class ChatScreen extends PureComponent  {
+class ChatScreen extends Component  {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,6 +74,7 @@ class ChatScreen extends PureComponent  {
         formatMessages = this.props.converations[this.props.navigation.state.params.idMed];
       }
       else {
+        console.log('started convert')
         let onConvert = await getOneMessages(this.props.data.personne.id, this.props.navigation.state.params.idMed)
         console.log('on conver', onConvert)
         if(onConvert){
@@ -129,6 +130,9 @@ class ChatScreen extends PureComponent  {
 
   async onSend(messages = []) {
     console.log('toSend', messages);
+    if( messages[0].text===""){
+      return;
+    }
     try{
       this.setState((previousState) => {
         return {

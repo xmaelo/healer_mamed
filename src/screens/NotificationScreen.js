@@ -23,7 +23,8 @@ class NotificationScreen extends Component {
   init = async () => {
     let list = await listSuivie(this.props.data.personne.id)
     console.log('list list list', list);
-    this.setState({list: list})
+    //this.setState({list: list})
+    this.setState({list: []})
   }
 
   confirmNotif = async(id) => {

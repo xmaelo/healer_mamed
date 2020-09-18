@@ -51,7 +51,9 @@ class DoctorReviewScreen extends Component {
     }
     else{
       this.flash();
+      console.log('before get allMessages')
       allMessages = await getAllMessages(this.props.navigation.state.params.id);
+      console.log('end load')
       hideMessage();
     }
     this.setState({messages: allMessages.data})

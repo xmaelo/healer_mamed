@@ -29,18 +29,27 @@ export const getMedecinSuivie = async (id) => {
  
 }
 
-export const listSuivie = async (id) => {
+export const listSuivie = async (id) => { 
   console.log('idpers listSuivie',id)
-  //https://covid19.mamed.care/api_v1/apis/{id}/updatetokens/{token}.json
-   const uri = "/api_v1/apilistedemandesuivies/"+id+".json"
-   return await axios.get(baseUri+uri)  
-    .then( (response) => { 
-      console.log(" ==========tokens=======",response.data);
-      return response.data
-    }) 
+  console.log('stated get api');
+  return await axios.get('https://jsonplaceholder.typicode.com/posts', { headers: { "Content-type": "application/json" } })
+    .then( (response) => {
+      console.log(" ===========mrss======",response); 
+      return {data:[]};
+    })
     .catch( (error) => {
-      console.log(error);  
-    });
+      console.log(error);    
+    }); 
+  //https://covid19.mamed.care/api_v1/apis/{id}/updatetokens/{token}.json
+   // const uri = "/api_v1/apilistedemandesuivies/"+id+".json"
+   // return await axios.get(baseUri+uri)  
+   //  .then( (response) => { 
+   //    console.log(" ==========tokens=======",response.data);
+   //    return response.data
+   //  }) 
+   //  .catch( (error) => {
+   //    console.log(error);  
+   //  });
 }
 export const aceptSuivie = async (idSuivie) => {
   console.log('idpers aceptSuivie',idSuivie)
@@ -199,6 +208,7 @@ export const onRegister = async (obj) => {
 }
 
 export const getAllMessages = async (id) => {
+
   return await axios.get(baseUri+'/api_v1/apis/'+id+'/pagemessage.json', { headers: { "Content-type": "application/json" } })
     .then( (response) => {
       console.log(" =================",response); 
@@ -210,6 +220,7 @@ export const getAllMessages = async (id) => {
 }
 export const onSendMessage = async (obj) => {
   console.log('obg', obj)
+  try{
   return await axios.post(baseUri+'/api_v1/messages.json', obj , { headers: { "Content-type": "application/json" } })
     .then( (response) => {
       console.log(" =================",response); 
@@ -218,6 +229,9 @@ export const onSendMessage = async (obj) => {
     .catch( (error) => {
       console.log(error);    
     }); 
+  }catch(e){
+    console.log('send error')
+  }
 }
 export const getOneMessages = async (id1,id2) => {
   console.log(baseUri+'/api_v1/conversations/'+id1+'/recepteurs/'+id2+'.json')

@@ -11,7 +11,7 @@ import {
 import CommonStyles from '../../styles/CommonStyles';
 import {
   colors,
-  fontSize,
+  fontSize, 
   fontFamily,
 } from '../../styles/variables';
 
@@ -26,31 +26,33 @@ export default class TypesContent extends Component {
         <Item
           itemImg={require('../../../img/healer/desinfectant.png')}
           iconWidth={17}
-          iconHeight={22}
-          itemHeaderText='Desinfectant'
-          itemContent='Many people experience neck and back injuries'
+          iconHeight={22} 
+          itemHeaderText='Suivi de grossesse'
+          itemContent='Le suivi mois par mois de votre grossesse : visites prénatales, échographies, amniocentèse. Toutes vos réponses sur les femmes enceintes'
         />
         <Item
           itemImg={require('../../../img/healer/transfusion.png')}
           iconWidth={17}
           iconHeight={22}
-          itemHeaderText='Transfusion'
-          itemContent='For many years, when people thought of alcohol and drug'
+          itemHeaderText='Suivi de diabète'
+          itemContent='Elle discrimine rapidement les cas sérieux des cas bénins, et suggère à la volée au professionnel de santé une conduite à tenir pour son patient scientifiquement validée. Egalement un outil efficace, facile, gratuit et adapté aux diagnostics du terrain.'
         />
-        <Item
-          itemImg={require('../../../img/healer/scale.png')}
-          iconWidth={22}
-          iconHeight={22}
-          itemHeaderText='Weight'
-          itemContent='Many people experience neck and back injuries'
-        />
-        <Item
-          itemImg={require('../../../img/healer/desinfectant.png')}
-          iconWidth={17}
-          iconHeight={22}
-          itemHeaderText='Desinfectant'
-          itemContent='Many people experience neck and back injuries'
-        />
+        {
+          // <Item
+          //   itemImg={require('../../../img/healer/scale.png')}
+          //   iconWidth={22}
+          //   iconHeight={22}
+          //   itemHeaderText='Weight'
+          //   itemContent='Many people experience neck and back injuries'
+          // />
+          // <Item
+          //   itemImg={require('../../../img/healer/desinfectant.png')}
+          //   iconWidth={17}
+          //   iconHeight={22}
+          //   itemHeaderText='Desinfectant'
+          //   itemContent='Many people experience neck and back injuries'
+          // />
+        }
       </View>
     );
   }

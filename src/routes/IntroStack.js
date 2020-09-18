@@ -39,6 +39,7 @@ import ResultFindHospitalScreen from '../screens/ResultFindHospitalScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import AntecedentScreen from '../screens/AntecedentScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ModulesScreen from '../screens/ModulesScreen';
 import GoalSettingsScreen from '../screens/GoalSettingsScreen';
 import DoctorFavoritesScreen from '../screens/DoctorFavoritesScreen';
 import InsurranceScreen from '../screens/InsurranceScreen';
@@ -195,6 +196,10 @@ const AppRouter = StackRouter(
     SettingsScreen: {
       screen: SettingsScreen,
       path: 'settings',
+    },
+    ModulesScreen: {
+      screen: ModulesScreen,
+      path: 'modules',
     },
     GoalSettingsScreen: {
       screen: GoalSettingsScreen,
